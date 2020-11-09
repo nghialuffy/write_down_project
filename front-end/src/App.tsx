@@ -19,7 +19,7 @@ function App() {
         >
           Learn React
         </a>
-        <BaseButton type='primary'>Primary</BaseButton>
+        <BaseButton type='primary' onClick={() => alert("Clicked!")}>Primary</BaseButton>
         <BaseButton>Default</BaseButton>
         <BaseButton type='danger'>Danger</BaseButton>
       </header>
