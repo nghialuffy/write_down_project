@@ -91,6 +91,8 @@ Phân quyền người dùng:
         4. Thông báo:
         5. Dùng socketIO, API
 
+![./use_case/write_down.png](./use_case/write_down.png)
+
 ## Công nghệ
 
 - Database: MongoDB ( dùng online)
