@@ -1,0 +1,69 @@
+admin
+    _id
+    username
+    password
+
+user:
+    _id
+    username
+    email
+    password
+    link_facebook
+    gender
+    avatar(url)
+    birthday
+    bio
+    list_post
+        post_id
+    list_draft
+        post_id
+    list_category
+    
+
+post:
+    _id
+    url_post
+    title
+    content
+    created_date
+    list_hashtag
+    category (id_category)
+    created_by (id_user)
+    time_to_read
+    list_comment
+    vote
+
+draft:
+    _id
+    url_draft
+    title
+    list_hashtag
+    
+    created_by
+    created_date
+    content
+    
+comment
+    _id
+    id_post
+    id_parent_comment
+    content
+    created_date
+    created_by (id_user)
+    vote
+
+category:
+    _id
+    name_category
+    url_images
+    allow_content
+    rule
+
+notifications:
+    _id
+    type_notification = ["newpost", "newfollow", "newcomment"]
+    from_user = _id_user
+    to_user = [list _id_user]
+    link
+    content
+    created_date
