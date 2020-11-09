@@ -1,0 +1,49 @@
+.base-button {
+    display: inline-block;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    padding: 0 20px;
+    line-height: 29px;
+}
+.btn-primary {
+    background: #2FB5FA;
+    border-color: #2FB5FA;
+    color: white;
+}
+.btn-default {
+    background: #FFF;
+    border-color: #777;
+    color: #555;
+}
+.btn-danger {
+    border-color: #D9534F;
+    background-color: white;
+    color: #D9534F;
+}
+
+.btn-primary:hover {
+    background: #1D98D8;
+    border-color: #1D98D8;
+}
+.btn-default:hover {
+    color: #2FB5FA;
+    border-color: #2FB5FA;
+}
+.btn-danger:hover {
+    background-color: #D9534F;
+    color: white;
+}

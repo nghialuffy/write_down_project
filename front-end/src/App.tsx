@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import {BaseButton} from './component';
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
         >
           Learn React
         </a>
+        <BaseButton type='primary'>Primary</BaseButton>
+        <BaseButton>Default</BaseButton>
+        <BaseButton type='danger'>Danger</BaseButton>
       </header>
     </div>
   );
