@@ -10,7 +10,7 @@ import json
 from bson import ObjectId
 import re
 
-password = b"Tpos@2010@!#"
+password = b"nghialuffy!@#"
 salt = os.urandom(16)
 
 # kdf = PBKDF2HMAC(
@@ -21,7 +21,7 @@ salt = os.urandom(16)
 #     backend=default_backend()
 # )
 
-secret_key = b'6thcFJNH4oBlppaughEZtJSjT1hWVxyeUKuSbL8TBZs='
+secret_key = b'***************************'
 #secret_key = base64.urlsafe_b64encode(kdf.derive(password))
 
 dic_dauso = {"086", "096", "097", "098", "032", "033", "034", "035", "036", "037", "038", "039", "089", "090", "093",
@@ -111,14 +111,6 @@ def SetLimit(limit):
     if int(limit) > 10000:
         return 10000
     return int(limit)
-
-def Check_Not_Phone(phoneNumber):
-    phone_char = re.match(r'.*[a-zA-Z!@#$%^&*.()_+\\/\- ].*', phoneNumber)  # số điện thoại có kí tự
-    if phone_char:  # nếu số điện thoại nằm trong format đó
-        return phone_char.group()   # trả về số điện thoại đó
-    if len(phoneNumber) != 10 or phoneNumber[:3] not in dic_dauso:
-        return phoneNumber
-    return None
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
