@@ -60,7 +60,7 @@ class Post():
         if (self.db_saved and save_to_db):
             db.post.update_one({'_id': self._id}, {'$push': {'list_comment': comment.__dict__}})
 
-    def insert(self):
+    def insert_to_db(self):
         self.db_saved=True
         db.post.insert_one(self.__dict__)
 
@@ -74,7 +74,7 @@ class User():
             self.link_facebook=""
             self.gender=""
             self.avatar=""
-            self.birthday=datetime.date(1999, 1, 1)
+            self.birthday=datetime.datetime(1999, 1, 1)
             self.bio=""
             self.list_post=[]
             self.list_draft=[]
@@ -100,14 +100,38 @@ class User():
 
     def add_post(self, post, save_to_db=True):
         self.list_post.append(post.__dict__)
+        post.created_by=self._id
         if (self.db_saved and save_to_db):
-            db.user.update_one({'_id': self._id}, {'$push': {'list_post': post.__dict__}})
+            db.user.update_one({'_id': self._id}, {'$push': {'list_post': post._id}})
+            if (post.db_saved==False):
+                post.insert_to_db()
 
-    def insert(self):
+    def insert_to_db(self):
         self.db_saved=True
         db.user.insert_one(self.__dict__)
 
+class Category():
+    def __init__(self, dict):
+        if (dict==None):
+            self._id=ObjectId()
+            self.name_category=""
+            self.url_images=""
+            self.allow_content=""
+            self.rule=""
+        else:
+            self._id=dict['_id']
+            self.name_category=dict['name_category']
+            self.url_images=dict['url_images']
+            self.allow_content=dict['allow_content']
+            self.rule=dict['rule']
+    def insert_to_db(self):
+        db.category.insert_one(self.__dict__)
+
 if __name__=="__main__":
-    post=Post(db.post.find_one({}))
+    post=Post()
     comment=Comment()
+    user=User()
+    
+    user.insert_to_db()
     post.add_comment(comment)
+    user.add_post(post)
