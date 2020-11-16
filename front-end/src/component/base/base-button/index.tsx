@@ -1,13 +1,12 @@
-import { BaseButtonProps } from 'antd/lib/button/button';
-import React from  'react';
+import React from 'react';
 import './style.scss';
 
-type BaseButton = {
+type BaseButtonProps = {
     children: React.ReactNode
     type?: 'primary' | 'default' | 'danger'
     className?: string
-    containerProps?: React.HTMLAttributes<HTMLDivElement>
-    onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void,
+    containerProps?: React.HTMLAttributes<HTMLButtonElement>
+    onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
 }
 
 export function BaseButton ({
@@ -16,10 +15,13 @@ export function BaseButton ({
     className,
     onClick,
     containerProps
-}: BaseButton) {
+}: BaseButtonProps) {
     return (
-        <button className={['base-button', className, `btn-${type}`].filter(Boolean).join(' ')}>
+        <button className={['base-button', className, `btn-${type}`].filter(Boolean).join(' ')}
+            onClick={onClick}
+            {...containerProps}
+        >
             {children}
         </button>
-    )
+    );
 }
