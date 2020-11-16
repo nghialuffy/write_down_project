@@ -6,7 +6,9 @@ import re
 from time import sleep
 
 chrome_options = webdriver.ChromeOptions()
-chrome_options.headless = True
+chrome_options.add_argument('headless')
+chrome_options.add_argument('window-size=1920x1080')
+chrome_options.add_argument("disable-gpu")
 def get_date(str):
     str=str.strip()
     date_str=re.findall(r"\d+ giờ trước", str)
@@ -24,6 +26,10 @@ def get_date(str):
     date_str=re.findall(r"Hôm qua", str)
     if (len(date_str)>0):
         return datetime.datetime.now()-datetime.timedelta(days=1)
+    date_str=re.findall(r"\d+ phút trước", str)
+    if (len(date_str)>0):
+        value=re.findall(r"\d+", date_str[0])
+        return datetime.datetime.now()-datetime.timedelta(minutes=int(value[0]))
     print("Không thể crawl ngày đăng: "+str)
     exit()
 
@@ -31,7 +37,9 @@ def crawl_post(url, time_to_read=0, category_id=None):
     if (db.post.find_one({'url_post': url[30:]})!=None):
         return
 
+    print()
     print("Crawling post: "+url)
+    print()
 
     driver=webdriver.Chrome("C:/Users/hvhai/Downloads/chromedriver_win32/chromedriver.exe", chrome_options=chrome_options)
     driver.get(url)
@@ -55,9 +63,12 @@ def crawl_post(url, time_to_read=0, category_id=None):
     post.time_to_read=time_to_read
     post.category=category_id
     
-    list_driver_hashtag=driver.find_element(By.XPATH, "//ul[@class='tags-list list-unstyled clearfix']").find_elements_by_tag_name('li')
-    for driver_hashtag in list_driver_hashtag:
-        post.list_hashtag.append(driver_hashtag.text.strip())
+    try:
+        list_driver_hashtag=driver.find_element(By.XPATH, "//ul[@class='tags-list list-unstyled clearfix']").find_elements_by_tag_name('li')
+        for driver_hashtag in list_driver_hashtag:
+            post.list_hashtag.append(driver_hashtag.text.strip())
+    except:
+        post.list_hashtag=[]
 
     while True:
         try:
@@ -112,24 +123,26 @@ def crawl_post(url, time_to_read=0, category_id=None):
     post.insert_to_db()
 
 def crawl_user(url):
+    print()
     print("Crawling user: "+url)
+    print()
     driver=webdriver.Chrome("C:/Users/hvhai/Downloads/chromedriver_win32/chromedriver.exe", chrome_options=chrome_options)
     driver.get(url)
     user=User()
+    user.username=url[32:-8]
+    print(user.username)
     try:
-        user.username=driver.find_element(By.XPATH, "//span[@class='nickname']").text.strip()[1:]
+        user.display_name=driver.find_element(By.XPATH, "//span[@class='display-name']").text.strip()
+    except:
         try:
-            user.display_name=driver.find_element(By.XPATH, "//span[@class='display-name']").text.strip()
+            user.display_name=driver.find_element(By.XPATH, "//div[@class='display-name']").text.strip()
         except:
             user.display_name=""
-        user.bio=driver.find_element(By.XPATH, "//div[@class='description']").text.strip()
-        user.avatar=driver.find_element(By.XPATH, "//div[@class='avatar']").find_element_by_tag_name('img').get_attribute("src").strip()
+    user.bio=driver.find_element(By.XPATH, "//div[@class='description']").text.strip()
+    user.avatar=driver.find_element(By.XPATH, "//div[@class='avatar']").find_element_by_tag_name('img').get_attribute("src").strip()
+    try:
         user.cover_img=driver.find_element(By.XPATH, "//div[@class='cover']").find_element_by_tag_name('img').get_attribute("src").strip()
     except:
-        user.username=driver.find_element(By.XPATH, "//div[@class='username']").text.strip()[1:]
-        user.display_name=driver.find_element(By.XPATH, "//div[@class='display-name']").text.strip()
-        user.bio=driver.find_element(By.XPATH, "//div[@class='description']").text.strip()
-        user.avatar=driver.find_element(By.XPATH, "//div[@class='avatar']").find_element_by_tag_name('img').get_attribute("src").strip()
         user.cover_img=driver.find_element(By.XPATH, "//div[@class='thumb clearfix']").find_element_by_tag_name('img').get_attribute("src").strip()
     user.insert_to_db()
     driver.close()
@@ -137,11 +150,13 @@ def crawl_user(url):
     return user
 
 def crawl_category(url):
+    print()
+    print("Crawling category: "+url)
+    print()
     category_find=db.category.find_one({'url': url[23:-22]})
+    driver=webdriver.Chrome("C:/Users/hvhai/Downloads/chromedriver_win32/chromedriver.exe", chrome_options=chrome_options)
+    driver.get(url)
     if (category_find==None):
-        driver=webdriver.Chrome("C:/Users/hvhai/Downloads/chromedriver_win32/chromedriver.exe", chrome_options=chrome_options)
-        driver.get(url)
-
         category=Category()
         category.url=url[23:-22]
         category.name_category=driver.find_element(By.XPATH, "//div[@id='category-heading']").find_element(By.XPATH, ".//div[@class='title']").text.strip()
@@ -184,4 +199,3 @@ def crawl():
 
 if __name__=="__main__":
     crawl()
-    #print("/nguoi-dung/Insect#profile"[12:-8])
