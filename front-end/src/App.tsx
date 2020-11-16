@@ -1,8 +1,23 @@
 import React from 'react';
-import { BaseList, BaseTag } from './component';
+import { BaseDropDown, BaseList, BaseTag } from './component';
 import './App.scss';
 
 function App() {
+  const dropDownSchema = [
+    {
+      text: 'item 1',
+      link: 'https://ant.design/components/dropdown/'
+    },
+    {
+      text: 'item 2',
+      link: 'https://ant.design/components/dropdown/'
+    },
+    {
+      text: 'item 3',
+      link: 'https://ant.design/components/dropdown/'
+    }
+  ]
+
   return (
     <div className="App">
       <header className="App-header">
@@ -18,6 +33,7 @@ function App() {
         ]} Item={ItemTemp}/>
         <BaseTag type='primary' text='tag 1' link='#'/>
         <BaseTag type='normal' text='tag 2' link='#'/>
+        <BaseDropDown buttonText='Dropdown' schema={dropDownSchema}/>
       </header>
     </div>
   );
