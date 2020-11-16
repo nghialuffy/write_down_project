@@ -1,13 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BaseList, BaseTag } from './component';
 import './App.scss';
-import { BaseList } from './component';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <BaseList data={[
           {
             _id: '1',
@@ -17,7 +15,9 @@ function App() {
             _id: '2',
             content: 'Text2'
           }
-        ]} Item={ItemTemp}></BaseList>
+        ]} Item={ItemTemp}/>
+        <BaseTag type='primary' text='tag 1' link='#'/>
+        <BaseTag type='normal' text='tag 2' link='#'/>
       </header>
     </div>
   );

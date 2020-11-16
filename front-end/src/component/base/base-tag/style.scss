@@ -1,0 +1,19 @@
+.base-tag {
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+}
+.base-tag.primary {
+    padding: 5px 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    border-radius: 3px;
+    color: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.05);
+}
+.base-tag.normal {
+    color: #2C3E50;
+    background-color: transparent;
+    font-size: 13px;
+    line-height: 15px;
+}
