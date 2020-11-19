@@ -3,6 +3,7 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import { NotFoundPage, Loading } from './components';
 import { Module, RootModule } from './core';
 import './App.scss';
+import { UserContextProvider } from './context';
 
 const INSTALLED_MODULE: any = {
   'modules': require('./modules'),
@@ -51,10 +52,12 @@ class RootApplication extends React.Component<{}, { loading: boolean }> {
     }
     return (
       <BrowserRouter basename="/">
-        <Switch>
-          {this.renderRoute()}
-          <Route component={NotFoundPage} />
-        </Switch>
+        <UserContextProvider>
+          <Switch>
+            {this.renderRoute()}
+            <Route component={NotFoundPage} />
+          </Switch>
+        </UserContextProvider>
       </BrowserRouter>
     );
   }
