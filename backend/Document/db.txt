@@ -14,6 +14,7 @@ user:
     phone_number
     link_facebook
     gender
+    created_date
     avatar(url)
     background(url)
     birthday

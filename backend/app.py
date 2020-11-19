@@ -2,10 +2,12 @@
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from datetime import datetime
-from Controller.HomePage import HomePage
+from Controller.homepage import HomePage
 import logging
-
-# 
+import os
+#
+if(not os.path.isdir('logs')):
+    os.mkdir('logs')
 logging.basicConfig( filename= "./logs/" + datetime.now().strftime('%Y%m%d') + '.log',
                             filemode='a',
                             format='%(levelname)s:\t%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',

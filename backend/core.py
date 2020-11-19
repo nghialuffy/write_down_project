@@ -11,18 +11,8 @@ from bson import ObjectId
 import re
 from mongo_access import *
 # password = b"nghialuffy!@#"
-# salt = base64.urlsafe_b64encode(os.urandom(16))
-
-# kdf = PBKDF2HMAC(
-#         algorithm=hashes.SHA256(),
-#         length=32,
-#         salt=salt,
-#         iterations=100000,
-#         backend=default_backend()
-#     )
 
 secret_key = b'OLEyLH0cqdfOX8zrlbwz-_k77fzVoiMR9XBVjclmwIU='
-# secret_key = base64.urlsafe_b64encode((password))
 
 def format_reponse(status_code, status_message, data, msg_error, current_page = 1, total_page = 1):
     repons = {}
@@ -64,18 +54,12 @@ def VerifyToken(token):
     if code != None:
         arr = code.split('|')
         if len(arr) == 3:
-            print(agrs)
+            agrs = [str(arr[0]), str(arr[1]), str(arr[2])]
+            # print(agrs)
             db = ConnectMongoDB()
-            listuser = db["user"].find({"username" : str(agrs[0])}, {})
-            return True, "GG"
-            # Find trong user => tra ve 
-
-            # data = Execute_Stored('p_ValidateToken', agrs)
-
-            # if data != None and len(data) > 0:
-            #     status = data[0]['Error'] == 0
-            #     msg = data[0]['Message']
-            #     return status, msg
+            listuser = list(db["user"].find({"username" : str(agrs[0])}, {}))
+            if(len(listuser) > 0):
+                return True, "Accept Token"          
             else:
                 return False, 'Internal Server Error'
         else:
@@ -120,6 +104,6 @@ class JSONEncoder(json.JSONEncoder):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
-# print(GenToken('nghia', 'ubuntu'))
+# print(GenToken('kradnguyen177', 'ubuntu'))
 
-print(VerifyToken('gAAAAABftoHFpNSipKvCRteXdK8bVWA6banVQwsCsS50msEtmk5ih9EURG69c_GR81Oryb3ynjKtCFu5N8YBObpyZaOPHhft1vfOosWXMyu0icibQ8efE98='))
+# print(VerifyToken('gAAAAABftp7ehQifEr-xiLNKp58VCLHegdr7R9gr-uD-MJc_hLNj_HOxkiluYIIiefK5VPQVzzUwAVOlCkRG6bMGqzpiAn46At_VMqD6VkYp_2r8Gyq_zMQ='))
