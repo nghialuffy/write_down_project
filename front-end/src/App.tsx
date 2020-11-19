@@ -1,53 +1,65 @@
 import React from 'react';
-import { BaseDropDown, BaseList, BaseTag } from './component';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { NotFoundPage, Loading } from './components';
+import { Module, RootModule } from './core';
 import './App.scss';
 
-function App() {
-  const dropDownSchema = [
-    {
-      text: 'item 1',
-      link: 'https://ant.design/components/dropdown/'
-    },
-    {
-      text: 'item 2',
-      link: 'https://ant.design/components/dropdown/'
-    },
-    {
-      text: 'item 3',
-      link: 'https://ant.design/components/dropdown/'
+const INSTALLED_MODULE: any = {
+  'modules': require('./modules'),
+};
+
+class RootApplication extends React.Component<{}, { loading: boolean }> {
+  rootModule: RootModule;
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      loading: true,
+    };
+    this.rootModule = new RootModule();
+  }
+  componentDidMount() {
+    this.init();
+  }
+
+  setupModule() {
+    for (let key in INSTALLED_MODULE) {
+      const module = new Module(key);
+      INSTALLED_MODULE[key].setup(module);
+      this.rootModule.register(module);
     }
-  ]
+  }
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <BaseList data={[
-          {
-            _id: '1',
-            content: 'Text1'
-          },
-          {
-            _id: '2',
-            content: 'Text2'
-          }
-        ]} Item={ItemTemp}/>
-        <BaseTag type='primary' text='tag 1' link='#'/>
-        <BaseTag type='normal' text='tag 2' link='#'/>
-        <BaseDropDown buttonText='Dropdown' schema={dropDownSchema}/>
-      </header>
-    </div>
-  );
-}
- 
-type ItemData = {
-  _id: string;
-  content: string;
+  async init() {
+    this.setState({ loading: true });
+    // Setup module
+    this.setupModule();
+    this.setState({ loading: false });
+  }
+
+  componentWillUnmount() {
+  }
+
+  renderRoute() {
+    return Object.entries(this.rootModule.routes()).map(([key, route]) => {
+      return <Route key={route.path} {...route} />;
+    });
+  }
+
+  render() {
+    if (this.state.loading) {
+      return <Loading />;
+    }
+    return (
+      <BrowserRouter basename="/">
+        <Switch>
+          {this.renderRoute()}
+          <Route component={NotFoundPage} />
+        </Switch>
+      </BrowserRouter>
+    );
+  }
 }
 
-function ItemTemp ({data} : {data: ItemData}) {
-  return (
-    <div>{data.content}</div>
-  )
-}
+// RootApplication.contextType = UserContext;
 
-export default App;
+export { RootApplication };
