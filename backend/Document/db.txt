@@ -5,20 +5,31 @@ admin
 
 user:
     _id
+    display_name
     username
     email
     password
+    address
+    personal_id
+    phone_number
     link_facebook
     gender
     avatar(url)
+    background(url)
     birthday
     bio
+    follower
+    following
     list_post
         post_id
     list_draft
-        post_id
+        draft_id
     list_category
-    
+        category_id
+    list_comment
+        comment_id
+    list_notifications
+        notifications_id
 
 post:
     _id
@@ -38,7 +49,6 @@ draft:
     url_draft
     title
     list_hashtag
-    
     created_by
     created_date
     content

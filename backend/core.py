@@ -1,7 +1,7 @@
 #!/usr/bin/python3
+import pymongo
 from flask import request
 from json import dumps
-from mySQL_access import *
 from cryptography.fernet import Fernet
 import base64, os
 import logging
@@ -9,23 +9,20 @@ from datetime import datetime
 import json
 from bson import ObjectId
 import re
-
-password = b"nghialuffy!@#"
-salt = os.urandom(16)
+from mongo_access import *
+# password = b"nghialuffy!@#"
+# salt = base64.urlsafe_b64encode(os.urandom(16))
 
 # kdf = PBKDF2HMAC(
-#     algorithm=hashes.SHA256(),
-#     length=32,
-#     salt=salt,
-#     iterations=100000,
-#     backend=default_backend()
-# )
+#         algorithm=hashes.SHA256(),
+#         length=32,
+#         salt=salt,
+#         iterations=100000,
+#         backend=default_backend()
+#     )
 
-secret_key = b'***************************'
-#secret_key = base64.urlsafe_b64encode(kdf.derive(password))
-
-dic_dauso = {"086", "096", "097", "098", "032", "033", "034", "035", "036", "037", "038", "039", "089", "090", "093",
-                 '058', "070", "079", "077", "076", "078", '088', '091', '094', '081', '082', '083', '084', '085', '092', '056', "099", "059"}
+secret_key = b'OLEyLH0cqdfOX8zrlbwz-_k77fzVoiMR9XBVjclmwIU='
+# secret_key = base64.urlsafe_b64encode((password))
 
 def format_reponse(status_code, status_message, data, msg_error, current_page = 1, total_page = 1):
     repons = {}
@@ -67,13 +64,18 @@ def VerifyToken(token):
     if code != None:
         arr = code.split('|')
         if len(arr) == 3:
-            agrs = (token, str(arr[0]))
-            data = Execute_Stored('p_ValidateToken', agrs)
+            print(agrs)
+            db = ConnectMongoDB()
+            listuser = db["user"].find({"username" : str(agrs[0])}, {})
+            return True, "GG"
+            # Find trong user => tra ve 
 
-            if data != None and len(data) > 0:
-                status = data[0]['Error'] == 0
-                msg = data[0]['Message']
-                return status, msg
+            # data = Execute_Stored('p_ValidateToken', agrs)
+
+            # if data != None and len(data) > 0:
+            #     status = data[0]['Error'] == 0
+            #     msg = data[0]['Message']
+            #     return status, msg
             else:
                 return False, 'Internal Server Error'
         else:
@@ -84,8 +86,8 @@ def VerifyToken(token):
 def GenToken(username, deviceName):
     #1: Ma hoa
     try:
-        #d = datetime.now()
-        code = username + '|' + deviceName + '|121212' #+ d.strftime('%Y-%m-%d %H:%M:%S')
+        d = int(datetime.now().timestamp())
+        code = username + '|' + deviceName + '|' + str(d)
         token = Encrypt(code)
         return token
     except Exception as e:
@@ -118,4 +120,6 @@ class JSONEncoder(json.JSONEncoder):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
-    
+# print(GenToken('nghia', 'ubuntu'))
+
+print(VerifyToken('gAAAAABftoHFpNSipKvCRteXdK8bVWA6banVQwsCsS50msEtmk5ih9EURG69c_GR81Oryb3ynjKtCFu5N8YBObpyZaOPHhft1vfOosWXMyu0icibQ8efE98='))

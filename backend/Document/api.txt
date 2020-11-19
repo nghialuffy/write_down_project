@@ -1,0 +1,22 @@
+GET:
+    category => 
+                Nổi bật
+                Mới nhất
+                Sôi Nổi
+                Top
+    postmonth           Bài viết của tháng
+    foryou              Phù hợp với bạn
+    login               Đăng nhập - Đăng ký
+    info                Thông tin user
+
+
+POST:
+    post                bài đăng
+    register                    đăng ký tài khoản
+    report              report tài khoản
+                        report bài đăng
+
+PUT:
+    comment             bình luận
+    updateinfo          update tài khoản
+    editdraft            sửa nháp
