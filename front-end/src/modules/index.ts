@@ -2,7 +2,6 @@ import { Module } from '../core';
 import { 
     HomePage, 
     CategoryPage, 
-    ProfilePage, 
     UserProfilePage, 
     NewPostPage, 
     LoginPage, 
@@ -37,11 +36,6 @@ export function setup(module: Module) {
         path: '/register',
         exact: true,
         component: RegisterPage,
-    });
-    module.route({
-        path: '/profile',
-        exact: false,
-        component: ProfilePage,
     });
     module.route({
         path: '/profile/:id',

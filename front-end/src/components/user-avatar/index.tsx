@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import { UserContext } from '../../context';
 
 type MiniData = {
     _id: string;
@@ -6,10 +7,11 @@ type MiniData = {
 
 type UserAvatarProps <T extends MiniData> = {
     data: T
-    url?: string,
 }
 
 export function UserAvatar<T extends MiniData> ({data} : UserAvatarProps<T>) {
+    const userContext = useContext(UserContext);
+    if (data._id === userContext.userId)
     return (
         <div>
             
