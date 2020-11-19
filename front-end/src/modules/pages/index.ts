@@ -1,6 +1,5 @@
 export {HomePage} from './home-page';
 export {CategoryPage} from './category-page';
-export {ProfilePage} from './profile-page'
 export {UserProfilePage} from './user-profile-page';
 export {NewPostPage} from './new-post-page';
 export {LoginPage} from './login-page';
