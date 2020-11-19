@@ -1,0 +1,18 @@
+GET:
+    category => 
+                Nổi bật
+                Mới nhất
+                Sôi Nổi
+                Top
+    Bài viết của tháng
+    Phù hợp với bạn
+    Login - Logout
+    Thông tin user
+
+
+POST:
+    bài đăng
+    update thông tin user
+
+PUT:
+    bình luận
