@@ -1,7 +1,7 @@
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from model import *
+from Controller.model import *
 import re
 from time import sleep
 
