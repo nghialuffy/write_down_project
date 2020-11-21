@@ -1,12 +1,11 @@
-from flask import Blueprint, request, jsonify, Flask, abort
-from model import User, db
+from flask import request, abort
+from app.model import User, db
 import hashlib
-bp = Blueprint('api', __name__)
+from app import bp
 
 @bp.route("/register", methods=['POST'])
 def register():
     rq=request.json
-    print(rq)
     if not rq or not 'username' in rq or not 'password' in rq:
         abort(400)
     
@@ -19,8 +18,3 @@ def register():
         abort(400)
 
     return "ok"
-
-if __name__=="__main__":
-    app=Flask(__name__)
-    app.register_blueprint(bp)
-    app.run()

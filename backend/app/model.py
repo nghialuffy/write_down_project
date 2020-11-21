@@ -1,9 +1,9 @@
-from pymongo import MongoClient
 from bson.objectid import ObjectId
 import datetime
+import base64
+import os
+from app import db
 
-client=MongoClient('mongodb+srv://pikan:zpldDfKVSo1E6wDK@writedown.xtaf7.mongodb.net/')
-db=client.write_down
 
 class Comment():
     def __init__(self, dict=None):
@@ -39,8 +39,6 @@ class Post():
             self.list_comment=[]
             self.vote=0
 
-            self.db_saved=False
-
         else:
             self.db_saved=False
             self._id=dict['_id']
@@ -54,8 +52,6 @@ class Post():
             self.time_to_read=dict['time_to_read']
             self.list_comment=dict['list_comment']
             self.vote=dict['vote']
-
-            self.db_saved=dict['db_saved']
 
     def add_comment(self, comment, save_to_db=True):
         self.list_comment.append(comment.__dict__)
@@ -83,8 +79,6 @@ class User():
             self.list_draft=[]
             self.list_category=[]
             self.list_follow=[]
-
-            self.db_saved=False
             
         else:
             self._id=dict['_id']
@@ -100,8 +94,6 @@ class User():
             self.list_draft=dict['list_draft']
             self.list_category=dict['list_category']
             self.list_follow=dict['list_follow']
-
-            self.db_saved=dict['db_saved']
 
     def add_post(self, post, save_to_db=True):
         self.list_post.append(post.__dict__)
@@ -131,6 +123,32 @@ class Category():
             self.rule=dict['rule']
     def insert_to_db(self):
         db.category.insert_one(self.__dict__)
+
+class Token():
+    def __init__(self, id_user):
+        self._id=""
+        self.token_expiration=datetime.datetime.utcnow()-datetime.timedelta(seconds=1)
+        self.id_user=id_user
+
+    def get_token(self, expires_in=3600):
+        now = datetime.datetime.utcnow()
+        if self._id and self.token_expiration > now + datetime.timedelta(seconds=60):
+            return self._id
+        self._id = base64.b64encode(os.urandom(24)).decode('utf-8')
+        self.token_expiration = now + datetime.timedelta(seconds=expires_in)
+        db.session.insert_one(self.__dict__)
+        return self
+
+    def revoke_token(self):
+        self.token_expiration = datetime.datetime.utcnow() - datetime.timedelta(seconds=1)
+        db.session.delete_one({"_id": self._id})
+
+    @staticmethod
+    def check_token(token):
+        user = db.session.find_one({"token": token})
+        if user is None or user.token_expiration < datetime.datetime.utcnow():
+            return None
+        return user
 
 if __name__=="__main__":
     post=Post()
