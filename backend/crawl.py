@@ -62,6 +62,10 @@ def crawl_post(url, time_to_read=0, category_id=None):
     post.vote=int(driver.find_element(By.XPATH, "//span[@class='vote-count']").text)
     post.time_to_read=time_to_read
     post.category=category_id
+    try:
+        post.views = int(re.findall(r"\d+", driver.find_element(By.XPATH, "//div[@class='views']").text.strip())[0])
+    except:
+        post.views = 0
     
     try:
         list_driver_hashtag=driver.find_element(By.XPATH, "//ul[@class='tags-list list-unstyled clearfix']").find_elements_by_tag_name('li')

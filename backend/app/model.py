@@ -38,6 +38,7 @@ class Post():
             self.time_to_read=0
             self.list_comment=[]
             self.vote=0
+            self.views=0
 
         else:
             self.db_saved=False
@@ -52,6 +53,7 @@ class Post():
             self.time_to_read=dict['time_to_read']
             self.list_comment=dict['list_comment']
             self.vote=dict['vote']
+            self.views=dict['views']
 
     def add_comment(self, comment, save_to_db=True):
         self.list_comment.append(comment.__dict__)
@@ -144,11 +146,11 @@ class Token():
         db.session.delete_one({"_id": self._id})
 
     @staticmethod
-    def check_token(token):
-        user = db.session.find_one({"token": token})
-        if user is None or user.token_expiration < datetime.datetime.utcnow():
+    def check_token(id_token):
+        token = db.session.find_one({"_id": id_token})
+        if token is None or user.token_expiration < datetime.datetime.utcnow():
             return None
-        return user
+        return token
 
 if __name__=="__main__":
     post=Post()
