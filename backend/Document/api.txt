@@ -1,0 +1,24 @@
+GET:
+    category => 
+                Nổi bật
+                Mới nhất
+                Sôi Nổi
+                Top
+    postmonth           Bài viết của tháng
+    foryou              Phù hợp với bạn
+    info                Thông tin user
+    login(username, password)       Đăng nhập. Trả về token
+        Ví dụ: curl -u abc:123 http://127.0.0.1:5000/login --> {"token":"a370IpyCScYxFZfRbXi/8u9KgU8qA7Fo"}
+
+POST:
+    post                bài đăng
+    register(username, password)    Đăng ký tài khoản. Trả về "ok" nếu thành công
+        Ví dụ: curl -i -X POST -H "Content-Type: application/json" -d "{\"username\":\"abasdfc\",\"password\":\"123\"}" http://localhost:5000/register
+
+    report              report tài khoản
+                        report bài đăng
+
+PUT:
+    comment             bình luận
+    updateinfo          update tài khoản
+    editdraft            sửa nháp

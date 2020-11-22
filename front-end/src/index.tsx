@@ -2,12 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import 'antd/dist/antd.css';
-import App from './App';
+import {RootApplication} from './App';
 import reportWebVitals from './reportWebVitals';
+import { Footer } from './components';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RootApplication />
+    <Footer/>
   </React.StrictMode>,
   document.getElementById('root')
 );

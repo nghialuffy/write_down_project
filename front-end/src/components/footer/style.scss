@@ -1,0 +1,28 @@
+.page-footer {
+   background-color:#3674a7;
+   display: grid;
+   color: white;
+}
+@media (min-width:767px) {
+   .column {
+      float: left;
+      width: 50%;
+   }
+}
+.column {
+   padding-left: 60px;
+   padding-right: 60px;
+   padding-top: 20px;
+   .title {
+      color: white;
+      font-weight: bolder;
+   }
+   p {
+      margin: 0;
+   }
+}
+.copyright {
+   text-align: center;
+   position: relative;
+   background-color: #12406b;
+}
