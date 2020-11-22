@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseDropDown, BaseList, BaseTag } from './component';
+import { BaseDropDown, BaseList, BaseTag, Footer } from './component';
 import './App.scss';
 
 function App() {
@@ -35,6 +35,9 @@ function App() {
         <BaseTag type='normal' text='tag 2' link='#'/>
         <BaseDropDown buttonText='Dropdown' schema={dropDownSchema}/>
       </header>
+      <footer>
+        <Footer/>
+      </footer>
     </div>
   );
 }

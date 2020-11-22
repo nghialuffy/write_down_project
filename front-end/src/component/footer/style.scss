@@ -1,0 +1,26 @@
+.page-footer {
+   background-color:#26272b;
+   display: grid;
+   color: wheat;
+}
+@media (min-width:767px) {
+   .column {
+      float: left;
+      width: 50%;
+   }
+}
+.column {
+   padding-left: 60px;
+   padding-right: 20px;
+   padding-top: 20px;
+}
+.title {
+   color: wheat;
+   font-weight: bolder;
+}
+
+.copyright {
+   text-align: center;
+   position: relative;
+   background-color: #27272b;
+}
