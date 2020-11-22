@@ -1,6 +1,6 @@
 from flask import jsonify, g
-from app import bp
-from app.auth import basic_auth
+from controller import bp
+from controller.auth import basic_auth
 
 @bp.route('/login', methods=['GET'])
 @basic_auth.login_required

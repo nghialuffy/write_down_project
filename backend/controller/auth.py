@@ -1,8 +1,8 @@
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from flask import abort, g
 import hashlib
-from app import db
-from app.model import Token
+from controller import db
+from controller.model import Token
 
 basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth()

@@ -1,7 +1,7 @@
 from flask import request, abort
-from app.model import User, db
+from controller.model import User, db
 import hashlib
-from app import bp
+from controller import bp
 
 @bp.route("/register", methods=['POST'])
 def register():

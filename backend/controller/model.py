@@ -2,7 +2,7 @@ from bson.objectid import ObjectId
 import datetime
 import base64
 import os
-from app import db
+from controller import db
 
 
 class Comment():

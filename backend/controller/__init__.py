@@ -5,8 +5,8 @@ bp=Blueprint('api', __name__)
 client=MongoClient('mongodb+srv://pikan:zpldDfKVSo1E6wDK@writedown.xtaf7.mongodb.net/')
 db=client.write_down
 
-from app.register import *
-from app.login import *
+from controller.register import *
+from controller.login import *
 
 if __name__=="__main__":
     app=Flask(__name__)
