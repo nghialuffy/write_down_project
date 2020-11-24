@@ -7,8 +7,9 @@ db=client.write_down
 
 from controller.register import *
 from controller.login import *
+from controller.user import *
 
 if __name__=="__main__":
     app=Flask(__name__)
     app.register_blueprint(bp)
-    app.run()
+    app.run(debug=True)

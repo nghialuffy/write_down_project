@@ -3,7 +3,8 @@ import datetime
 import base64
 import os
 from controller import db
-
+from bs4 import BeautifulSoup
+from flask import jsonify
 
 class Comment():
     def __init__(self, dict=None):
@@ -21,7 +22,7 @@ class Comment():
             self.created_by=dict['created_by']
             self.list_comment=dict['list_comment']
             self.vote=dict['vote']
-    def add_comment(self, comment, save_to_db=True):
+    def add_comment(self, comment):
         self.list_comment.append(comment.__dict__)
 
 class Post():
@@ -55,16 +56,33 @@ class Post():
             self.vote=dict['vote']
             self.views=dict['views']
 
-    def add_comment(self, comment, save_to_db=True):
+    def add_comment(self, comment):
         self.list_comment.append(comment.__dict__)
-        if (self.db_saved and save_to_db):
-            db.post.update_one({'_id': self._id}, {'$push': {'list_comment': comment.__dict__}})
 
     def insert_to_db(self):
-        self.db_saved=True
         db.post.insert_one(self.__dict__)
         db.user.update_one({'_id': self.created_by}, {'$push': {'list_post': self._id}})
 
+    def get_mini_post(self, get_username=True):
+        category=db.category.find_one({"_id": self.category}, {"_id": 0, "name_category": 1, "url": 1})
+        soup=BeautifulSoup(self.content, "lxml")
+
+        img_soup=soup.find("img")
+        if img_soup!=None:
+            img_post=img_soup.get_attribute_list("src")[0]
+        else:
+            img_post=""
+
+        mini_content=soup.text[:150]+"..."
+        if get_username:
+            username=db.user.find_one({"_id": self.created_by}, {"_id": 0, "username": 1})["username"]
+            return {"username": username, "title": self.title, "category": category, "created_date": self.created_date,
+                    "time_to_read": self.time_to_read, "image": img_post, "content": mini_content, "vote": self.vote,
+                    "comment": len(self.list_comment)}
+        else:
+            return {"title": self.title, "category": category, "created_date": self.created_date,
+                    "time_to_read": self.time_to_read, "image": img_post, "content": mini_content, "vote": self.vote,
+                    "comment": len(self.list_comment)}
 class User():
     def __init__(self, dict=None):
         if (dict==None):
@@ -97,16 +115,11 @@ class User():
             self.list_category=dict['list_category']
             self.list_follow=dict['list_follow']
 
-    def add_post(self, post, save_to_db=True):
+    def add_post(self, post):
         self.list_post.append(post.__dict__)
         post.created_by=self._id
-        if (self.db_saved and save_to_db):
-            db.user.update_one({'_id': self._id}, {'$push': {'list_post': post._id}})
-            if (post.db_saved==False):
-                post.insert_to_db()
 
     def insert_to_db(self):
-        self.db_saved=True
         db.user.insert_one(self.__dict__)
 
 class Category():
@@ -148,15 +161,10 @@ class Token():
     @staticmethod
     def check_token(id_token):
         token = db.session.find_one({"_id": id_token})
-        if token is None or user.token_expiration < datetime.datetime.utcnow():
+        if token is None or token.token_expiration < datetime.datetime.utcnow():
             return None
         return token
 
 if __name__=="__main__":
-    post=Post()
-    comment=Comment()
-    user=User()
-    
-    user.insert_to_db()
-    post.add_comment(comment)
-    user.add_post(post)
+    post=Post(db.post.find_one({"_id": ObjectId("5fb24d10685674ae279f1404")}))
+    print(post.get_mini_post())
