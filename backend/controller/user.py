@@ -3,7 +3,6 @@ from controller.model import Post
 
 @bp.route('/user/<username>', methods=['GET'])
 def get_user(username):
-    print(username)
     user=db.user.find_one({"username": username},
                           {"password": 0, "link_facebook": 0, "email": 0, "list_draft": 0, "list_category": 0})
     list_post=[]

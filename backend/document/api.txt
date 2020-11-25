@@ -6,7 +6,8 @@ GET:
                 Top
     postmonth           Bài viết của tháng
     foryou              Phù hợp với bạn
-    info                Thông tin user
+    user(username)                Thông tin user
+        Ví dụ: http://127.0.0.1:5000/user/Araragikoyomioc
     login(username, password)       Đăng nhập. Trả về token
         Ví dụ: curl -u abc:123 http://127.0.0.1:5000/login --> {"token":"a370IpyCScYxFZfRbXi/8u9KgU8qA7Fo"}
 
