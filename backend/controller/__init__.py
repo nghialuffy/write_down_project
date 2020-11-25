@@ -8,6 +8,7 @@ db=client.write_down
 from controller.register import *
 from controller.login import *
 from controller.user import *
+from controller.postmonth import *
 
 if __name__=="__main__":
     app=Flask(__name__)

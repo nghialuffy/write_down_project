@@ -75,14 +75,20 @@ class Post():
 
         mini_content=soup.text[:150]+"..."
         if get_username:
-            username=db.user.find_one({"_id": self.created_by}, {"_id": 0, "username": 1})["username"]
-            return {"username": username, "title": self.title, "category": category, "created_date": self.created_date,
+            user=db.user.find_one({"_id": self.created_by}, {"_id": 0, "username": 1, "display_name": 1})
+            return {"username": user["username"], "display_username": user["display_username"], "title": self.title,
+                    "category": category, "created_date": self.created_date, "url": self.url_post,
                     "time_to_read": self.time_to_read, "image": img_post, "content": mini_content, "vote": self.vote,
                     "comment": len(self.list_comment)}
         else:
-            return {"title": self.title, "category": category, "created_date": self.created_date,
+            return {"title": self.title, "category": category, "created_date": self.created_date, "url": self.url_post,
                     "time_to_read": self.time_to_read, "image": img_post, "content": mini_content, "vote": self.vote,
                     "comment": len(self.list_comment)}
+
+    def get_micro_post(self):
+        user = db.user.find_one({"_id": self.created_by}, {"_id": 0, "username": 1, "display_name": 1})
+        return {"title": self.title, "username": user["username"], "created_date": self.created_date, "url": self.url_post,
+                "display_username": user["display_name"]}
 class User():
     def __init__(self, dict=None):
         if (dict==None):
