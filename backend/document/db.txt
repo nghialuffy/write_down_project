@@ -53,6 +53,7 @@ draft:
     created_by
     created_date
     content
+    category
     
 comment
     _id
