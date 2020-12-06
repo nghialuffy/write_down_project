@@ -6,20 +6,35 @@ GET:
                 Top
     postmonth           Bài viết của tháng
     foryou              Phù hợp với bạn
-    user(username)                Thông tin user
+    user/<username>                Thông tin user
         Ví dụ: http://127.0.0.1:5000/user/Araragikoyomioc
-    login(username, password)       Đăng nhập. Trả về token
+    login (username, password)       Đăng nhập. Trả về token
         Ví dụ: curl -u abc:123 http://127.0.0.1:5000/login --> {"token":"a370IpyCScYxFZfRbXi/8u9KgU8qA7Fo"}
+        Error 401: Không đúng tài khoản hoặc mật khẩu
+    post/<postname>     Xem bài đăng
+    post/<postname>/edit-history    Xem lịch sử chỉnh sửa
 
 POST:
-    post                bài đăng
-    register(username, password)    Đăng ký tài khoản. Trả về "ok" nếu thành công
-        Ví dụ: curl -i -X POST -H "Content-Type: application/json" -d "{\"username\":\"abasdfc\",\"password\":\"123\"}" http://localhost:5000/register
+    post      Đăng bài. Mẫu như file post.json. Cần có token.
+        Trả về url post nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+    register    Đăng ký tài khoản. Mẫu như file register.json.
+        Trả về "ok" nếu thành công
+        Error 409: Trùng username
+        Error 400: Không đúng cú pháp
 
     report              report tài khoản
                         report bài đăng
 
 PUT:
+    post/<postname>     Chỉnh sửa bài đăng. Mẫu như file post.json. Cần có token của acc đăng bài.
+        Trả về url post nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Token không phải của acc đăng bài
     comment             bình luận
     updateinfo          update tài khoản
     editdraft            sửa nháp

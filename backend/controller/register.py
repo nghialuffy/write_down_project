@@ -8,7 +8,10 @@ def register():
     rq=request.json
     if not rq or not 'username' in rq or not 'password' in rq:
         abort(400)
-    
+
+    if db.user.find_one({"username": rq["username"]}) is not None:
+        abort(409)
+
     try:
         user=User()
         user.username=rq['username']
