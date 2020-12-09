@@ -167,39 +167,42 @@ def update_comment(postname):
     if not rq or not "content" in rq or not "id" in rq:
         abort(400)
 
-    if not "parent" in rq:
-        pre_cmt = \
-            db.post.find_one({"url_post": postname},
-                             {"_id": 0, "list_comment": {"$elemMatch": {"_id": ObjectId(rq['id'])}}})[
-                "list_comment"][0]
-        if token.id_user != pre_cmt["created_by"]:
-            abort(405)
-        e = db.post.update_one({"url_post": postname, "list_comment._id": ObjectId(rq["id"])},
-                               {'$set': {"list_comment.$.content": rq["content"]},
-                                '$push': {"list_comment.$.edit_history": pre_cmt["content"]}})
-        if e.matched_count > 0:
-            return "ok"
+    try:
+        if not "parent" in rq:
+            pre_cmt = \
+                db.post.find_one({"url_post": postname},
+                                 {"_id": 0, "list_comment": {"$elemMatch": {"_id": ObjectId(rq['id'])}}})[
+                    "list_comment"][0]
+            if token.id_user != pre_cmt["created_by"]:
+                abort(405)
+            e = db.post.update_one({"url_post": postname, "list_comment._id": ObjectId(rq["id"])},
+                                   {'$set': {"list_comment.$.content": rq["content"]},
+                                    '$push': {"list_comment.$.edit_history": pre_cmt["content"]}})
+            if e.matched_count > 0:
+                return "ok"
+            else:
+                abort(403)
         else:
-            abort(403)
-    else:
-        pre_cmt = list(db.post.aggregate([{"$match": {"url_post": postname}},
-                                          {"$unwind": "$list_comment"},
-                                          {"$unwind": "$list_comment.list_comment"},
-                                          {"$match": {"list_comment.list_comment._id": ObjectId(rq["id"])}},
-                                          {"$project": {"_id": 0, "list_comment.list_comment": 1}}]))[0][
-            "list_comment"]["list_comment"]
-        if token.id_user != pre_cmt["created_by"]:
-            abort(405)
-        e = db.post.update_one({"url_post": postname, "list_comment": {"$elemMatch": {
-            "_id": ObjectId(rq["parent"]), "list_comment._id": ObjectId(rq["id"])}}},
-                               {"$set": {"list_comment.$[outer].list_comment.$[inner].content": rq["content"]},
-                                "$push": {
-                                    "list_comment.$[outer].list_comment.$[inner].edit_history": pre_cmt["content"]}},
-                               array_filters=[{"outer._id": ObjectId(rq["parent"])}, {"inner._id": ObjectId(rq["id"])}])
-        if e.matched_count > 0:
-            return "ok"
-        else:
-            abort(403)
+            pre_cmt = list(db.post.aggregate([{"$match": {"url_post": postname}},
+                                              {"$unwind": "$list_comment"},
+                                              {"$unwind": "$list_comment.list_comment"},
+                                              {"$match": {"list_comment.list_comment._id": ObjectId(rq["id"])}},
+                                              {"$project": {"_id": 0, "list_comment.list_comment": 1}}]))[0][
+                "list_comment"]["list_comment"]
+            if token.id_user != pre_cmt["created_by"]:
+                abort(405)
+            e = db.post.update_one({"url_post": postname, "list_comment": {"$elemMatch": {
+                "_id": ObjectId(rq["parent"]), "list_comment._id": ObjectId(rq["id"])}}},
+                                   {"$set": {"list_comment.$[outer].list_comment.$[inner].content": rq["content"]},
+                                    "$push": {
+                                        "list_comment.$[outer].list_comment.$[inner].edit_history": pre_cmt["content"]}},
+                                   array_filters=[{"outer._id": ObjectId(rq["parent"])}, {"inner._id": ObjectId(rq["id"])}])
+            if e.matched_count > 0:
+                return "ok"
+            else:
+                abort(403)
+    except:
+        abort(403)
 
     return "ok"
 
@@ -213,34 +216,37 @@ def delete_comment(postname):
     if not rq or not "id" in rq:
         abort(400)
 
-    if not "parent" in rq:
-        pre_cmt = \
-            db.post.find_one({"url_post": postname},
-                             {"_id": 0, "list_comment": {"$elemMatch": {"_id": ObjectId(rq['id'])}}})[
-                "list_comment"][0]
-        if token.id_user != pre_cmt["created_by"]:
-            abort(405)
-        e=db.post.update_one({"url_post": postname},
-                           {'$pull': {"list_comment": {"_id": ObjectId(rq["id"])}}})
-        if e.matched_count > 0:
-            return "ok"
+    try:
+        if not "parent" in rq:
+            pre_cmt = \
+                db.post.find_one({"url_post": postname},
+                                 {"_id": 0, "list_comment": {"$elemMatch": {"_id": ObjectId(rq['id'])}}})[
+                    "list_comment"][0]
+            if token.id_user != pre_cmt["created_by"]:
+                abort(405)
+            e=db.post.update_one({"url_post": postname},
+                               {'$pull': {"list_comment": {"_id": ObjectId(rq["id"])}}})
+            if e.matched_count > 0:
+                return "ok"
+            else:
+                abort(403)
         else:
-            abort(403)
-    else:
-        pre_cmt = list(db.post.aggregate([{"$match": {"url_post": postname}},
-                                          {"$unwind": "$list_comment"},
-                                          {"$unwind": "$list_comment.list_comment"},
-                                          {"$match": {"list_comment.list_comment._id": ObjectId(rq["id"])}},
-                                          {"$project": {"_id": 0, "list_comment.list_comment": 1}}]))[0][
-            "list_comment"]["list_comment"]
-        if token.id_user != pre_cmt["created_by"]:
-            abort(405)
-        e=db.post.update_one({"url_post": postname, "list_comment._id": ObjectId(rq["parent"])},
-                           {'$pull': {"list_comment.$.list_comment": {"_id": ObjectId(rq["id"])}}})
-        if e.matched_count > 0:
-            return "ok"
-        else:
-            abort(403)
+            pre_cmt = list(db.post.aggregate([{"$match": {"url_post": postname}},
+                                              {"$unwind": "$list_comment"},
+                                              {"$unwind": "$list_comment.list_comment"},
+                                              {"$match": {"list_comment.list_comment._id": ObjectId(rq["id"])}},
+                                              {"$project": {"_id": 0, "list_comment.list_comment": 1}}]))[0][
+                "list_comment"]["list_comment"]
+            if token.id_user != pre_cmt["created_by"]:
+                abort(405)
+            e=db.post.update_one({"url_post": postname, "list_comment._id": ObjectId(rq["parent"])},
+                               {'$pull': {"list_comment.$.list_comment": {"_id": ObjectId(rq["id"])}}})
+            if e.matched_count > 0:
+                return "ok"
+            else:
+                abort(403)
+    except:
+        abort(403)
 
 
 if __name__ == "__main__":
