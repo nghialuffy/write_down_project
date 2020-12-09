@@ -18,6 +18,7 @@ class Comment():
             self.created_by = None
             self.list_comment = []
             self.vote = 0
+            self.edit_history=[]
         else:
             self._id = dict['_id']
             self.content = dict['content']
@@ -25,6 +26,7 @@ class Comment():
             self.created_by = dict['created_by']
             self.list_comment = dict['list_comment']
             self.vote = dict['vote']
+            self.edit_history=dict['edit_history']
 
     def add_comment(self, comment):
         self.list_comment.append(comment.__dict__)

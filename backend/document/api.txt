@@ -20,10 +20,18 @@ POST:
         Error 400: Không đúng cú pháp
         Error 401: Token sai
         Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+
     register    Đăng ký tài khoản. Mẫu như file register.json.
         Trả về "ok" nếu thành công
         Error 409: Trùng username
         Error 400: Không đúng cú pháp
+
+    post/<postname>/comment     Thêm bình luận. Mẫu như file comment.json (thêm vào post) và reply.json (thêm vào comment)
+                                Cần có token.
+        Trả về thông tin comment đã thêm nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
 
     report              report tài khoản
                         report bài đăng
@@ -38,3 +46,9 @@ PUT:
     comment             bình luận
     updateinfo          update tài khoản
     editdraft            sửa nháp
+
+DELETE:
+    post/<postname>     Xóa bài đăng. Cần có token của acc đăng bài.
+        Error 400: Không đúng cú pháp
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Không phải token của acc đăng bài
