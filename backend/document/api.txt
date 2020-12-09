@@ -43,7 +43,15 @@ PUT:
         Error 401: Token sai
         Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
         Error 405: Token không phải của acc đăng bài
-    comment             bình luận
+
+    post/<postname>/comment     Sửa bình luận. Mẫu như file update_comment.json và update_reply.json
+                                Cần có token của acc bình luận.
+        Trả về "ok" nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Token không phải của acc bình luận
+
     updateinfo          update tài khoản
     editdraft            sửa nháp
 
@@ -52,3 +60,11 @@ DELETE:
         Error 400: Không đúng cú pháp
         Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
         Error 405: Không phải token của acc đăng bài
+
+    post/<postname>/comment     Xóa bình luận. Mẫu như file delete_comment.json và delete_reply.json
+                                Cần có token của acc bình luận.
+        Trả về "ok" nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Token không phải của acc bình luận

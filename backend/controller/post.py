@@ -174,9 +174,13 @@ def update_comment(postname):
                 "list_comment"][0]
         if token.id_user != pre_cmt["created_by"]:
             abort(405)
-        db.post.update_one({"url_post": postname, "list_comment._id": ObjectId(rq["id"])},
-                           {'$set': {"list_comment.$.content": rq["content"]},
-                            '$push': {"list_comment.$.edit_history": pre_cmt["content"]}})
+        e = db.post.update_one({"url_post": postname, "list_comment._id": ObjectId(rq["id"])},
+                               {'$set': {"list_comment.$.content": rq["content"]},
+                                '$push': {"list_comment.$.edit_history": pre_cmt["content"]}})
+        if e.matched_count > 0:
+            return "ok"
+        else:
+            abort(403)
     else:
         pre_cmt = list(db.post.aggregate([{"$match": {"url_post": postname}},
                                           {"$unwind": "$list_comment"},
@@ -186,13 +190,19 @@ def update_comment(postname):
             "list_comment"]["list_comment"]
         if token.id_user != pre_cmt["created_by"]:
             abort(405)
-        db.post.update_one({"url_post": postname, "list_comment": {"$elemMatch": {
+        e = db.post.update_one({"url_post": postname, "list_comment": {"$elemMatch": {
             "_id": ObjectId(rq["parent"]), "list_comment._id": ObjectId(rq["id"])}}},
-                       {"$set": {"list_comment.$[outer].list_comment.$[inner].content": rq["content"]},
-                        "$push": {"list_comment.$[outer].list_comment.$[inner].edit_history": pre_cmt["content"]}},
-                       array_filters=[{"outer._id": ObjectId(rq["parent"])}, {"inner._id": ObjectId(rq["id"])}])
+                               {"$set": {"list_comment.$[outer].list_comment.$[inner].content": rq["content"]},
+                                "$push": {
+                                    "list_comment.$[outer].list_comment.$[inner].edit_history": pre_cmt["content"]}},
+                               array_filters=[{"outer._id": ObjectId(rq["parent"])}, {"inner._id": ObjectId(rq["id"])}])
+        if e.matched_count > 0:
+            return "ok"
+        else:
+            abort(403)
 
     return "ok"
+
 
 @bp.route('/post/<postname>/comment', methods=['DELETE'])
 @token_auth.login_required
@@ -210,8 +220,12 @@ def delete_comment(postname):
                 "list_comment"][0]
         if token.id_user != pre_cmt["created_by"]:
             abort(405)
-        db.post.update_one({"url_post": postname},
+        e=db.post.update_one({"url_post": postname},
                            {'$pull': {"list_comment": {"_id": ObjectId(rq["id"])}}})
+        if e.matched_count > 0:
+            return "ok"
+        else:
+            abort(403)
     else:
         pre_cmt = list(db.post.aggregate([{"$match": {"url_post": postname}},
                                           {"$unwind": "$list_comment"},
@@ -221,10 +235,13 @@ def delete_comment(postname):
             "list_comment"]["list_comment"]
         if token.id_user != pre_cmt["created_by"]:
             abort(405)
-        db.post.update_one({"url_post": postname, "list_comment._id": ObjectId(rq["parent"])},
+        e=db.post.update_one({"url_post": postname, "list_comment._id": ObjectId(rq["parent"])},
                            {'$pull': {"list_comment.$.list_comment": {"_id": ObjectId(rq["id"])}}})
+        if e.matched_count > 0:
+            return "ok"
+        else:
+            abort(403)
 
-    return "ok"
 
 if __name__ == "__main__":
     print(list(db.post.aggregate([
