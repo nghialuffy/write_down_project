@@ -12,7 +12,11 @@ GET:
         Ví dụ: curl -u abc:123 http://127.0.0.1:5000/login --> {"token":"a370IpyCScYxFZfRbXi/8u9KgU8qA7Fo"}
         Error 401: Không đúng tài khoản hoặc mật khẩu
     post/<postname>     Xem bài đăng
+        Có thể có token hoặc không.
+        Nếu có token và user đã vote bài đăng thì trường voted_user hiển thị 1 (upvote), -1 (downvote), 0 (đã xóa vote)
     post/<postname>/edit-history    Xem lịch sử chỉnh sửa
+    draft/<draftname>      Xem nháp (Cần token của user cần xem)
+    draft           Xem danh sách các nháp
 
 POST:
     post      Đăng bài. Mẫu như file post.json. Cần có token.
@@ -36,6 +40,21 @@ POST:
     report              report tài khoản
                         report bài đăng
 
+    draft       Thêm nháp. Mẫu như file post.json. Cần có token.
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+
+    draft/<draftname>/post       Đăng bài đã lưu nháp. Cần có token đăng nháp.
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Token không phải của acc đăng bài
+
+    post/<postname>/vote/<upordown>     Vote bài đăng. Cần có token.
+        <upordown> phải là "up"/"down"/"unvote"
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+
 PUT:
     post/<postname>     Chỉnh sửa bài đăng. Mẫu như file post.json. Cần có token của acc đăng bài.
         Trả về url post nếu thành công
@@ -55,6 +74,13 @@ PUT:
     updateinfo          update tài khoản
     editdraft            sửa nháp
 
+    draft/<draftname>     Chỉnh sửa nháp. Mẫu như file post.json. Cần có token của acc đăng bài.
+        Trả về url draft nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Token không phải của acc đăng bài
+
 DELETE:
     post/<postname>     Xóa bài đăng. Cần có token của acc đăng bài.
         Error 400: Không đúng cú pháp
@@ -68,3 +94,13 @@ DELETE:
         Error 401: Token sai
         Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
         Error 405: Token không phải của acc bình luận
+
+    draft/<draftname>     Xóa nháp. Cần có token của acc đăng bài.
+        Error 400: Không đúng cú pháp
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Không phải token của acc đăng bài
+
+
+
+
+curl -H "Content-Type: application/json" -H "Authorization: Bearer xxnh0V3o5T7bMYdgi5AowpAzwLaOfziF" -d @post.json http://127.0.0.1:5000/draft

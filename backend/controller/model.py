@@ -18,7 +18,7 @@ class Comment():
             self.created_by = None
             self.list_comment = []
             self.vote = 0
-            self.edit_history=[]
+            self.edit_history = []
         else:
             self._id = dict['_id']
             self.content = dict['content']
@@ -26,7 +26,7 @@ class Comment():
             self.created_by = dict['created_by']
             self.list_comment = dict['list_comment']
             self.vote = dict['vote']
-            self.edit_history=dict['edit_history']
+            self.edit_history = dict['edit_history']
 
     def add_comment(self, comment):
         self.list_comment.append(comment.__dict__)
@@ -45,16 +45,18 @@ def get_url_post(title, draft=False):
     url = title
 
     if draft:
-        while db.draft.find_one({"url_post": url}) is not None:
+        while db.draft.find_one({"url_draft": url}) is not None:
             url = title + '-' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5))
     else:
         while db.post.find_one({"url_post": url}) is not None:
             url = title + '-' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5))
     return url
 
+
 def get_time_to_read(content):
     soup = BeautifulSoup(content, "lxml")
     return int(len(soup.text.split()) / 200)
+
 
 class Post():
     def __init__(self, dict=None):
@@ -72,6 +74,7 @@ class Post():
             self.vote = 0
             self.views = 0
             self.edit_history = []
+            self.voted_user = {}
 
         else:
             self._id = dict['_id']
@@ -87,6 +90,7 @@ class Post():
             self.vote = dict['vote']
             self.views = dict['views']
             self.edit_history = dict['edit_history']
+            self.voted_user = dict['voted_user']
 
     def add_comment(self, comment):
         self.list_comment.append(comment.__dict__)
@@ -147,7 +151,7 @@ class Draft:
             self.list_hashtag = []
             self.category = None
             self.created_by = None
-            self.history=history
+            self.history = history
 
         else:
             self._id = dict['_id']
@@ -158,11 +162,12 @@ class Draft:
             self.list_hashtag = dict['list_hashtag']
             self.category = dict['category']
             self.created_by = dict['created_by']
-            self.history=dict['history']
+            self.history = dict['history']
 
     def insert_to_db(self):
         db.draft.insert_one(self.__dict__)
-        db.user.update_one({'_id': self.created_by}, {'$push': {'list_draft': self._id}})
+        if not self.history:
+            db.user.update_one({'_id': self.created_by}, {'$push': {'list_draft': self._id}})
 
     def get_mini_draft(self):
         category = db.category.find_one({"_id": self.category}, {"_id": 0, "name_category": 1, "url": 1})
@@ -186,9 +191,10 @@ class Draft:
         post.list_hashtag = self.list_hashtag
         post.category = self.category
         post.created_by = self.created_by
-        post.time_to_read=get_time_to_read(post.content)
+        post.time_to_read = get_time_to_read(post.content)
 
         return post
+
 
 class User():
     def __init__(self, dict=None):

@@ -19,6 +19,7 @@ def get_comment(data_cmt, is_reply=False):
 
 
 @bp.route('/post/<postname>', methods=['GET'])
+@token_auth.login_required(optional=True)
 def get_post(postname):
     post = {}
     data = db.post.find_one({"url_post": postname}, {"_id": 0, "url_post": 0, "time_to_read": 0})
@@ -27,7 +28,7 @@ def get_post(postname):
     post["created_date"] = data["created_date"]
     post["list_hashtag"] = data["list_hashtag"]
     post["vote"] = data["vote"]
-    post["views"] = data["views"]
+    post["views"] = data["views"] + 1
     post["edit_history"] = len(data["edit_history"]) > 0
     post["category"] = db.category.find_one({"_id": data["category"]}, {"_id": 0, "name_category": 1, "url": 1})
     post["created_by"] = db.user.find_one({"_id": data["created_by"]}, {"_id": 0, "username": 1, "display_name": 1,
@@ -35,6 +36,13 @@ def get_post(postname):
     post["list_comment"] = []
     for data_cmt in data["list_comment"]:
         post["list_comment"].append(get_comment(data_cmt))
+
+    if g.current_token is not None:
+        token=g.current_token.get_token()
+        if str(token.id_user) in data["voted_user"]:
+            post["user_voted"]=data["voted_user"][str(token.id_user)]
+
+    db.post.update_one({"url_post": postname}, {"$set": {"views": data["views"] + 1}})
     return post
 
 
@@ -104,7 +112,7 @@ def put_post(postname):
                                    "title": rq["title"],
                                    "content": rq["content"],
                                    "list_hashtag": rq["list_hashtag"],
-                                   "category": db.category.find_one({"url": rq["category"]}, {"_id": 1})["_id"],
+                                   "category": category_id,
                                    "time_to_read": get_time_to_read(rq["content"])
                                },
                                "$push": {
@@ -130,6 +138,39 @@ def delete_post(postname):
 
         db.post.delete_one({"url_post": postname})
         return "ok"
+    except:
+        abort(403)
+
+
+@bp.route('/post/<postname>/vote/<upordown>', methods=['POST'])
+@token_auth.login_required
+def vote_post(postname, upordown):
+    token = g.current_token.get_token()
+    vote = 0
+    if upordown == "up":
+        vote = 1
+    elif upordown == "down":
+        vote = -1
+    elif upordown == "unvote":
+        vote = 0
+    else:
+        abort(403)
+
+    try:
+        data = db.post.find_one({"url_post": postname}, {"_id": 0, "voted_user." + str(token.id_user): 1, "vote": 1})
+        voted = data["voted_user"]
+        vote_num = data["vote"]
+        if str(token.id_user) in voted:
+            rs_vote=vote_num - voted[str(token.id_user)] + vote
+            print(rs_vote)
+            db.post.update_one({"url_post": postname}, {"$set": {"voted_user." + str(token.id_user): vote,
+                                                                 "vote": rs_vote}})
+            return {"vote": rs_vote}
+        else:
+            rs_vote=vote_num + vote
+            db.post.update_one({"url_post": postname}, {"$set": {"voted_user." + str(token.id_user): vote,
+                                                                 "vote": rs_vote}})
+            return {"vote": rs_vote}
     except:
         abort(403)
 
@@ -195,8 +236,10 @@ def update_comment(postname):
                 "_id": ObjectId(rq["parent"]), "list_comment._id": ObjectId(rq["id"])}}},
                                    {"$set": {"list_comment.$[outer].list_comment.$[inner].content": rq["content"]},
                                     "$push": {
-                                        "list_comment.$[outer].list_comment.$[inner].edit_history": pre_cmt["content"]}},
-                                   array_filters=[{"outer._id": ObjectId(rq["parent"])}, {"inner._id": ObjectId(rq["id"])}])
+                                        "list_comment.$[outer].list_comment.$[inner].edit_history": pre_cmt[
+                                            "content"]}},
+                                   array_filters=[{"outer._id": ObjectId(rq["parent"])},
+                                                  {"inner._id": ObjectId(rq["id"])}])
             if e.matched_count > 0:
                 return "ok"
             else:
@@ -224,8 +267,8 @@ def delete_comment(postname):
                     "list_comment"][0]
             if token.id_user != pre_cmt["created_by"]:
                 abort(405)
-            e=db.post.update_one({"url_post": postname},
-                               {'$pull': {"list_comment": {"_id": ObjectId(rq["id"])}}})
+            e = db.post.update_one({"url_post": postname},
+                                   {'$pull': {"list_comment": {"_id": ObjectId(rq["id"])}}})
             if e.matched_count > 0:
                 return "ok"
             else:
@@ -239,8 +282,8 @@ def delete_comment(postname):
                 "list_comment"]["list_comment"]
             if token.id_user != pre_cmt["created_by"]:
                 abort(405)
-            e=db.post.update_one({"url_post": postname, "list_comment._id": ObjectId(rq["parent"])},
-                               {'$pull': {"list_comment.$.list_comment": {"_id": ObjectId(rq["id"])}}})
+            e = db.post.update_one({"url_post": postname, "list_comment._id": ObjectId(rq["parent"])},
+                                   {'$pull': {"list_comment.$.list_comment": {"_id": ObjectId(rq["id"])}}})
             if e.matched_count > 0:
                 return "ok"
             else:
@@ -250,27 +293,4 @@ def delete_comment(postname):
 
 
 if __name__ == "__main__":
-    print(list(db.post.aggregate([
-        {
-            "$match": {
-                "url_post": "asdgasfg"
-            }
-        },
-        {
-            "$unwind": "$list_comment"
-        },
-        {
-            "$unwind": "$list_comment.list_comment"
-        },
-        {
-            "$match": {
-                "list_comment.list_comment._id": ObjectId("5fd060e41a2fcfffa843087e")
-            }
-        },
-        {
-            "$project": {
-                "_id": 0,
-                "list_comment.list_comment": 1
-            }
-        }
-    ]))[0]["list_comment"]["list_comment"])
+    print()
