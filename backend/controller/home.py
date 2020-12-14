@@ -6,12 +6,6 @@ from controller.auth import token_auth
 from bson.objectid import ObjectId
 import pymongo
 import json
-class JSONEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, ObjectId):
-            return str(o)
-        return json.JSONEncoder.default(self, o)
-
 
 @bp.route('/s/all/hot', methods=['GET'])
 # @token_auth.login_required(optional=True)
