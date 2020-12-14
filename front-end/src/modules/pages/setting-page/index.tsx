@@ -1,7 +1,8 @@
 import React from 'react';
+import { AppWrap } from '../../../components';
 
 export function SettingPage () {
     return(
-        <div>This is setting page.</div>
+        <AppWrap>This is setting page.</AppWrap>
     )
 }

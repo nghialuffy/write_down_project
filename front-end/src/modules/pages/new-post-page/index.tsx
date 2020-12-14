@@ -1,7 +1,8 @@
 import React from 'react';
+import { AppWrap } from '../../../components';
 
 export function NewPostPage () {
     return(
-        <div>This is new post page.</div>
+        <AppWrap>This is new post page.</AppWrap>
     )
 }

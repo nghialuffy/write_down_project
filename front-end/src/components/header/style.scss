@@ -1,0 +1,129 @@
+.header {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    padding: 10px 100px;
+    background-color: white;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.24), 0px 0px 16px rgba(0, 0, 0, 0.12);
+    .logo {
+        height: 100px;
+        width: auto;
+    }
+    .header-content {
+        flex: 1;
+        .header-content-top {
+            display: flex;
+            flex-wrap: wrap;
+            column-gap: 10px;
+            row-gap: 10px;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 10px;
+            .header-search {
+                min-width: 150px;
+                flex: 1;
+                .ant-input-wrapper {
+                    .ant-input-affix-wrapper {
+                        border-radius: 50px 0 0 50px;
+                        height: 40px;
+                        outline: none;
+                    }
+                    .ant-input-affix-wrapper.ant-input-affix-wrapper-focused {
+                        border-color: #ccc;
+                    }
+                    .ant-input-group-addon {
+                        button {
+                            height: 40px;
+                            border-radius: 0 50px 50px 0;
+                            width: 50px;
+                        }
+                    }
+                }
+            }
+            .anticon.anticon-bell {
+                color: #999;
+                font-size: 30px;
+            }
+            .anticon.anticon-bell:hover {
+                color: #2C3E50;
+            }
+            .user-info {
+                display: flex;
+                column-gap: 7px;
+                .username {
+                    display: flex;
+                    align-items: center;
+                    column-gap: 5px;
+                    cursor: pointer;
+                    .anticon {
+                        color: #999;
+                        font-size: 12px;
+                    }
+                }
+                .username:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+        .header-content-bottom {
+            margin-top: 10px;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+            column-gap: 20px;
+            a:hover {
+                color: #5eabbc;
+            }
+            .ant-dropdown-trigger {
+                padding: 0;
+            }
+        } 
+    }    
+}
+
+@media(max-width: 768px) {
+    .header {
+        .logo {
+            width: auto;
+            height: 50px;
+        }
+        padding-left: 10px;
+        padding-right: 10px;
+        .header-content{
+            .header-content-top {
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                .link-new-post {
+                    display: none;
+                }
+                .header-search {
+                    .ant-input-wrapper {
+                        .ant-input-affix-wrapper {
+                            height: 30px;
+                        }
+                        .ant-input-group-addon {
+                            button {
+                                height: 30px;
+                            }
+                        } 
+                    }
+                }
+                .anticon.anticon-bell {
+                    font-size: 25px;
+                }
+            }
+            .header-content-bottom {
+                margin-top: 0;
+                margin-left: 0;
+                width: 100%;
+                flex-wrap: wrap;
+                .link {
+                    display: none;
+                }
+            }
+        }
+    }
+}

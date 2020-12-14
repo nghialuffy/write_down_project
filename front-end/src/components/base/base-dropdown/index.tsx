@@ -3,30 +3,25 @@ import { Menu, Dropdown, Button } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import './style.scss'
 
-type DropdownDataItem = {
-    text: string,
-    link: string
-}
-
 type BaseDropDownProps = {
-    buttonText: string,
-    schema: Array<DropdownDataItem>
+    button: React.ReactNode,
+    data: Array<any>
     className?: string
+    Item: React.ComponentType<{data: any}>
 }
 
 export function BaseDropDown({
-    buttonText,
-    schema,
+    button,
+    data,
     className,
+    Item
 }: BaseDropDownProps) {
     const menu = (
-        <Menu>
-            {schema.map(item => {
+        <Menu className='menu-base-dropdown'>
+            {data.map((item, index) => {
                 return (
-                    <Menu.Item key={item.text}>
-                        <a href={item.link}>
-                            {item.text}
-                        </a>
+                    <Menu.Item key={index}>
+                        <Item data={item} />
                     </Menu.Item>
                 );
             })}
@@ -37,9 +32,10 @@ export function BaseDropDown({
         <Dropdown 
             overlay={menu} 
             className={['base-dropdown', className].filter(Boolean).join(' ')}
+            trigger={['click']}
             >
-            <Button>
-                {buttonText} <DownOutlined />
+            <Button onClick={e => e.preventDefault()}>
+                {button} <DownOutlined />
             </Button>
         </Dropdown>
     );
