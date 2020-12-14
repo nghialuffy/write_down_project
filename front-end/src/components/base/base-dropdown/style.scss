@@ -1,0 +1,15 @@
+button.base-dropdown:hover, button.base-dropdown:focus {
+    color: #5eabbc;
+}
+button.base-dropdown {
+    border: none;
+    background-color: transparent;
+}
+.menu-base-dropdown {
+    .ant-dropdown-menu-item {
+        a:hover, span:hover {
+            color: #5eabbc;
+            text-decoration: none;
+        }
+    }
+}

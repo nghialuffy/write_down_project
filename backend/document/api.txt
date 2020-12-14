@@ -1,0 +1,106 @@
+GET:
+    category => 
+                Nổi bật
+                Mới nhất
+                Sôi Nổi
+                Top
+    postmonth           Bài viết của tháng
+    foryou              Phù hợp với bạn
+    user/<username>                Thông tin user
+        Ví dụ: http://127.0.0.1:5000/user/Araragikoyomioc
+    login (username, password)       Đăng nhập. Trả về token
+        Ví dụ: curl -u abc:123 http://127.0.0.1:5000/login --> {"token":"a370IpyCScYxFZfRbXi/8u9KgU8qA7Fo"}
+        Error 401: Không đúng tài khoản hoặc mật khẩu
+    post/<id>     Xem bài đăng
+        Có thể có token hoặc không.
+        Nếu có token và user đã vote bài đăng thì trường voted_user hiển thị 1 (upvote), -1 (downvote), 0 (đã xóa vote)
+    post/<id>/edit-history    Xem lịch sử chỉnh sửa
+    draft/<id>      Xem nháp (Cần token của user cần xem)
+    draft           Xem danh sách các nháp
+
+POST:
+    post      Đăng bài. Mẫu như file post.json. Cần có token.
+        Trả về url post nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+
+    register    Đăng ký tài khoản. Mẫu như file register.json.
+        Trả về "ok" nếu thành công
+        Error 409: Trùng username
+        Error 400: Không đúng cú pháp
+
+    post/<id_post>/comment     Thêm bình luận. Mẫu như file comment.json (thêm vào post) và reply.json (thêm vào comment)
+                                Cần có token.
+        Trả về thông tin comment đã thêm nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+
+    report              report tài khoản
+                        report bài đăng
+
+    draft       Thêm nháp. Mẫu như file post.json. Cần có token.
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+
+    draft/<id_draft>/post       Đăng bài đã lưu nháp. Cần có token đăng nháp.
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Token không phải của acc đăng bài
+
+    post/<id_post>/vote/<upordown>     Vote bài đăng. Cần có token.
+        <upordown> phải là "up"/"down"/"unvote"
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+
+PUT:
+    post/<id>     Chỉnh sửa bài đăng. Mẫu như file post.json. Cần có token của acc đăng bài.
+        Trả về url post nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Token không phải của acc đăng bài
+
+    post/<id_post>/comment     Sửa bình luận. Mẫu như file update_comment.json và update_reply.json
+                                Cần có token của acc bình luận.
+        Trả về "ok" nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Token không phải của acc bình luận
+
+    updateinfo          update tài khoản
+    editdraft            sửa nháp
+
+    draft/<id>     Chỉnh sửa nháp. Mẫu như file post.json. Cần có token của acc đăng bài.
+        Trả về url draft nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Token không phải của acc đăng bài
+
+DELETE:
+    post/<id>     Xóa bài đăng. Cần có token của acc đăng bài.
+        Error 400: Không đúng cú pháp
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Không phải token của acc đăng bài
+
+    post/<id_post>/comment     Xóa bình luận. Mẫu như file delete_comment.json và delete_reply.json
+                                Cần có token của acc bình luận.
+        Trả về "ok" nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Token không phải của acc bình luận
+
+    draft/<id>     Xóa nháp. Cần có token của acc đăng bài.
+        Error 400: Không đúng cú pháp
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Không phải token của acc đăng bài
+
+
+
+
+curl -H "Content-Type: application/json" -H "Authorization: Bearer xxnh0V3o5T7bMYdgi5AowpAzwLaOfziF" -d @post.json http://127.0.0.1:5000/draft

@@ -1,30 +1,11 @@
-#!/usr/bin/python3
-from flask import Flask, request, jsonify
-from flask_restful import Resource, Api
-from datetime import datetime
-from Controller.homepage import HomePage
-import logging
+import os
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# 
-logging.basicConfig( filename= "./logs/" + datetime.now().strftime('%Y%m%d') + '.log',
-                            filemode='a',
-                            format='%(levelname)s:\t%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                            datefmt='%H:%M:%S',
-                            level=logging.ERROR)
+CONFIG_PATH = os.path.join(ROOT_DIR, 'configuration.conf')
 
-app = Flask(__name__)
-api = Api(app)
+from controller import *
 
-
-api.add_resource(HomePage, '/')
-
-
-
-if __name__ == '__main__':
-    try:
-        #app.debug = True
-        app.run(host='103.113.83.246', port=8001) # api Dev
-        # app.run(host='103.113.83.200', port=9001) # api Production
-        #app.run(host='0.0.0.0', port=5001)
-    except Exception as e:
-        print('Error: ', e)
+if __name__ == "__main__":
+    app = Flask(__name__)
+    app.register_blueprint(bp)
+    app.run(host="0.0.0.0", debug=True)
