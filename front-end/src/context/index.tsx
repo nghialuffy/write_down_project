@@ -2,8 +2,9 @@ import React from 'react';
 
 type UserContextType = {
     auth: boolean
-    userId: string
+    _id: string
     displayName: string,
+    avatar_url: string
     authenticated: () => void
     logout: () => void
     updateUser: (newInfo: StateType) => void
@@ -11,8 +12,9 @@ type UserContextType = {
 
 export const UserContext = React.createContext<UserContextType>({
     auth: false,
-    userId: '',
+    _id: '',
     displayName: '',
+    avatar_url: '',
     authenticated: () => undefined,
     logout: () => undefined,
     updateUser: (newInfo: StateType) => undefined
@@ -20,8 +22,9 @@ export const UserContext = React.createContext<UserContextType>({
 
 type StateType = {
     auth: boolean
-    userId: string
+    _id: string
     displayName: string
+    avatar_url: string
 }
 
 export class UserContextProvider extends React.Component<any, StateType> {
@@ -29,8 +32,9 @@ export class UserContextProvider extends React.Component<any, StateType> {
         super(props);
         this.state = {
             auth: false,
-            userId: '',
+            _id: '',
             displayName: '',
+            avatar_url: ''
         };
         console.log(this.state);
     }

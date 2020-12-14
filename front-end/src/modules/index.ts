@@ -7,7 +7,8 @@ import {
     LoginPage, 
     RegisterPage, 
     SettingPage, 
-    TopicPage 
+    TopicPage, 
+    TopWriterPage
 } from './pages';
 
 export function setup(module: Module) {
@@ -51,5 +52,10 @@ export function setup(module: Module) {
         path: '/setting',
         exact: false,
         component: SettingPage,
+    });
+    module.route({
+        path: '/top-writer',
+        exact: false,
+        component: TopWriterPage,
     });
 }

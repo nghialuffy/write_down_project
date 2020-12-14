@@ -1,0 +1,75 @@
+.post-card {
+    border-radius: 2px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+    .post-card-info {
+        margin-bottom: 10px;
+        display: flex;
+        .info-content {
+            margin-left: 10px;
+            .info-content-top {
+                .username {
+                    font-weight: bold;
+                }
+                .linking-word {
+                    color: #99A3AD;
+                    margin: 0 5px;
+                }
+            }
+            .info-content-bottom {
+                color: #99A3AD;
+                font-size: 12px;
+            }
+        }
+    }
+    .post-card-content:hover {
+        text-decoration: none;
+    }
+    .post-card-content {
+        .card-img {
+            max-height: 200px;
+            overflow: hidden;
+            img {
+                width: 100%;
+            }
+        }
+        .content-title {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+    }
+    .post-card-footer {
+        display: flex;
+        justify-content: space-between;
+        .anticon {
+            font-size: 20px;
+            color: #99A3AD;
+        }
+        .footer-content-left {
+            display: flex;
+            align-items: center;
+            .vote-number {
+                font-weight: bold;
+                margin-right: 5px;
+            }
+            .up-vote:hover {
+                color: chartreuse;
+            }
+            .down-vote:hover {
+                color: brown;
+            }
+        }   
+        .footer-content-right {
+            display: flex;
+            column-gap: 20px;
+            > div {
+                display: flex;
+                align-items: center;
+                column-gap: 5px;
+            }
+        } 
+    }
+}
