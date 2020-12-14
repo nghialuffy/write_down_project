@@ -12,5 +12,5 @@ from controller.user import *
 from controller.post import *
 from controller.draft import *
 from controller.post_of_month import *
-from controller.home import *
+from controller.categories import *
 
