@@ -22,15 +22,15 @@ def post_draft():
         draft.url_draft = get_url_post(draft.title, draft=True)
 
         draft.insert_to_db()
-        return draft.url_draft
+        return str(draft._id)
     except:
         abort(403)
 
-@bp.route('/draft/<draftname>', methods=['GET'])
+@bp.route('/draft/<id>', methods=['GET'])
 @token_auth.login_required
-def get_draft(draftname):
+def get_draft(id):
     try:
-        data = db.draft.find_one({"url_draft": draftname}, {"_id": 0, "url_draft": 0})
+        data = db.draft.find_one({"_id": id}, {"_id": 0, "url_draft": 0})
 
         token = g.current_token.get_token()
         if token.id_user != data["created_by"]:
@@ -44,12 +44,12 @@ def get_draft(draftname):
     except:
         abort(403)
 
-@bp.route('/draft/<draftname>', methods=['PUT'])
+@bp.route('/draft/<id>', methods=['PUT'])
 @token_auth.login_required
-def put_draft(draftname):
+def put_draft(id):
     token = g.current_token.get_token()
 
-    pre_draft = Draft(db.draft.find_one({"url_draft": draftname}))
+    pre_draft = Draft(db.draft.find_one({"_id": id}))
     if token.id_user != pre_draft.created_by:
         abort(405)
 
@@ -62,9 +62,9 @@ def put_draft(draftname):
 
         if pre_draft.title == rq["title"] and pre_draft.content == rq["content"] and pre_draft.list_hashtag == rq[
             "list_hashtag"] and pre_draft.category == category_id:
-            return draftname
+            return id
 
-        db.draft.update_one({"url_draft": draftname},
+        db.draft.update_one({"_id": id},
                            {"$set": {
                                    "title": rq["title"],
                                    "content": rq["content"],
@@ -73,19 +73,19 @@ def put_draft(draftname):
                                     }})
     except:
         abort(403)
-    return draftname
+    return id
 
-@bp.route('/draft/<draftname>', methods=['DELETE'])
+@bp.route('/draft/<id>', methods=['DELETE'])
 @token_auth.login_required
-def delete_draft(draftname):
+def delete_draft(id):
     token = g.current_token.get_token()
     try:
-        draft = Draft(db.draft.find_one({"url_draft": draftname}))
+        draft = Draft(db.draft.find_one({"_id": id}))
         if token.id_user != draft.created_by:
             abort(405)
 
         db.user.update_one({"_id": token.id_user}, {"$pull": {"list_draft": draft._id}})
-        db.draft.delete_one({"url_draft": draftname})
+        db.draft.delete_one({"_id": id})
         return "ok"
     except:
         abort(403)
@@ -106,11 +106,11 @@ def get_all_draft():
     except:
         abort(403)
 
-@bp.route('/draft/<draftname>/post', methods=['POST'])
+@bp.route('/draft/<id>/post', methods=['POST'])
 @token_auth.login_required
-def draft_to_post(draftname):
+def draft_to_post(id):
     try:
-        draft = Draft(db.draft.find_one({"url_draft": draftname}))
+        draft = Draft(db.draft.find_one({"_id": id}))
 
         token = g.current_token.get_token()
         if token.id_user != draft.created_by:
@@ -119,6 +119,6 @@ def draft_to_post(draftname):
         post=draft.toPost()
         post.insert_to_db()
 
-        return post.url_post
+        return str(post._id)
     except:
         abort(403)

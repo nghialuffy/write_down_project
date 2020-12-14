@@ -1,6 +1,7 @@
 from flask import Blueprint, Flask
 from pymongo import MongoClient
 
+
 bp = Blueprint('api', __name__)
 client = MongoClient('mongodb+srv://pikan:zpldDfKVSo1E6wDK@writedown.xtaf7.mongodb.net/')
 db = client.write_down
