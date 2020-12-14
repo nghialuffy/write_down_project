@@ -2,6 +2,7 @@ from flask import request, abort, g
 from controller import bp, db
 from controller.model import Draft, get_url_post
 from controller.auth import token_auth
+from bson.objectid import ObjectId
 
 @bp.route('/draft', methods=['POST'])
 @token_auth.login_required
@@ -30,7 +31,7 @@ def post_draft():
 @token_auth.login_required
 def get_draft(id):
     try:
-        data = db.draft.find_one({"_id": id}, {"_id": 0, "url_draft": 0})
+        data = db.draft.find_one({"_id": ObjectId(id)}, {"_id": 0, "url_draft": 0})
 
         token = g.current_token.get_token()
         if token.id_user != data["created_by"]:
@@ -49,7 +50,7 @@ def get_draft(id):
 def put_draft(id):
     token = g.current_token.get_token()
 
-    pre_draft = Draft(db.draft.find_one({"_id": id}))
+    pre_draft = Draft(db.draft.find_one({"_id": ObjectId(id)}))
     if token.id_user != pre_draft.created_by:
         abort(405)
 
@@ -64,7 +65,7 @@ def put_draft(id):
             "list_hashtag"] and pre_draft.category == category_id:
             return id
 
-        db.draft.update_one({"_id": id},
+        db.draft.update_one({"_id": ObjectId(id)},
                            {"$set": {
                                    "title": rq["title"],
                                    "content": rq["content"],
@@ -80,12 +81,12 @@ def put_draft(id):
 def delete_draft(id):
     token = g.current_token.get_token()
     try:
-        draft = Draft(db.draft.find_one({"_id": id}))
+        draft = Draft(db.draft.find_one({"_id": ObjectId(id)}))
         if token.id_user != draft.created_by:
             abort(405)
 
         db.user.update_one({"_id": token.id_user}, {"$pull": {"list_draft": draft._id}})
-        db.draft.delete_one({"_id": id})
+        db.draft.delete_one({"_id": ObjectId(id)})
         return "ok"
     except:
         abort(403)
@@ -110,7 +111,7 @@ def get_all_draft():
 @token_auth.login_required
 def draft_to_post(id):
     try:
-        draft = Draft(db.draft.find_one({"_id": id}))
+        draft = Draft(db.draft.find_one({"_id": ObjectId(id)}))
 
         token = g.current_token.get_token()
         if token.id_user != draft.created_by:
