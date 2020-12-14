@@ -3,7 +3,7 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import { NotFoundPage, Loading } from './components';
 import { Module, RootModule } from './core';
 import './App.scss';
-import { UserContextProvider } from './context';
+import { UserContext, UserContextProvider } from './context';
 
 const INSTALLED_MODULE: any = {
   'modules': require('./modules'),
@@ -34,6 +34,7 @@ class RootApplication extends React.Component<{}, { loading: boolean }> {
     this.setState({ loading: true });
     // Setup module
     this.setupModule();
+    
     this.setState({ loading: false });
   }
 

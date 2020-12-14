@@ -1,5 +1,8 @@
 .post-item {
     display: flex;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: transparent;
     .post-item-content {
         margin-left: 10px;
         .post-title {
@@ -17,13 +20,13 @@
             text-overflow: ellipsis;
         } 
         .post-title:hover {
-            color: #2FB5FA;
+            color: #5eabbc;
         }
         .sub-title {
             color: #99A3AD;
             font-size: 12px;
             .username {
-                color: #2FB5FA;
+                color: #5eabbc;
                 margin: 0 5px;
             }
             .username:hover {

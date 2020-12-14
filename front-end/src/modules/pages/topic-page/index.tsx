@@ -1,7 +1,8 @@
 import React from 'react';
+import { AppWrap } from '../../../components';
 
 export function TopicPage () {
     return(
-        <div>This is topic page.</div>
+        <AppWrap>This is topic page.</AppWrap>
     )
 }

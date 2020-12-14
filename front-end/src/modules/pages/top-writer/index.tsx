@@ -1,8 +1,8 @@
 import React from 'react';
 import { AppWrap } from '../../../components';
 
-export function RegisterPage () {
+export function TopWriterPage () {
     return(
-        <div>This is register page.</div>
+        <AppWrap>This is top writer page.</AppWrap>
     )
 }

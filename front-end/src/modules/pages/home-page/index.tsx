@@ -1,12 +1,15 @@
 import React from 'react';
-import { PostCard, PostItem } from '../../components';
+import { AppWrap, PostCard, PostItem } from '../../../components';
 
 export function HomePage () {
     return(
-        <div>
+        <AppWrap>
             This is home page.
             <PostItem />
+            <PostItem />
+
             <PostCard />
-        </div>
+            <PostCard />
+        </AppWrap>
     )
 }

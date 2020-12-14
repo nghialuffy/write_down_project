@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment'
-import { UserAvatar } from '../../../components';
+import { UserAvatar } from '..';
 import './style.scss';
 
 export function PostItem () {
@@ -17,7 +17,7 @@ export function PostItem () {
                 <div className='sub-title'>
                     <span>bởi</span>
                     <a href='https://spiderum.com/hot?page=1' className='username'>Hex</a>
-                    <span>{moment('2017-01-01').format('DD MMM YYYY')}</span>
+                    <span>{moment('2020-12-08T11:17:17.862041+00:00').fromNow()}</span>
                 </div>
             </div>
         </div>

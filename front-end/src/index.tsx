@@ -4,12 +4,10 @@ import './index.scss';
 import 'antd/dist/antd.css';
 import {RootApplication} from './App';
 import reportWebVitals from './reportWebVitals';
-import { Footer } from './components';
 
 ReactDOM.render(
   <React.StrictMode>
     <RootApplication />
-    <Footer/>
   </React.StrictMode>,
   document.getElementById('root')
 );

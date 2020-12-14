@@ -1,11 +1,10 @@
 .page-footer {
+   position: relative;
+   bottom: 0;
    background-color:#eee;
    display: grid;
    color: #2c3f52;
-   .container:not(.copyright) {
-      column-gap: 20px;
-      padding: 0 50px;
-   }
+   width: 100%;
    img.logo {
       width: 100px;
       height: auto;
@@ -16,20 +15,26 @@
          display: flex;
          align-items: center;
          column-gap: 5px;
+         .anticon {
+            margin-right: 4px;
+         }
       }
    }
    .copyright {
+      width: 100%;
       color: white;
       opacity: .8;
       height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
+      background-color: #12406b;
+      word-wrap: break-word;
       > a {
          color: white;
       }
       > a:hover {
-         color: #2FB5FA;
+         color: #5eabbc;
       }
       .small-logo {
          width: 30px;
@@ -42,16 +47,8 @@
       float: left;
       width: 50%;
    }
-}
-.column {
-   .title {
-      font-weight: bolder;
+   .container:not(.copyright) {
+      column-gap: 20px;
+      padding: 0 50px;
    }
-   p {
-      margin: 0;
-   }
-}
-.copyright {
-   position: relative;
-   background-color: #12406b;
 }

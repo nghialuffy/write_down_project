@@ -9,7 +9,7 @@ export function HoverProfile () {
                 Username
             </a>
             {showInfo && <div className='user-info'>
-
+                
             </div>}
         </span>
     );
