@@ -1,5 +1,5 @@
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
-from flask import abort, g
+from flask import abort, g, request
 import hashlib
 from controller import db
 from controller.model import Token
@@ -10,6 +10,13 @@ token_auth = HTTPTokenAuth()
 
 @basic_auth.verify_password
 def verify_password(username, password):
+    rq = request.json
+    if not rq or not "username" in rq or not "password" in rq:
+        abort(400)
+
+    username = rq["username"]
+    password = rq["password"]
+
     user = db.user.find_one({"username": username, "password": hashlib.md5(password.encode('utf-8')).hexdigest()})
     if user is None:
         return False

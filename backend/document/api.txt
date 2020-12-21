@@ -8,8 +8,9 @@ GET:
     foryou              Phù hợp với bạn
     user/<username>                Thông tin user
         Ví dụ: http://127.0.0.1:5000/user/Araragikoyomioc
-    login (username, password)       Đăng nhập. Trả về token
-        Ví dụ: curl -u abc:123 http://127.0.0.1:5000/login --> {"token":"a370IpyCScYxFZfRbXi/8u9KgU8qA7Fo"}
+    login       Đăng nhập. Trả về token. Mẫu như login.json
+        Ví dụ: curl -H "Content-Type: application/json" -d @login.json http://127.0.0.1:5000/login
+            --> {"token":"a370IpyCScYxFZfRbXi/8u9KgU8qA7Fo"}
         Error 401: Không đúng tài khoản hoặc mật khẩu
     post/<id>     Xem bài đăng
         Có thể có token hoặc không.
