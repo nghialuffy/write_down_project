@@ -41,7 +41,7 @@ export const Categories = [
     },
     {
         label: 'Du lich - Ẩm thực',
-        value: 'traveling-food'
+        value: 'traveling_food'
     },
     {
         label: 'Thể thao',
@@ -49,7 +49,88 @@ export const Categories = [
     },
     {
         label: 'English Zone',
-        value: 'english-zone'
+        value: 'english_zone'
     },
 
+];
+
+export const UserCategory = [
+    {
+        _id: '1',
+        label: 'Sách',
+        value: 'books',
+        follow: true
+    },
+    {
+        _id: '2',
+        label: 'Khoa học',
+        value: 'science',
+        follow: true
+    },
+    {
+        _id: '3',
+        label: 'Tranh luận',
+        value: 'argument',
+        follow: true
+    },
+    {
+        _id: '4',
+        label: 'Âm nhạc',
+        value: 'music',
+        follow: true
+    },
+    {
+        _id: '5',
+        label: 'Game',
+        value: 'game',
+        follow: false
+    },
+    {
+        _id: '6',
+        label: 'Phim',
+        value: 'film',
+        follow: true
+    },
+    {
+        _id: '7',
+        label: 'Kĩ năng',
+        value: 'skill',
+        follow: false
+    },
+    {
+        _id: '8',
+        label: 'Tâm sự',
+        value: 'talk',
+        follow: true
+    },
+    {
+        _id: '9',
+        label: 'Anime',
+        value: 'anime',
+        follow: true
+    },
+    {
+        _id: '10',
+        label: 'Truyện tranh',
+        value: 'comics',
+        follow: false
+    },
+    {
+        _id: '11',
+        label: 'Du lich - Ẩm thực',
+        value: 'traveling_food',
+        follow: true
+    },
+    {
+        _id: '12',
+        label: 'Thể thao',
+        value: 'sport',
+        follow: false
+    },
+    {
+        _id: '13',
+        label: 'English Zone',
+        value: 'english_zone',
+        follow: true
+    },
 ];

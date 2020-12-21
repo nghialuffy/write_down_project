@@ -4,5 +4,38 @@
     height: 100vh;
     .web-content {
         flex: 1;
+        padding: 10px;
+        .layout-container {
+            .left-content, .right-content {
+                display: none;
+            }
+        }
+    }
+}
+
+@media(min-width: 768px) {
+    .app-wrap {
+        .web-content {
+            padding: 10px 50px;
+        }
+    }
+}
+@media(min-width: 1024px) {
+    .app-wrap {
+        .web-content {
+            justify-content: center;
+            display: flex;
+            .layout-container {
+                max-width: 1000px;
+                .left-content, .right-content {
+                    display: block;
+                } 
+                .main-content {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                }
+            }
+        }
     }
 }
