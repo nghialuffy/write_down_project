@@ -13,7 +13,7 @@ export function BaseList<T extends {_id: string}>({
     Item,
     className,
 }: BaseListProps<T>) {
-    function renderItem() {
+    const renderItem = () => {
         return data.map((item) => <Item data={item} key={item._id} />);
     }
     return (
