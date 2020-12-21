@@ -18,7 +18,10 @@ export function BaseButton ({
 }: BaseButtonProps) {
     return (
         <button className={['base-button', className, `btn-${type}`].filter(Boolean).join(' ')}
-            onClick={onClick}
+            onClick={(e) => {
+                onClick && onClick(e);
+                if (e) e.stopPropagation();
+            }}
             {...containerProps}
         >
             {children}

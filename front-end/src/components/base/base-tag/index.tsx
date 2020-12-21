@@ -1,27 +1,28 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './style.scss';
 
 type BaseTagProps = {
-    text: string
-    link: string
+    value: string
+    label: string
     type?: 'primary' | 'normal'
     className?: string
     containerProps?: React.HTMLAttributes<HTMLElement>
 }
 
 export function BaseTag({
-    type = 'normal',
+    type = 'primary',
+    label,
     className,
     containerProps,
-    text,
-    link
+    value,
 } : BaseTagProps) {
     return (
-        <a className={['base-tag', type, className].filter(Boolean).join(' ')}
-            href={link}
+        <Link className={['base-tag', type, className].filter(Boolean).join(' ')}
+            to={`/posts/tags/${value}`}
             {...containerProps}
             >
-            {text}
-        </a>
+            {label}
+        </Link>
     )
 }

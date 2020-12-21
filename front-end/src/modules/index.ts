@@ -25,7 +25,7 @@ export function setup(module: Module) {
         component: CategoryPage,
     });
     module.route({
-        path: '/posts/:topic',
+        path: '/posts/tags/:topic',
         exact: true,
         component: TopicPage,
     });
