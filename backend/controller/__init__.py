@@ -9,7 +9,8 @@ db = client.write_down
 from controller.register import *
 from controller.login import *
 from controller.user import *
-from controller.postmonth import *
 from controller.post import *
 from controller.draft import *
+from controller.post_of_month import *
+from controller.home import *
 
