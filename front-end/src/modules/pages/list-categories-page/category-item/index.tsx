@@ -1,6 +1,6 @@
 import { url } from 'inspector';
 import React from 'react';
-import CategoryImage from '../../../../assets/Images';
+import { CategoryImage } from '../../../../assets/Images';
 import { BaseButton } from '../../../../components';
 import './style.scss';
 

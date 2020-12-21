@@ -64,4 +64,14 @@ export function setup(module: Module) {
         exact: false,
         component: ListCategoriesPage,
     });
+    module.route({
+        path: '/posts/:category/:type',
+        exact: false,
+        component: CategoryPage,
+    });
+    module.route({
+        path: '/:type',
+        exact: false,
+        component: HomePage,
+    });
 }

@@ -1,6 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { AppWrap } from '../../../components';
+import { AppWrap, BaseList } from '../../../components';
 import { UserCategory } from '../../../constants';
 import { CategoryItem } from './category-item';
 import './style.scss';
@@ -8,9 +7,11 @@ import './style.scss';
 export function ListCategoriesPage() {
     return (
         <AppWrap>
-            <div className='list-categories'>
-                {UserCategory.map(item => <CategoryItem data={item as any} />)}
-            </div>
+            <BaseList<typeof UserCategory[0]> 
+                data={UserCategory} 
+                Item={CategoryItem as any} 
+                className='list-categories'
+            />
         </AppWrap>
     )
 }
