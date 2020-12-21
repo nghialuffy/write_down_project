@@ -285,6 +285,8 @@ class Token():
         token._id = data["_id"]
         token.token_expiration = data["token_expiration"]
         return token
+    def show_token(self):
+        return self._id
 
 
 if __name__ == "__main__":
