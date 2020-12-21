@@ -1,15 +1,33 @@
+import { Pagination } from 'antd';
 import React from 'react';
-import { AppWrap, PostCard, PostItem } from '../../../components';
+import { useParams,useHistory } from 'react-router-dom';
+import { AppWrap, PostCard, PostItem, SideBarRight } from '../../../components';
+import { MenuSideBar } from '../../../components/menu-side-bar';
+import './style.scss';
 
 export function HomePage () {
+    let { type } = useParams<{type: string}>();
+    let history = useHistory();
+    if (!type) {
+        history.push('/hot');
+    }
     return(
         <AppWrap>
-            This is home page.
-            <PostItem />
-            <PostItem />
-
-            <PostCard />
-            <PostCard />
+            <div className='layout-container'>
+                <div className='left-content'>
+                    <MenuSideBar />
+                </div>
+                <div className='main-content'>
+                    <PostCard />
+                    <PostCard />
+                    <PostCard />
+                    <PostCard />
+                    <Pagination total={200} pageSize={20}/>
+                </div>
+                <div className='right-content'>
+                    <SideBarRight />
+                </div>
+            </div>
         </AppWrap>
     )
 }

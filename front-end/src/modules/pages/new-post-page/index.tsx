@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 function handleEditorChange(e: any) {
     console.log(
         'Content was updated:',
-        e.target.getContent()
+        e.target.value
     );
 }
 

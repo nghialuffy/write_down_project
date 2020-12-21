@@ -8,12 +8,14 @@ GET:
     foryou              Phù hợp với bạn
     user/<username>                Thông tin user
         Ví dụ: http://127.0.0.1:5000/user/Araragikoyomioc
-    login (username, password)       Đăng nhập. Trả về token
-        Ví dụ: curl -u abc:123 http://127.0.0.1:5000/login --> {"token":"a370IpyCScYxFZfRbXi/8u9KgU8qA7Fo"}
+    login       Đăng nhập. Trả về token. Mẫu như login.json
+        Ví dụ: curl -H "Content-Type: application/json" -d @login.json http://127.0.0.1:5000/login
+            --> {"token":"a370IpyCScYxFZfRbXi/8u9KgU8qA7Fo"}
         Error 401: Không đúng tài khoản hoặc mật khẩu
     post/<id>     Xem bài đăng
         Có thể có token hoặc không.
         Nếu có token và user đã vote bài đăng thì trường voted_user hiển thị 1 (upvote), -1 (downvote), 0 (đã xóa vote)
+            Tương tự với vote bình luận
     post/<id>/edit-history    Xem lịch sử chỉnh sửa
     draft/<id>      Xem nháp (Cần token của user cần xem)
     draft           Xem danh sách các nháp
@@ -52,6 +54,11 @@ POST:
 
     post/<id_post>/vote/<upordown>     Vote bài đăng. Cần có token.
         <upordown> phải là "up"/"down"/"unvote"
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+
+    post/<id_post>/comment/vote     Vote bình luận. Cần có token. Mẫu như file vote_cmt.json và vote_reply.json
+        "upordown" phải là "up"/"down"/"unvote"
         Error 401: Token sai
         Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
 

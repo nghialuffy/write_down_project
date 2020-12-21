@@ -8,7 +8,8 @@ import {
     RegisterPage, 
     SettingPage, 
     TopicPage, 
-    TopWriterPage
+    TopWriterPage,
+    ListCategoriesPage
 } from './pages';
 
 export function setup(module: Module) {
@@ -24,7 +25,7 @@ export function setup(module: Module) {
         component: CategoryPage,
     });
     module.route({
-        path: '/posts/:topic',
+        path: '/posts/tags/:topic',
         exact: true,
         component: TopicPage,
     });
@@ -57,5 +58,20 @@ export function setup(module: Module) {
         path: '/top-writer',
         exact: false,
         component: TopWriterPage,
+    });
+    module.route({
+        path: '/all-categories',
+        exact: false,
+        component: ListCategoriesPage,
+    });
+    module.route({
+        path: '/posts/:category/:type',
+        exact: false,
+        component: CategoryPage,
+    });
+    module.route({
+        path: '/:type',
+        exact: false,
+        component: HomePage,
     });
 }

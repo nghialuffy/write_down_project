@@ -1,0 +1,40 @@
+.menu-side-bar {
+    .item {
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        margin: 2px 0;
+        .menu-icon {
+            width: 30px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            stroke: #959EA7;
+            fill: transparent;
+        }  
+        a {
+            color: #959EA7;
+        }
+
+    }
+    .item.active {
+        background-color: white;
+        .menu-icon {
+            stroke: none;
+            fill: #138999;
+        }
+        a {
+            color:  #34495E;
+        }
+    }
+    .item:hover {
+        a {
+            text-decoration: none;
+            color:  #34495E;
+        }
+        .menu-icon {
+            stroke: #34495E;
+            fill: transparent;
+        }
+    }
+}
