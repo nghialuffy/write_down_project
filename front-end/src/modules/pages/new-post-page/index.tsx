@@ -5,21 +5,21 @@ import Form from 'antd/lib/form/Form';
 import { Input } from 'antd';
 import { Categories } from '../../../constants';
 import { Link } from 'react-router-dom';
-// function handleEditorChange(e: any) {
-//     console.log(
-//         'Content was updated:',
-//         e.target.getContent()
-//     );
-// }
+function handleEditorChange(e: any) {
+    console.log(
+        'Content was updated:',
+        e.target.getContent()
+    );
+}
 
 export function NewPostPage() {
     const [value, setValue] = useState("");
-    const handleEditorChange = (e: any) => {
-        // setValue(e.target.getContent());
-        console.log("Content:" + value);
-        setValue(e.target.getContent())
+    // const handleEditorChange = (e: any) => {
+    //     // setValue(e.target.getContent());
+    //     console.log("Content:" + value);
+    //     setValue(e.target.getContent())
         
-    }
+    // }
     return (
         <AppWrap>
             <Form>
