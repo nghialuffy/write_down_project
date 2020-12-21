@@ -5,7 +5,18 @@ from datetime import datetime
 from controller.auth import token_auth
 from bson.objectid import ObjectId
 import pymongo
+from bs4 import BeautifulSoup
 
+def get_content_post(data):
+    res = ""
+    try:
+        soup = BeautifulSoup(data)
+        full_text = soup.find_all(text=True)
+        for raw_data in full_text:
+            res += raw_data
+    except Exception as exc:
+        print("Error: " + exc)
+    return res
 @bp.route('/s/all/hot', methods=['GET'])
 # @token_auth.login_required(optional=True)
 def get_hot_post_unverified():
@@ -41,7 +52,7 @@ def get_hot_post_unverified():
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : str(list_post[index_page]["content"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"])),
                     "url_post" : str(list_post[index_page]["url_post"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
@@ -166,7 +177,7 @@ def get_controversial_post_unverified():
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : str(list_post[index_page]["content"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"])),
                     "url_post" : str(list_post[index_page]["url_post"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
@@ -213,7 +224,7 @@ def get_top_post_unverified():
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : str(list_post[index_page]["content"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"])),
                     "url_post" : str(list_post[index_page]["url_post"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
@@ -269,7 +280,7 @@ def get_category_hot(category_name):
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : str(list_post[index_page]["content"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"])),
                     "url_post" : str(list_post[index_page]["url_post"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
@@ -324,7 +335,7 @@ def get_category_new(category_name):
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : str(list_post[index_page]["content"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"])),
                     "url_post" : str(list_post[index_page]["url_post"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
