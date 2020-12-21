@@ -9,7 +9,8 @@ import {
     SettingPage, 
     TopicPage, 
     TopWriterPage,
-    ListCategoriesPage
+    ListCategoriesPage,
+    PostDetailPage
 } from './pages';
 
 export function setup(module: Module) {
@@ -73,5 +74,10 @@ export function setup(module: Module) {
         path: '/:type',
         exact: false,
         component: HomePage,
+    });
+    module.route({
+        path: '/post/detail/:id',
+        exact: false,
+        component: PostDetailPage,
     });
 }

@@ -8,7 +8,6 @@ export function ForYouPosts () {
             <PostItem />
             <PostItem />
             <PostItem />
-            <PostItem />
         </div>
     );
 }

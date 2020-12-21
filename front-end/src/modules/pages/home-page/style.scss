@@ -2,12 +2,23 @@
     display: flex;
     column-gap: 20px;
     .left-content {
-        width: 10%;
+        width: 15%;
     }
     .main-content {
         flex: 1;
+        position: relative;
     }
     .right-content {
-        width: 30%;
+        width: 25%;
     }
+}
+.ant-spin-spinning.list-loading {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+    width: 100%;
+    background: aliceblue;
+    z-index: 499;
 }

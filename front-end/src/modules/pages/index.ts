@@ -8,3 +8,4 @@ export {TopicPage} from './topic-page';
 export {SettingPage} from './setting-page';
 export {TopWriterPage} from './top-writer';
 export {ListCategoriesPage} from './list-categories-page';
+export {PostDetailPage} from './post-detail';

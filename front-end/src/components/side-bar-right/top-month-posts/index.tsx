@@ -9,6 +9,7 @@ export function TopMonthPosts () {
             <PostItem />
             <PostItem />
             <PostItem />
+            <PostItem />
         </div>
     );
 }

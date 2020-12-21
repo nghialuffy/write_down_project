@@ -9,3 +9,7 @@ export const ComposeHeader = styled.div `
     padding: 10px 0;
     border-bottom: 1px solid rgba(95,111,129,0.2);
 `;
+
+export const ErrorText = styled.span`
+    color: red;
+`;

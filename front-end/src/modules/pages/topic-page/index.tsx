@@ -18,10 +18,10 @@ export function TopicPage () {
                     <MenuSideBar />
                 </div>
                 <div className='main-content'>
+                    {/* <PostCard />
                     <PostCard />
                     <PostCard />
-                    <PostCard />
-                    <PostCard />
+                    <PostCard /> */}
                     <Pagination total={200} pageSize={20} />
                 </div>
                 <div className='right-content'>

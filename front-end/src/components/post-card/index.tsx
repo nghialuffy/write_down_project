@@ -1,54 +1,71 @@
 import moment from 'moment';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserAvatar } from '..';
 import { CaretUpOutlined, CaretDownOutlined, EyeOutlined, CommentOutlined } from '@ant-design/icons';
 import './style.scss';
+import { PostCardType } from '../../model';
+import { useEntityData } from '../../access';
+import { UserType, CategoryType } from '../../model';
+import { Link } from 'react-router-dom';
+import { ErrorText } from '../style-components';
+import { HTTPCodeLabel } from '../../const';
+import { Spin } from 'antd';
 
-export function PostCard () {
+export function PostCard({ data }: { data: PostCardType }) {
+    const { loading: userLoading, data: user, status: userStatus } = useEntityData<UserType>(`user/${data.created_by}`);
+    const { loading: categoryLoading, data: category, status: categoryStatus } = useEntityData<CategoryType>(`categories/${data.category}`)
     return (
         <div className='post-card'>
             <div className='post-card-info'>
+                {(userLoading || categoryLoading) && <Spin className='item-loading' />}
                 <UserAvatar data={{
-                    _id: '12333',
-                    avatar_url: 'https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-xs-avatar/e0134d8000c911ebb2e9f38cb09f8367.png'
-                }}/>
+                    _id: user?._id ?? user?.username ?? '',
+                    avatar_url: user?.avatar
+                }} />
                 <div className='info-content'>
                     <div className='info-content-top'>
-                        <a href='https://spiderum.com/hot?page=1' className='username'>Shailly</a>
+                        <Link
+                            to={`/profile/${user?._id}`}
+                            className='username'
+                        >
+                            {userStatus === "200" ? user?.username : <ErrorText>{`[${userStatus}] ${HTTPCodeLabel(userStatus)}`}</ErrorText>}
+                        </Link>
                         <span className='linking-word'>trong</span>
-                        <a href='https://spiderum.com/hot?page=1' className='category'>Phim</a>                       
+                        <Link to={`/posts/${category?.url}`} className='category'>
+                            {categoryStatus === "200" ? category?.name_category :
+                                <ErrorText>{`[${categoryStatus}] ${HTTPCodeLabel(categoryStatus)}`}</ErrorText>}
+                        </Link>
                     </div>
                     <div className='info-content-bottom'>
-                        {moment('2020-12-08T11:17:17.862041+00:00').fromNow()}
+                        {moment(data.created_date).fromNow()}
                     </div>
+                    <div>{`${data.time_to_read} phút đọc`}</div>
                 </div>
             </div>
-            <a className='post-card-content' href='https://spiderum.com/hot?page=1'>
-                <div className='card-img'>
+            <Link className='post-card-content' to={`/post/detail/${data._id}`}>
+                {data.url_image && <div className='card-img'>
                     <img src='https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-thumbnails/30ec2e70379d11eb9e72bd946431b3ae.jpg'
                         alt='post-card-img'
                     />
-                </div>
-               
-                <h3 className='content-title'>"Before we go" – Trước lúc ta lên đường</h3>
-                <p className='content-truncate'> Bạn đã bao giờ gặp một ai đó cho bạn cái cảm giác yên tâm kì lạ kể cả khi bạn mới gặp người đó lần đầu hay chưa? 
-                    Tôi thì có rồi, đó là một người lạ...
+                </div>}
+                <h3 className='content-title'>{data.title}</h3>
+                <p className='content-truncate'>{data.content}
                 </p>
-            </a>
+            </Link>
             <div className='post-card-footer'>
                 <div className='footer-content-left'>
-                    <span className='vote-number'>3</span>
-                    <CaretUpOutlined className='up-vote'/>
-                    <CaretDownOutlined className='down-vote'/>
+                    <span className='vote-number'>{data.vote}</span>
+                    <CaretUpOutlined className='up-vote' />
+                    <CaretDownOutlined className='down-vote' />
                 </div>
                 <div className='footer-content-right'>
                     <div className='seen-number'>
                         <EyeOutlined />
-                        246
+                        {data.views}
                     </div>
                     <div className='comment-number'>
                         <CommentOutlined />
-                        5
+                        {data.comments}
                     </div>
                 </div>
             </div>

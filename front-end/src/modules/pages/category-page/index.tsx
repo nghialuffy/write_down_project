@@ -1,9 +1,11 @@
-import { Pagination } from 'antd';
-import React from 'react';
+import { Empty, Pagination, Spin } from 'antd';
+import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { useEntityDataList } from '../../../access';
 import { CategoryImage } from '../../../assets/Images';
-import { AppWrap, BaseButton, MenuSideBar, PostCard, PostItem, SideBarRight } from '../../../components';
+import { AppWrap, BaseButton, BaseList, MenuSideBar, PostCard, SideBarRight } from '../../../components';
 import { Categories } from '../../../constants';
+import { ListPost, PostCardType } from '../../../model';
 import './style.scss';
 
 export function CategoryPage() {
@@ -13,19 +15,15 @@ export function CategoryPage() {
     if (!type) {
         history.push(`/posts/${category}/hot`)
     }
+    const [currentPage, setCurrentPage] = useState(1);
+    const { loading, data } = useEntityDataList<ListPost>(`s/${category}/${type}`, currentPage);
 
-    const categoryItemData = {
-        _id: '1',
-        value: category,
-        display: Categories.filter(item => item.value === category)[0].label,
-        follow: true
-    }
     return (
         <AppWrap>
             <div className='category-header' style={{ backgroundImage: `url(${CategoryImage[category].default})` }}>
-                <div className='category-label'>{categoryItemData.display}</div>
-                <BaseButton type={categoryItemData.follow ? 'primary' : 'default'} className='btn-follow'>
-                    {categoryItemData.follow ? 'Huỷ theo dõi' : 'Theo dõi'}
+                <div className='category-label'>{Categories.filter(item => item.value === category)[0].label}</div>
+                <BaseButton type='primary' className='btn-follow'>
+                    Theo dõi
                 </BaseButton>
             </div>
             <div className='layout-container'>
@@ -33,11 +31,12 @@ export function CategoryPage() {
                     <MenuSideBar />
                 </div>
                 <div className='main-content'>
-                    <PostCard />
-                    <PostCard />
-                    <PostCard />
-                    <PostCard />
-                    <Pagination total={200} pageSize={20} />
+                    {loading && <Spin size='large' className='list-loading' />}
+                    {data ?
+                        <>
+                            <BaseList<PostCardType> data={data.data} Item={PostCard} />
+                            <Pagination total={data.total_page} pageSize={20} onChange={(page) => setCurrentPage(page)} />
+                        </> : <Empty description='Sorry, something went wrong!' />}
                 </div>
                 <div className='right-content'>
                     <SideBarRight />
