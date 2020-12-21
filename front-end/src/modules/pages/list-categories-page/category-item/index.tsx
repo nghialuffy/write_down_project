@@ -8,6 +8,7 @@ type CategoryType = {
     value: keyof typeof CategoryImage
     label: string
     follow: boolean
+    _id: string
 }
 
 export function CategoryItem({ data }: { data: CategoryType }) {
