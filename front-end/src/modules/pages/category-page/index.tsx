@@ -2,7 +2,7 @@ import { Pagination } from 'antd';
 import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { CategoryImage } from '../../../assets/Images';
-import { AppWrap, BaseButton, MenuSideBar, PostCard, PostItem } from '../../../components';
+import { AppWrap, BaseButton, MenuSideBar, PostCard, PostItem, SideBarRight } from '../../../components';
 import { Categories } from '../../../constants';
 import './style.scss';
 
@@ -40,9 +40,7 @@ export function CategoryPage() {
                     <Pagination total={200} pageSize={20} />
                 </div>
                 <div className='right-content'>
-                    <PostItem />
-                    <PostItem />
-                    <PostItem />
+                    <SideBarRight />
                 </div>
             </div>
         </AppWrap>

@@ -1,7 +1,7 @@
 import { Pagination } from 'antd';
 import React from 'react';
 import { useParams,useHistory } from 'react-router-dom';
-import { AppWrap, PostCard, PostItem } from '../../../components';
+import { AppWrap, PostCard, PostItem, SideBarRight } from '../../../components';
 import { MenuSideBar } from '../../../components/menu-side-bar';
 import './style.scss';
 
@@ -25,9 +25,7 @@ export function HomePage () {
                     <Pagination total={200} pageSize={20}/>
                 </div>
                 <div className='right-content'>
-                    <PostItem/>
-                    <PostItem/>
-                    <PostItem/>
+                    <SideBarRight />
                 </div>
             </div>
         </AppWrap>

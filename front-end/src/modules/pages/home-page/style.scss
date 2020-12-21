@@ -1,13 +1,13 @@
 .layout-container {
     display: flex;
-    column-gap: 10px;
+    column-gap: 20px;
     .left-content {
-        width: 15%;
+        width: 10%;
     }
     .main-content {
         flex: 1;
     }
     .right-content {
-        width: 25%;
+        width: 30%;
     }
 }

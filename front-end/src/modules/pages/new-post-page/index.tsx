@@ -4,7 +4,7 @@ import { AppWrap } from '../../../components';
 function handleEditorChange(e: any) {
     console.log(
         'Content was updated:',
-        e.target.getContent()
+        e.target.value
     );
 }
 export function NewPostPage() {
