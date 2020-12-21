@@ -1,0 +1,295 @@
++ lấy list tất cả các post đang hot (không đăng nhập)
+url:    http://IP:PORT/s/all/hot
+Method: GET
+param:  ?page=
+response:
+{
+    "current_page": 1,
+    "data": {
+        "0": {
+            "category": "5fb2495d685674ae279f1357",
+            "comments": 0,
+            "content" : "....",
+            "created_by": "5fb24938685674ae279f1351",
+            "created_date": "Wed, 07 Oct 2020 00:00:00 GMT",
+            "time_to_read": "16",
+            "title": "Những siêu anh hùng quyền năng nhất Marvel Comics",
+            "url_post": "Nhung-sieu-anh-hung-quyen-nang-nhat-Marvel-Comics-rr9",
+            "views": 20069,
+            "vote": 9
+        },
+        ...
+        "19": {
+            "category": "5fb251de685674ae279f152a",
+            "comments": 3,
+            "content" : "....",
+            "created_by": "5fb25227685674ae279f153a",
+            "created_date": "Wed, 14 Oct 2020 00:00:00 GMT",
+            "time_to_read": "8",
+            "title": "Những giọng ca ấn tượng trong cộng đồng indie",
+            "url_post": "Nhung-giong-ca-an-tuong-trong-cong-dong-indie-rxf",
+            "views": 4746,
+            "vote": 42
+        }
+    },
+    "max_page": 16
+}
+
++ lấy list tất cả các post mới nhất (không đăng nhập)
+url:    http://IP:PORT/s/all/new
+Method: GET
+param:  ?page=
+response:
+{
+    "current_page": 1,
+    "data": {
+        "0": {
+            "category": "5fb2495d685674ae279f1357",
+            "comments": 0,
+            "content" : "....",
+            "created_by": "5fb24938685674ae279f1351",
+            "created_date": "Wed, 07 Oct 2020 00:00:00 GMT",
+            "time_to_read": "16",
+            "title": "Những siêu anh hùng quyền năng nhất Marvel Comics",
+            "url_post": "Nhung-sieu-anh-hung-quyen-nang-nhat-Marvel-Comics-rr9",
+            "views": 20069,
+            "vote": 9
+        },
+        ...
+        "19": {
+            "category": "5fb251de685674ae279f152a",
+            "comments": 3,
+            "content" : "....",
+            "created_by": "5fb25227685674ae279f153a",
+            "created_date": "Wed, 14 Oct 2020 00:00:00 GMT",
+            "time_to_read": "8",
+            "title": "Những giọng ca ấn tượng trong cộng đồng indie",
+            "url_post": "Nhung-giong-ca-an-tuong-trong-cong-dong-indie-rxf",
+            "views": 4746,
+            "vote": 42
+        }
+    },
+    "max_page": 16
+}
+
++ lấy list tất cả các post sôi nổi (không đăng nhập)
+url:    http://IP:PORT/s/all/controversial
+Method: GET
+param:  ?page=
+response:
+{
+    "current_page": 1,
+    "data": {
+        "0": {
+            "category": "5fb2495d685674ae279f1357",
+            "comments": 0,
+            "content" : "....",
+            "created_by": "5fb24938685674ae279f1351",
+            "created_date": "Wed, 07 Oct 2020 00:00:00 GMT",
+            "time_to_read": "16",
+            "title": "Những siêu anh hùng quyền năng nhất Marvel Comics",
+            "url_post": "Nhung-sieu-anh-hung-quyen-nang-nhat-Marvel-Comics-rr9",
+            "views": 20069,
+            "vote": 9
+        },
+        ...
+        "19": {
+            "category": "5fb251de685674ae279f152a",
+            "comments": 3,
+            "content" : "....",
+            "created_by": "5fb25227685674ae279f153a",
+            "created_date": "Wed, 14 Oct 2020 00:00:00 GMT",
+            "time_to_read": "8",
+            "title": "Những giọng ca ấn tượng trong cộng đồng indie",
+            "url_post": "Nhung-giong-ca-an-tuong-trong-cong-dong-indie-rxf",
+            "views": 4746,
+            "vote": 42
+        }
+    },
+    "max_page": 16
+}
+
++ lấy list tất cả các post trên top (không đăng nhập)
+url:    http://IP:PORT/s/all/top
+Method: GET
+param:  ?page=
+response:
+{
+    "current_page": 1,
+    "data": {
+        "0": {
+            "category": "5fb2495d685674ae279f1357",
+            "comments": 0,
+            "content" : "....",
+            "created_by": "5fb24938685674ae279f1351",
+            "created_date": "Wed, 07 Oct 2020 00:00:00 GMT",
+            "time_to_read": "16",
+            "title": "Những siêu anh hùng quyền năng nhất Marvel Comics",
+            "url_post": "Nhung-sieu-anh-hung-quyen-nang-nhat-Marvel-Comics-rr9",
+            "views": 20069,
+            "vote": 9
+        },
+        ...
+        "19": {
+            "category": "5fb251de685674ae279f152a",
+            "comments": 3,
+            "content" : "....",
+            "created_by": "5fb25227685674ae279f153a",
+            "created_date": "Wed, 14 Oct 2020 00:00:00 GMT",
+            "time_to_read": "8",
+            "title": "Những giọng ca ấn tượng trong cộng đồng indie",
+            "url_post": "Nhung-giong-ca-an-tuong-trong-cong-dong-indie-rxf",
+            "views": 4746,
+            "vote": 42
+        }
+    },
+    "max_page": 16
+}
+================================================
++ lấy list post theo phân loại và đang hot (không đăng nhập)
+url:    http://IP:PORT/s/<tên_category>/hot
+Method: GET
+param:  ?page=
+response:
+{
+    "current_page": 1,
+    "data": {
+        "0": {
+            "category": "5fb2495d685674ae279f1357",
+            "comments": 0,
+            "content" : "....",
+            "created_by": "5fb24938685674ae279f1351",
+            "created_date": "Wed, 07 Oct 2020 00:00:00 GMT",
+            "time_to_read": "16",
+            "title": "Những siêu anh hùng quyền năng nhất Marvel Comics",
+            "url_post": "Nhung-sieu-anh-hung-quyen-nang-nhat-Marvel-Comics-rr9",
+            "views": 20069,
+            "vote": 9
+        },
+        ...
+        "19": {
+            "category": "5fb251de685674ae279f152a",
+            "comments": 3,
+            "content" : "....",
+            "created_by": "5fb25227685674ae279f153a",
+            "created_date": "Wed, 14 Oct 2020 00:00:00 GMT",
+            "time_to_read": "8",
+            "title": "Những giọng ca ấn tượng trong cộng đồng indie",
+            "url_post": "Nhung-giong-ca-an-tuong-trong-cong-dong-indie-rxf",
+            "views": 4746,
+            "vote": 42
+        }
+    },
+    "max_page": 16
+}
+
++ lấy list post theo phân loại và mới nhất (không đăng nhập)
+url:    http://IP:PORT/s/all/new
+Method: GET
+param:  ?page=
+response:
+{
+    "current_page": 1,
+    "data": {
+        "0": {
+            "category": "5fb2495d685674ae279f1357",
+            "comments": 0,
+            "content" : "....",
+            "created_by": "5fb24938685674ae279f1351",
+            "created_date": "Wed, 07 Oct 2020 00:00:00 GMT",
+            "time_to_read": "16",
+            "title": "Những siêu anh hùng quyền năng nhất Marvel Comics",
+            "url_post": "Nhung-sieu-anh-hung-quyen-nang-nhat-Marvel-Comics-rr9",
+            "views": 20069,
+            "vote": 9
+        },
+        ...
+        "19": {
+            "category": "5fb251de685674ae279f152a",
+            "comments": 3,
+            "content" : "....",
+            "created_by": "5fb25227685674ae279f153a",
+            "created_date": "Wed, 14 Oct 2020 00:00:00 GMT",
+            "time_to_read": "8",
+            "title": "Những giọng ca ấn tượng trong cộng đồng indie",
+            "url_post": "Nhung-giong-ca-an-tuong-trong-cong-dong-indie-rxf",
+            "views": 4746,
+            "vote": 42
+        }
+    },
+    "max_page": 16
+}
+
++ lấy list post theo phân loại và sôi nổi (không đăng nhập)
+url:    http://IP:PORT/s/all/controversial
+Method: GET
+param:  ?page=
+response:
+{
+    "current_page": 1,
+    "data": {
+        "0": {
+            "category": "5fb2495d685674ae279f1357",
+            "comments": 0,
+            "content" : "....",
+            "created_by": "5fb24938685674ae279f1351",
+            "created_date": "Wed, 07 Oct 2020 00:00:00 GMT",
+            "time_to_read": "16",
+            "title": "Những siêu anh hùng quyền năng nhất Marvel Comics",
+            "url_post": "Nhung-sieu-anh-hung-quyen-nang-nhat-Marvel-Comics-rr9",
+            "views": 20069,
+            "vote": 9
+        },
+        ...
+        "19": {
+            "category": "5fb251de685674ae279f152a",
+            "comments": 3,
+            "content" : "....",
+            "created_by": "5fb25227685674ae279f153a",
+            "created_date": "Wed, 14 Oct 2020 00:00:00 GMT",
+            "time_to_read": "8",
+            "title": "Những giọng ca ấn tượng trong cộng đồng indie",
+            "url_post": "Nhung-giong-ca-an-tuong-trong-cong-dong-indie-rxf",
+            "views": 4746,
+            "vote": 42
+        }
+    },
+    "max_page": 16
+}
+
++ lấy list post theo phân loại và trên top (không đăng nhập)
+url:    http://IP:PORT/s/all/top
+Method: GET
+param:  ?page=
+response:
+{
+    "current_page": 1,
+    "data": {
+        "0": {
+            "category": "5fb2495d685674ae279f1357",
+            "comments": 0,
+            "content" : "....",
+            "created_by": "5fb24938685674ae279f1351",
+            "created_date": "Wed, 07 Oct 2020 00:00:00 GMT",
+            "time_to_read": "16",
+            "title": "Những siêu anh hùng quyền năng nhất Marvel Comics",
+            "url_post": "Nhung-sieu-anh-hung-quyen-nang-nhat-Marvel-Comics-rr9",
+            "views": 20069,
+            "vote": 9
+        },
+        ...
+        "19": {
+            "category": "5fb251de685674ae279f152a",
+            "comments": 3,
+            "content" : "....",
+            "created_by": "5fb25227685674ae279f153a",
+            "created_date": "Wed, 14 Oct 2020 00:00:00 GMT",
+            "time_to_read": "8",
+            "title": "Những giọng ca ấn tượng trong cộng đồng indie",
+            "url_post": "Nhung-giong-ca-an-tuong-trong-cong-dong-indie-rxf",
+            "views": 4746,
+            "vote": 42
+        }
+    },
+    "max_page": 16
+}
