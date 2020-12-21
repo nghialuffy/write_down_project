@@ -4,5 +4,29 @@
     height: 100vh;
     .web-content {
         flex: 1;
+        padding: 10px;
+    }
+}
+
+@media(min-width: 768px) {
+    .app-wrap {
+        .web-content {
+            padding: 10px 50px;
+        }
+    }
+}
+@media(min-width: 1024px) {
+    .app-wrap {
+        .web-content {
+            padding: 10px 100px;
+        }
+    }
+}
+
+@media(min-width: 1224px) {
+    .app-wrap {
+        .web-content {
+            padding: 10px 300px;
+        }
     }
 }

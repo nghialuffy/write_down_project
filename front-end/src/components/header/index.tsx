@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
 import logo from '../../assets/logo.png';
-import { Dropdown, Input, Menu } from 'antd';
-import { BellOutlined, DownOutlined } from '@ant-design/icons';
+import { Button, Dropdown, Input, Menu } from 'antd';
+import {
+    BellOutlined,
+    DownOutlined,
+    MenuOutlined,
+    HomeOutlined,
+    UserOutlined,
+    LogoutOutlined,
+    LoginOutlined,
+    FormOutlined,
+    ShopOutlined
+} from '@ant-design/icons';
 import { UserAvatar } from '../user-avatar';
 import './style.scss';
 import { BaseButton, BaseDropDown } from '../base';
 import { Link } from 'react-router-dom';
 import { Categories } from '../../constants';
+const { SubMenu } = Menu;
 
 export function Header() {
     const [user, setUser] = useState<any>({
@@ -22,6 +33,7 @@ export function Header() {
             <Link to='/'>
                 <img src={logo} alt='logo' className='logo' />
             </Link>
+            <HeaderSideBar user={user}/>
             <div className='header-content'>
                 <div className='header-content-top'>
                     <Input.Search
@@ -65,10 +77,52 @@ export function Header() {
                     {Categories.slice(0, 5).map(item => {
                         return <Link to={`/posts/${item.value}`} className='link'>{item.label}</Link>
                     })}
-                    <Link to='/posts/all' className='link-all-categories'>Tất cả chủ đề</Link>
+                    <Link to='/all-categories' className='link-all-categories'>Tất cả chủ đề</Link>
                 </div>
             </div>
+        </div>
+    )
+}
 
+function HeaderSideBar({ user }: { user: any }) {
+    const [showSideBar, setShowSideBar] = useState(false);
+    return (
+        <div className='header-side-bar'>
+            <BaseButton type='primary' onClick={() => setShowSideBar(!showSideBar)}><MenuOutlined /></BaseButton>
+            <Menu
+                defaultSelectedKeys={['home']}
+                defaultOpenKeys={['catigories']}
+                mode="inline"
+                theme="light"
+                inlineCollapsed={showSideBar}
+            >
+                <Menu.Item key="home" icon={<HomeOutlined />}>
+                    <Link to='/'>Trang chủ</Link>
+                </Menu.Item>
+                <SubMenu key="catigories" icon={<ShopOutlined />} title="Tất cả chủ đề">
+                    {Categories.map(item =>
+                        <Menu.Item key={item.value}>
+                            <Link to={`/posts/${item.value}`} className='link'>{item.label}</Link>
+                        </Menu.Item>
+                    )}
+                </SubMenu>
+                {user ? <>
+                    <Menu.Item key="profile" icon={<UserOutlined />}>
+                        <Link to={`/profile/${user._id}`}>Trang cá nhân</Link>
+                    </Menu.Item>
+                    <Menu.Item key="log-out" icon={<LogoutOutlined />}>
+                        Đăng xuất
+                </Menu.Item>
+                </> :
+                    <>
+                        <Menu.Item key="profile" icon={<LogoutOutlined />}>
+                            <Link to='/login'>Đăng nhập</Link>
+                        </Menu.Item>
+                        <Menu.Item key="3" icon={<FormOutlined />}>
+                            <Link to='/register'>Đăng ký</Link>
+                        </Menu.Item>
+                    </>}
+            </Menu>
         </div>
     )
 }

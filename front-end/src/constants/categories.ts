@@ -41,7 +41,7 @@ export const Categories = [
     },
     {
         label: 'Du lich - Ẩm thực',
-        value: 'traveling-food'
+        value: 'traveling_food'
     },
     {
         label: 'Thể thao',
@@ -49,7 +49,75 @@ export const Categories = [
     },
     {
         label: 'English Zone',
-        value: 'english-zone'
+        value: 'english_zone'
     },
 
+];
+
+export const UserCategory = [
+    {
+        label: 'Sách',
+        value: 'books',
+        follow: true
+    },
+    {
+        label: 'Khoa học',
+        value: 'science',
+        follow: true
+    },
+    {
+        label: 'Tranh luận',
+        value: 'argument',
+        follow: true
+    },
+    {
+        label: 'Âm nhạc',
+        value: 'music',
+        follow: true
+    },
+    {
+        label: 'Game',
+        value: 'game',
+        follow: false
+    },
+    {
+        label: 'Phim',
+        value: 'film',
+        follow: true
+    },
+    {
+        label: 'Kĩ năng',
+        value: 'skill',
+        follow: false
+    },
+    {
+        label: 'Tâm sự',
+        value: 'talk',
+        follow: true
+    },
+    {
+        label: 'Anime',
+        value: 'anime',
+        follow: true
+    },
+    {
+        label: 'Truyện tranh',
+        value: 'comics',
+        follow: false
+    },
+    {
+        label: 'Du lich - Ẩm thực',
+        value: 'traveling_food',
+        follow: true
+    },
+    {
+        label: 'Thể thao',
+        value: 'sport',
+        follow: false
+    },
+    {
+        label: 'English Zone',
+        value: 'english_zone',
+        follow: true
+    },
 ];
