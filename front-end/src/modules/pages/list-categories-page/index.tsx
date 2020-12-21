@@ -10,7 +10,7 @@ export function ListCategoriesPage() {
             <BaseList<typeof UserCategory[0]> 
                 data={UserCategory} 
                 Item={CategoryItem as any} 
-                className='list-categories'
+                className='list-categories layout-container'
             />
         </AppWrap>
     )
