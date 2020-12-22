@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from controller.model import *
 import re
 from time import sleep
+from selenium.webdriver.common.keys import Keys
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('headless')
@@ -225,4 +226,13 @@ def crawl():
 
 
 if __name__ == "__main__":
-    crawl()
+    driver = webdriver.Chrome("C:/Users/DELL/Downloads/chromedriver_win32/chromedriver.exe")
+    driver.get("https://spiderum.com/bai-dang/Attack-on-Titan-Tom-tat-toan-bo-dong-thoi-gian-tinh-den-chap-135-manga-Phan-1-SPOILERS-wij")
+    content_html=driver.find_element(By.XPATH, "//div[@class='fr-element fr-view']").get_attribute('innerHTML')
+    driver.get("https://www.tiny.cloud/docs/demo/tinydrive/")
+    driver.find_element(By.XPATH, "//button[@aria-label='Source code']").click()
+    elem=driver.find_element(By.XPATH, "//textarea[@class='tox-textarea']")
+    elem.send_keys(Keys.CONTROL, 'a')
+    elem.send_keys(Keys.DELETE)
+    elem.send_keys(content_html)
+    driver.find_element(By.XPATH, "//button[@title='Save']").click()
