@@ -7,7 +7,7 @@ from controller.auth import token_auth
 from bson.objectid import ObjectId
 import pymongo
 from bs4 import BeautifulSoup
-from app import socketio
+# from app import socketio
 
 
 
