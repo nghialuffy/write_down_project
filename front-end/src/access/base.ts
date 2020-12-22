@@ -25,7 +25,18 @@ const APIGet = async (url: string) => {
         headers: token ? {...headers, 'Authorization' : `Bearer ${token}`} : headers,
     });
 }
+
+const APIDelete = async (url: string, data?: string) => {
+    return await axios({
+        method: 'DELETE',
+        url: `${BASE_URL}/${url}`,
+        headers: headers,
+        data: data
+    });
+}
+
 export const DataAccess = {
     Get: APIGet,
     Post: APIPost,
+    Delete: APIDelete,
 };

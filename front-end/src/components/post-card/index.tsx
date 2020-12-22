@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { UserAvatar } from '..';
 import { CaretUpOutlined, CaretDownOutlined, EyeOutlined, CommentOutlined } from '@ant-design/icons';
 import './style.scss';
@@ -9,7 +9,6 @@ import { UserType, CategoryType } from '../../model';
 import { Link } from 'react-router-dom';
 import { ErrorText } from '../style-components';
 import { HTTPCodeLabel } from '../../const';
-import { Spin } from 'antd';
 import { LoadingFullView } from '../loading';
 
 export function PostCard({ data }: { data: PostCardType }) {
