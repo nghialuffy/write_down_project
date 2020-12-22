@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const headers = {
-    'Authorization' : 'Basic Og==',
+    'Authorization': 'Basic Og==',
     'Content-Type': 'application/json',
     'accept': "*/*",
     "Access-Control-Allow-Origin": '*'
@@ -9,10 +9,11 @@ const headers = {
 const BASE_URL = 'http://192.168.1.196:5000';
 
 const APIPost = async (url: string, data: string) => {
+    const token = localStorage.getItem('token');
     return await axios({
         method: 'POST',
         url: `${BASE_URL}/${url}`,
-        headers: headers,
+        headers: token?{...headers, 'Authorization' : `Bearer ${token}`} : headers,
         data: data
     });
 }
@@ -34,7 +35,6 @@ const APIDelete = async (url: string, data?: string) => {
         data: data
     });
 }
-
 export const DataAccess = {
     Get: APIGet,
     Post: APIPost,

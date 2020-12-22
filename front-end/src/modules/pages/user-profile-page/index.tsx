@@ -35,5 +35,5 @@ export function UserProfilePage() {
                 }
             </div> : <Empty description='Sorry, something went wrong!' />}
         </AppWrap>
-    )
+    );
 }
