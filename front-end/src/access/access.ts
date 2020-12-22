@@ -8,7 +8,7 @@ export type UseEntityData<T> = {
     data?: T,
 };
 
-export function useEntityData<T extends Partial<{ _id: string; }>>(url: string | undefined, keyUpdate?: any, defaultData?: T): UseEntityData<T> {
+export function useEntityData<T>(url: string | undefined, keyUpdate?: any, defaultData?: T): UseEntityData<T> {
     let [data, setData] = useState<T>();
     const [loading, setLoading] = useState(defaultData ? false : true);
     const [errorStatus, setStatus] = useState<HTTP_STATUS_CODE>('200');
@@ -63,7 +63,7 @@ export function useEntityDataList<T>(url: string | undefined, page?: number, def
         try {
             if (!url) return;
             setLoading(true);
-            const res = await DataAccess.Get(`${url}?page=${page}`);
+            const res = await DataAccess.Get(`${url}${page ?`?page=${page}` : ''}`);
             setData(res.data);
             setStatus(res?.status?.toString());
         } catch (e) {
@@ -88,7 +88,7 @@ export function useEntityDataList<T>(url: string | undefined, page?: number, def
             setLoading(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchUser, url, page, defaultData]);
+    }, [url, page, defaultData]);
 
     return { loading, data, status: errorStatus };
 }
