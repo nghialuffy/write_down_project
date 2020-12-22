@@ -3,7 +3,6 @@ import { useEntityDataList } from '../../../access';
 import { PostItemType } from '../../../model';
 import { BaseList } from '../../base';
 import { ComposeHeader, PostItem } from '../../index';
-import { LoadingFullView } from '../../loading';
 
 export function TopMonthPosts () {
     const {loading, data} = useEntityDataList<PostItemType>('/postofmonth');

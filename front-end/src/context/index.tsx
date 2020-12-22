@@ -2,50 +2,56 @@ import React from 'react';
 import {DataAccess} from '../access';
 
 type UserContextType = {
-    auth: boolean
     _id: string
     displayName: string,
-    avatar_url: string
-    authenticated: () => void
+    avatar: string
     logout: () => void
     updateUser: (newInfo: StateType) => void
 }
 
 export const UserContext = React.createContext<UserContextType>({
-    auth: false,
     _id: '',
     displayName: '',
-    avatar_url: '',
-    authenticated: () => undefined,
+    avatar: '',
     logout: () => undefined,
     updateUser: (newInfo: StateType) => undefined
 });
 
 type StateType = {
-    auth: boolean
     _id: string
     displayName: string
-    avatar_url: string
+    avatar: string
 }
 
 export class UserContextProvider extends React.Component<any, StateType> {
     constructor(props: any) {
         super(props);
+        const token = localStorage.getItem('token');
         this.state = {
-            auth: false,
             _id: '',
             displayName: '',
-            avatar_url: ''
+            avatar: ''
         };
+        if (token) {
+            DataAccess.Get('auth').then(res => {
+                this.setState({
+                    _id: res.data._id,
+                    avatar: res.data.avatar,
+                    displayName: res.data.display_name
+                })
+            })
+        }
         console.log(this.state);
     }
 
-    authenticated = () => {
-        this.setState({ auth: true });
-    }
-
     logout = () => {
-        this.setState({ auth: false });
+        DataAccess.Delete('logout');
+        this.setState({
+            _id: '',
+            displayName: '',
+            avatar: ''
+        });
+        localStorage.removeItem('item');
     }
 
     updateUser = (newInfo: StateType) => {
@@ -57,7 +63,6 @@ export class UserContextProvider extends React.Component<any, StateType> {
         return (
             <UserContext.Provider value={{
                 ...this.state,
-                authenticated: this.authenticated,
                 updateUser: this.updateUser,
                 logout: this.logout,
             }}>
