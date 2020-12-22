@@ -22,7 +22,7 @@ def logout():
 def auth():
     token = g.current_token.get_token()
     try:
-        user=db.user.find_one({"_id": token.id_user}, {"_id": 0, "username": 1, "display_name": 1, "avatar": 1})
+        user=db.user.find_one({"_id": token.id_user}, {"_id": 1, "username": 1, "display_name": 1, "avatar": 1})
         return user
     except:
         abort(403)
