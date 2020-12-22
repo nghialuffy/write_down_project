@@ -49,7 +49,7 @@ export function PostCard({ data }: { data: PostCardType }) {
                     />
                 </div>}
                 <h3 className='content-title'>{data.title}</h3>
-                <p className='content-truncate'>{data.content}...
+                <p className='content-truncate'>{data.content}
                 </p>
             </Link>
             <div className='post-card-footer'>

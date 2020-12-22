@@ -1,16 +1,11 @@
 import { Form, Input, Button, Checkbox } from 'antd';
-import React, { useState } from 'react';
+import React from 'react';
 import { AppWrap } from '../../../components';
 import './style.scss';
-import AuthService from "../../../service/user/auth";
-import { AxiosError, AxiosResponse } from 'axios';
-import { useHistory } from 'react-router-dom';
-import logo from './../../../assets/logo.png'
+
+
 export function RegisterPage() {
-    const [register_form] = Form.useForm();
-    const [successful, setSuccessful] = useState(false);
-    const [message, setMessage] = useState("");
-    let history = useHistory();
+    const [register] = Form.useForm();
     const layout = {
         labelCol: { span: 8 },
         wrapperCol: { span: 16 },
@@ -18,38 +13,23 @@ export function RegisterPage() {
     const tailLayout = {
         wrapperCol: { offset: 8, span: 16 },
     };
-    const onFinish = (values: any) => {
-        AuthService.register(values.username, values.password).then(
-            (response: AxiosResponse) => {
-                setMessage(response.data);
-                setSuccessful(true);
-            },
-            (error: AxiosError) => {
-                const resMessage =
-                    (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                    error.message ||
-                    error.toString();
+    const onFinish = (values:any) => {
 
-                setMessage(resMessage);
-                setSuccessful(false);
-            }
-        );
-        console.log(message)
-        history.push("/");
     };
 
+    const onFinishFailed = (values:any) => {
+        console.log('Failed:', values);
+    };
 
     return (
         <AppWrap>
-            <img src={logo} alt='Write Down logo' className='logo' height='300' width = '300'/>
             <Form
-                form={register_form}
+                form={register}
                 {...layout}
-                name="register_form"
+                name="register"
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
             >
                 <Form.Item
                     label="Username"
@@ -62,12 +42,7 @@ export function RegisterPage() {
                 <Form.Item
                     label="Password"
                     name="password"
-                    dependencies={['password']}
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your password!'
-                        }]}
+                    rules={[{ required: true, message: 'Please input your password!' }]}
                 >
                     <Input.Password />
                 </Form.Item>
@@ -93,7 +68,9 @@ export function RegisterPage() {
                 >
                     <Input.Password />
                 </Form.Item>
-
+                <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+                    <Checkbox>Remember me</Checkbox>
+                </Form.Item>
 
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Submit</Button>
