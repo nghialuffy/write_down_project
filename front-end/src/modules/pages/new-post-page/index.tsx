@@ -1,33 +1,36 @@
 import React, { useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import { AppWrap, BaseDropDown } from '../../../components';
-import Form from 'antd/lib/form/Form';
-import { Input } from 'antd';
+import { AppWrap } from '../../../components';
+
+import { Input, Form, Select } from 'antd';
 import { Categories } from '../../../constants';
-import { Link } from 'react-router-dom';
-function handleEditorChange(e: any) {
-    console.log(
-        'Content was updated:',
-        e.target.value
-    );
-}
+
+
 
 export function NewPostPage() {
-    const [value, setValue] = useState("");
-    // const handleEditorChange = (e: any) => {
-    //     // setValue(e.target.getContent());
-    //     console.log("Content:" + value);
-    //     setValue(e.target.getContent())
-        
-    // }
+    let [value, setValue] = useState("");
+    let [category, setCategory] = useState(Categories[0].value);
+    let [tags, setTags] = useState([]);
+    let handleCategoryChange = (e: any) => {
+        console.log(e);
+        setCategory(e);
+        console.log(category);
+    }
+    let handleEditorChange = (e: any) => {
+        setValue(e.target.getContent());
+        console.log(value);
+    }
+    let handleTagsChange = (value:any) =>{
+        setTags(value);
+        console.log(tags);
+    }
     return (
         <AppWrap>
             <Form>
                 <Input type="text" placeholder="Title"></Input>
                 <Editor
                     apiKey="unjo0maub5xvytcqn7sb3ilawv9s91yy05kwktk2f3sbzaiw"
-                    initialValue="<p>Initial content</p>"
-                    value={value}
+                    initialValue="<div><div/>"
                     init={{
                         height: 500,
                         paste_data_images: true,
@@ -44,20 +47,26 @@ export function NewPostPage() {
                     }}
                     onChange={handleEditorChange}
                 />
-                <div>Tags:<Input type="text" ></Input></div>
-                <BaseDropDown
-                        button='Chọn chủ đề'
-                        data={Categories}
-                        Item={CategoryLink}
+                <Form.Item
+                    label="Tags"
+                    hasFeedback
+                >
+                    <Select
+                        mode="multiple"
+                        style={{ width: '100%' }}
+                        placeholder="Please select at least 3 tags"
+                        onChange={handleTagsChange}
+                        options={Categories}
                     />
+                </Form.Item>
+                <Form.Item
+                    label="Category"
+                    hasFeedback
+                >
+                    <Select allowClear options={Categories} style={{ width: 200 }} value = {category} onChange={handleCategoryChange} />
+                </Form.Item>
             </Form>
         </AppWrap>
 
-    )
-}
-function CategoryLink({ data }: { data: typeof Categories[0] }) {
-    return (
-        // <Link to={`/posts/${data.value}`} className='link'>{data.label}</Link>
-        <p>{data.label}</p>
     )
 }
