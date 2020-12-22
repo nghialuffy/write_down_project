@@ -1,10 +1,11 @@
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, notification } from 'antd';
 import React, { useState } from 'react';
 import { AppWrap } from '../../../components';
 import AuthService from "../../../service/user/auth";
 import { AxiosError, AxiosResponse } from 'axios';
 import { useHistory } from 'react-router-dom';
 import logo from './../../../assets/logo.png'
+import { DataAccess } from '../../../access';
 
 export function LoginPage () {
     const [register_form] = Form.useForm();
@@ -19,11 +20,15 @@ export function LoginPage () {
         wrapperCol: { offset: 8, span: 16 },
     };
     const onFinish = (values: any) => {
-        AuthService.login(values.username, values.password)
-        setMessage(localStorage.getItem('user')+"");
-        
-        history.push("/");
-        console.log(message)
+        DataAccess.Post('login ', JSON.stringify(values)).then(res => {
+            if (res) history.push("/");
+            localStorage.setItem('token', res.data?.token);
+        }).catch(e => notification.error({
+            message: 'Error',
+            description: e,
+        }));
+        // setMessage(localStorage.getItem('user')+"");
+
     };
 
 
