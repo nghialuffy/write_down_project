@@ -1,6 +1,8 @@
 from controller import bp, db
 from controller.model import Post
 from bson.objectid import ObjectId
+from flask import g, abort
+from controller.auth import token_auth
 
 @bp.route('/user/<_id>', methods=['GET'])
 def get_user(_id):
