@@ -22,6 +22,8 @@
             .info-content-bottom {
                 color: #99A3AD;
                 font-size: 12px;
+                display: flex;
+                column-gap: 20px;
             }
         }
     }
@@ -75,12 +77,5 @@
     }
 }
 .ant-spin-spinning.item-loading {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    height: 100%;
-    align-items: center;
-    width: 100%;
-    background: white;
     z-index: 400;
 }

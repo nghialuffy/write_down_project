@@ -1,9 +1,9 @@
-import { Empty, Pagination, Spin } from 'antd';
+import { Empty, Pagination} from 'antd';
 import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useEntityDataList } from '../../../access';
 import { CategoryImage } from '../../../assets/Images';
-import { AppWrap, BaseButton, BaseList, MenuSideBar, PostCard, SideBarRight } from '../../../components';
+import { AppWrap, BaseButton, BaseList, LoadingFullView, MenuSideBar, PostCard, SideBarRight } from '../../../components';
 import { Categories } from '../../../constants';
 import { ListPost, PostCardType } from '../../../model';
 import './style.scss';
@@ -16,7 +16,7 @@ export function CategoryPage() {
         history.push(`/posts/${category}/hot`)
     }
     const [currentPage, setCurrentPage] = useState(1);
-    const { loading, data } = useEntityDataList<ListPost>(`s/${category}/${type}`, currentPage);
+    const { loading, data } = useEntityDataList<ListPost>(`s/${category}/${type ?? 'hot'}`, currentPage);
 
     return (
         <AppWrap>
@@ -31,7 +31,7 @@ export function CategoryPage() {
                     <MenuSideBar />
                 </div>
                 <div className='main-content'>
-                    {loading && <Spin size='large' className='list-loading' />}
+                    {loading && <LoadingFullView size='large' className='list-loading' />}
                     {data ?
                         <>
                             <BaseList<PostCardType> data={data.data} Item={PostCard} />

@@ -52,30 +52,38 @@
                         }
                     }
                 }
-                .anticon.anticon-bell {
-                    color: #999;
-                    font-size: 30px;
-                }
-                .anticon.anticon-bell:hover {
-                    color: #2C3E50;
-                }
-                .user-info {
+                .header-content-top-right {
+                    position: relative;
                     display: flex;
-                    column-gap: 7px;
-                    .username {
+                    flex-wrap: wrap;
+                    column-gap: 10px;
+                    .anticon.anticon-bell {
+                        color: #999;
+                        font-size: 30px;
+                    }
+                    .anticon.anticon-bell:hover {
+                        color: #2C3E50;
+                    }
+                    .user-info {
+                        position: relative;
                         display: flex;
-                        align-items: center;
-                        column-gap: 5px;
-                        cursor: pointer;
-                        .anticon {
-                            color: #999;
-                            font-size: 12px;
+                        column-gap: 7px;
+                        .username {
+                            display: flex;
+                            align-items: center;
+                            column-gap: 5px;
+                            cursor: pointer;
+                            .anticon {
+                                color: #999;
+                                font-size: 12px;
+                            }
+                        }
+                        .username:hover {
+                            text-decoration: underline;
                         }
                     }
-                    .username:hover {
-                        text-decoration: underline;
-                    }
                 }
+                
             }
             .header-content-bottom {
                 margin-left: 10px;

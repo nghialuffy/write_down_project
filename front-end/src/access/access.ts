@@ -8,7 +8,7 @@ export type UseEntityData<T> = {
     data?: T,
 };
 
-export function useEntityData<T extends Partial<{ _id: string; }>>(url: string | undefined, defaultData?: T): UseEntityData<T> {
+export function useEntityData<T extends Partial<{ _id: string; }>>(url: string | undefined, keyUpdate?: any, defaultData?: T): UseEntityData<T> {
     let [data, setData] = useState<T>();
     const [loading, setLoading] = useState(defaultData ? false : true);
     const [errorStatus, setStatus] = useState<HTTP_STATUS_CODE>('200');
@@ -42,7 +42,7 @@ export function useEntityData<T extends Partial<{ _id: string; }>>(url: string |
             setLoading(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchUser, url, defaultData]);
+    }, [fetchUser, url, defaultData, keyUpdate]);
 
     return { loading, data, status: errorStatus };
 }

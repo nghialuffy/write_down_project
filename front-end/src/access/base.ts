@@ -18,10 +18,11 @@ const APIPost = async (url: string, data: string) => {
 }
 
 const APIGet = async (url: string) => {
+    const token = localStorage.getItem('token');
     return await axios({
         method: 'GET',
         url: `${BASE_URL}/${url}`,
-        headers: headers,
+        headers: token ? {...headers, 'Authorization' : `Bearer ${token}`} : headers,
     });
 }
 export const DataAccess = {
