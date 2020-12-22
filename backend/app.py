@@ -7,8 +7,6 @@ from flask import Blueprint, Flask
 import socketio
 from flask_cors import CORS
 from pymongo import MongoClient
-import eventlet
-from eventlet import wsgi
 from controller import *
 app = Flask(__name__)
 cors = CORS(app)
