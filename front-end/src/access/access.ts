@@ -63,7 +63,7 @@ export function useEntityDataList<T>(url: string | undefined, page?: number, def
         try {
             if (!url) return;
             setLoading(true);
-            const res = await DataAccess.Get(`${url}?page=${page}`);
+            const res = await DataAccess.Get(`${url}?page=${page ?? 1}`);
             setData(res.data);
             setStatus(res?.status?.toString());
         } catch (e) {

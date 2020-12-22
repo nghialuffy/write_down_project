@@ -1,9 +1,12 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import { AppWrap } from '../../../components';
 
 export function PostDetailPage () {
     let { id } = useParams<{ id: string }>();
     return (
-        <div>This is post detail page <span>Post id: {id}</span></div>
+        <AppWrap>
+            
+        </AppWrap>
     )
 } 
