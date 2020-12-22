@@ -22,7 +22,6 @@ def get_top_user():
                     "email" : 1,
                     "link_facebook": 1,
                     "avatar": 1,
-                    "cover_img": 1,
                     "bio": 1,
                     "post" : { "$sum" : "$list_post"}
                 }
@@ -40,7 +39,6 @@ def get_top_user():
                     "email" : 1,
                     "link_facebook": 1,
                     "avatar": 1,
-                    "cover_img": 1,
                     "bio": 1,
                 }
             }
@@ -56,7 +54,6 @@ def get_top_user():
                 temp_res["email"] = str(row_data["email"])
                 temp_res["link_facebook"] = str(row_data["link_facebook"])
                 temp_res["avatar"] = str(row_data["avatar"])
-                temp_res["cover_img"] = str(row_data["cover_img"])
                 temp_res["bio"] = str(row_data["bio"])
                 list_res.append(temp_res)
             res["data"] = list_res
