@@ -19,6 +19,7 @@ class Comment():
             self.list_comment = []
             self.vote = 0
             self.edit_history = []
+            self.voted_user = {}
         else:
             self._id = dict['_id']
             self.content = dict['content']
@@ -27,6 +28,7 @@ class Comment():
             self.list_comment = dict['list_comment']
             self.vote = dict['vote']
             self.edit_history = dict['edit_history']
+            self.voted_user = dict['voted_user']
 
     def add_comment(self, comment):
         self.list_comment.append(comment.__dict__)
@@ -272,7 +274,11 @@ class Token():
 
     def revoke_token(self):
         self.token_expiration = datetime.datetime.utcnow() - datetime.timedelta(seconds=1)
-        db.session.delete_one({"_id": self._id})
+        e = db.session.update_one({"_id": self._id}, {"$set": {"token_expiration": self.token_expiration}})
+        if e.matched_count > 0:
+            return "ok"
+        else:
+            return "error"
 
     @staticmethod
     def check_token(id_token):
@@ -283,6 +289,9 @@ class Token():
         token._id = data["_id"]
         token.token_expiration = data["token_expiration"]
         return token
+
+    def show_token(self):
+        return self._id
 
 
 if __name__ == "__main__":

@@ -11,6 +11,11 @@ def get_comment(data_cmt, is_reply=False):
            "vote": data_cmt["vote"],
            "created_by": db.user.find_one({"_id": data_cmt["created_by"]}, {"_id": 0, "username": 1, "display_name": 1,
                                                                             "avatar": 1})}
+    if g.current_token is not None:
+        token = g.current_token.get_token()
+        if str(token.id_user) in data_cmt["voted_user"]:
+            cmt["user_voted"] = data_cmt["voted_user"][str(token.id_user)]
+
     if not is_reply:
         cmt["list_comment"] = []
         for data_reply in data_cmt["list_comment"]:
@@ -23,29 +28,45 @@ def get_comment(data_cmt, is_reply=False):
 def get_post(id):
     try:
         post = {}
-        data = db.post.find_one({"_id": ObjectId(id)}, {"_id": 0, "url_post": 0, "time_to_read": 0})
-        post["title"] = data["title"]
-        post["content"] = data["content"]
-        post["created_date"] = data["created_date"]
-        post["list_hashtag"] = data["list_hashtag"]
-        post["vote"] = data["vote"]
-        post["views"] = data["views"] + 1
-        post["edit_history"] = len(data["edit_history"]) > 0
-        post["category"] = db.category.find_one({"_id": data["category"]}, {"_id": 0, "name_category": 1, "url": 1})
-        post["created_by"] = db.user.find_one({"_id": data["created_by"]}, {"_id": 0, "username": 1, "display_name": 1,
-                                                                            "avatar": 1})
-        post["list_comment"] = []
-        for data_cmt in data["list_comment"]:
-            post["list_comment"].append(get_comment(data_cmt))
+        data = db.post.find_one({"_id": ObjectId(id)}, {"url_post": 0, "time_to_read": 0})
+        if data != None:
+            post["_id"] = str(data["_id"])
+            post["title"] = data["title"]
+            post["content"] = data["content"]
+            post["created_date"] = data["created_date"]
+            post["list_hashtag"] = data["list_hashtag"]
+            post["vote"] = data["vote"]
+            post["views"] = data["views"] + 1
+            post["edit_history"] = len(data["edit_history"]) > 0
 
-        if g.current_token is not None:
-            token=g.current_token.get_token()
-            if str(token.id_user) in data["voted_user"]:
-                post["user_voted"]=data["voted_user"][str(token.id_user)]
+            post["category"] = {}
+            query1 = db.category.find_one({"_id": ObjectId(data["category"])})
+            if(query1 != None):
+                post["category"]["_id"] = str(query1["_id"])
+                post["category"]["name_category"] = query1["name_category"]
+                post["category"]["url"] = query1["url"]
 
-        db.post.update_one({"_id": ObjectId(id)}, {"$set": {"views": data["views"] + 1}})
-        return post
-    except:
+            post["created_by"] = {}
+            query2 = db.user.find_one({"_id": ObjectId(data["created_by"])})
+            if(query2 != None):
+                post["created_by"]["_id"] = str(query2["_id"])
+                post["created_by"]["username"] = query2["username"]
+                post["created_by"]["display_name"] = query2["display_name"]
+                post["created_by"]["avatar"] = query2["avatar"]
+            
+            post["list_comment"] = []
+            for data_cmt in data["list_comment"]:
+                post["list_comment"].append(get_comment(data_cmt))
+
+            if g.current_token is not None:
+                token = g.current_token.get_token()
+                if str(token.id_user) in data["voted_user"]:
+                    post["user_voted"] = data["voted_user"][str(token.id_user)]
+
+            db.post.update_one({"_id": ObjectId(id)}, {"$set": {"views": data["views"] + 1}})
+            return post
+    except Exception as exc:
+        print(f"Error: {exc}")
         abort(403)
 
 
@@ -160,17 +181,15 @@ def vote_post(id, upordown):
         data = db.post.find_one({"_id": ObjectId(id)}, {"_id": 0, "voted_user." + str(token.id_user): 1, "vote": 1})
         voted = data["voted_user"]
         vote_num = data["vote"]
+
         if str(token.id_user) in voted:
-            rs_vote=vote_num - voted[str(token.id_user)] + vote
-            print(rs_vote)
-            db.post.update_one({"_id": ObjectId(id)}, {"$set": {"voted_user." + str(token.id_user): vote,
-                                                                 "vote": rs_vote}})
-            return {"vote": rs_vote}
+            rs_vote = vote_num - voted[str(token.id_user)] + vote
         else:
-            rs_vote=vote_num + vote
-            db.post.update_one({"_id": ObjectId(id)}, {"$set": {"voted_user." + str(token.id_user): vote,
-                                                                 "vote": rs_vote}})
-            return {"vote": rs_vote}
+            rs_vote = vote_num + vote
+
+        db.post.update_one({"_id": ObjectId(id)}, {"$set": {"voted_user." + str(token.id_user): vote,
+                                                            "vote": rs_vote}})
+        return {"vote": rs_vote}
     except:
         abort(403)
 
@@ -189,10 +208,10 @@ def post_comment(id):
     cmt.created_by = token.id_user
     try:
         if not "parent" in rq:
-            e=db.post.update_one({"_id": ObjectId(id)}, {'$push': {"list_comment": cmt.__dict__}})
+            e = db.post.update_one({"_id": ObjectId(id)}, {'$push': {"list_comment": cmt.__dict__}})
         else:
-            e=db.post.update_one({"_id": ObjectId(id), "list_comment._id": ObjectId(rq["parent"])},
-                               {'$push': {"list_comment.$.list_comment": cmt.__dict__}})
+            e = db.post.update_one({"_id": ObjectId(id), "list_comment._id": ObjectId(rq["parent"])},
+                                   {'$push': {"list_comment.$.list_comment": cmt.__dict__}})
         if e.matched_count > 0:
             return get_comment(cmt.__dict__)
         else:
@@ -290,6 +309,77 @@ def delete_comment(id):
                 return "ok"
             else:
                 abort(403)
+    except:
+        abort(403)
+
+
+@bp.route('/post/<id>/comment/vote', methods=['POST'])
+@token_auth.login_required
+def vote_cmt(id):
+    token = g.current_token.get_token()
+    rq = request.json
+
+    if not rq or not "id_cmt" in rq or not "upordown" in rq:
+        abort(400)
+
+    vote = 0
+    if rq["upordown"] == "up":
+        vote = 1
+    elif rq["upordown"] == "down":
+        vote = -1
+    elif rq["upordown"] == "unvote":
+        vote = 0
+    else:
+        abort(403)
+
+    try:
+        if not "parent" in rq:
+            pre_cmt = \
+                db.post.find_one({"_id": ObjectId(id)},
+                                 {"_id": 0, "list_comment": {"$elemMatch": {"_id": ObjectId(rq['id_cmt'])}}})[
+                    "list_comment"][0]
+            voted = pre_cmt["voted_user"]
+            vote_num = pre_cmt["vote"]
+
+            if str(token.id_user) in voted:
+                rs_vote = vote_num - voted[str(token.id_user)] + vote
+            else:
+                rs_vote = vote_num + vote
+
+            e = db.post.update_one({"_id": ObjectId(id), "list_comment._id": ObjectId(rq["id_cmt"])},
+                                   {'$set': {"list_comment.$.voted_user." + str(token.id_user): vote,
+                                             "list_comment.$.vote": rs_vote}})
+            if e.matched_count > 0:
+                return {"vote": rs_vote}
+            else:
+                abort(403)
+        else:
+            pre_cmt = list(db.post.aggregate([{"$match": {"_id": ObjectId(id)}},
+                                              {"$unwind": "$list_comment"},
+                                              {"$unwind": "$list_comment.list_comment"},
+                                              {"$match": {"list_comment.list_comment._id": ObjectId(rq["id_cmt"])}},
+                                              {"$project": {"_id": 0, "list_comment.list_comment": 1}}]))[0][
+                "list_comment"]["list_comment"]
+            voted = pre_cmt["voted_user"]
+            vote_num = pre_cmt["vote"]
+
+            if str(token.id_user) in voted:
+                rs_vote = vote_num - voted[str(token.id_user)] + vote
+            else:
+                rs_vote = vote_num + vote
+
+            e = db.post.update_one({"_id": ObjectId(id), "list_comment": {"$elemMatch": {
+                "_id": ObjectId(rq["parent"]), "list_comment._id": ObjectId(rq["id_cmt"])}}},
+                                   {"$set": {"list_comment.$[outer].list_comment.$[inner].voted_user." + str(
+                                       token.id_user): vote,
+                                             "list_comment.$[outer].list_comment.$[inner].vote": rs_vote}},
+                                   array_filters=[{"outer._id": ObjectId(rq["parent"])},
+                                                  {"inner._id": ObjectId(rq["id_cmt"])}])
+            if e.matched_count > 0:
+                return {"vote": rs_vote}
+            else:
+                abort(403)
+
     except:
         abort(403)
 

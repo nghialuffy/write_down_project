@@ -1,105 +1,156 @@
 .header {
-    display: flex;
+    z-index: 999;
     width: 100%;
+    padding: 10px 100px;
+    display: flex;
     justify-content: center;
     position: sticky;
     position: -webkit-sticky;
     top: 0;
-    padding: 10px 100px;
+    padding-top: 10px;
     background-color: white;
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.24), 0px 0px 16px rgba(0, 0, 0, 0.12);
-    .logo {
-        height: 100px;
-        width: auto;
-    }
-    .header-content {
-        flex: 1;
-        .header-content-top {
-            display: flex;
-            flex-wrap: wrap;
-            column-gap: 10px;
-            row-gap: 10px;
-            align-items: center;
-            justify-content: center;
-            padding-bottom: 10px;
-            .header-search {
-                min-width: 150px;
-                flex: 1;
-                .ant-input-wrapper {
-                    .ant-input-affix-wrapper {
-                        border-radius: 50px 0 0 50px;
-                        height: 40px;
-                        outline: none;
-                    }
-                    .ant-input-affix-wrapper.ant-input-affix-wrapper-focused {
-                        border-color: #ccc;
-                    }
-                    .ant-input-group-addon {
-                        button {
+    .container {
+        display: flex;
+        width: 100%;
+        .logo {
+            height: 100px;
+            width: auto;
+        }
+        .header-side-bar {
+            display: none;
+        }
+        .header-content {
+            flex: 1;
+            .header-content-top {
+                margin-top: 10px;
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 10px;
+                row-gap: 10px;
+                align-items: center;
+                justify-content: center;
+                padding-bottom: 10px;
+                .header-search {
+                    min-width: 150px;
+                    flex: 1;
+                    .ant-input-wrapper {
+                        .ant-input-affix-wrapper {
+                            border-radius: 50px 0 0 50px;
                             height: 40px;
-                            border-radius: 0 50px 50px 0;
-                            width: 50px;
+                            outline: none;
+                        }
+                        .ant-input-affix-wrapper.ant-input-affix-wrapper-focused {
+                            border-color: #ccc;
+                        }
+                        .ant-input-group-addon {
+                            button {
+                                height: 40px;
+                                border-radius: 0 50px 50px 0;
+                                width: 50px;
+                            }
                         }
                     }
                 }
-            }
-            .anticon.anticon-bell {
-                color: #999;
-                font-size: 30px;
-            }
-            .anticon.anticon-bell:hover {
-                color: #2C3E50;
-            }
-            .user-info {
-                display: flex;
-                column-gap: 7px;
-                .username {
+                .header-content-top-right {
+                    position: relative;
                     display: flex;
-                    align-items: center;
-                    column-gap: 5px;
-                    cursor: pointer;
-                    .anticon {
+                    flex-wrap: wrap;
+                    column-gap: 10px;
+                    .anticon.anticon-bell {
                         color: #999;
-                        font-size: 12px;
+                        font-size: 30px;
+                    }
+                    .anticon.anticon-bell:hover {
+                        color: #2C3E50;
+                    }
+                    .user-info {
+                        position: relative;
+                        display: flex;
+                        column-gap: 7px;
+                        .username {
+                            display: flex;
+                            align-items: center;
+                            column-gap: 5px;
+                            cursor: pointer;
+                            .anticon {
+                                color: #999;
+                                font-size: 12px;
+                            }
+                        }
+                        .username:hover {
+                            text-decoration: underline;
+                        }
                     }
                 }
-                .username:hover {
-                    text-decoration: underline;
+                
+            }
+            .header-content-bottom {
+                margin-left: 10px;
+                display: flex;
+                align-items: center;
+                column-gap: 20px;
+                a:hover {
+                    color: #5eabbc;
                 }
-            }
-        }
-        .header-content-bottom {
-            margin-top: 10px;
-            margin-left: 20px;
-            display: flex;
-            align-items: center;
-            column-gap: 20px;
-            a:hover {
-                color: #5eabbc;
-            }
-            .ant-dropdown-trigger {
-                padding: 0;
-            }
-        } 
-    }    
+                .ant-dropdown-trigger {
+                    padding: 0;
+                }
+            } 
+        }    
+    }
+    
 }
 
 @media(max-width: 768px) {
     .header {
-        .logo {
-            width: auto;
-            height: 50px;
-        }
-        padding-left: 10px;
-        padding-right: 10px;
-        .header-content{
-            .header-content-top {
-                justify-content: flex-start;
-                flex-wrap: wrap;
-                .link-new-post {
+        padding: 5px;
+        .container {
+            .logo {
+                display: none;
+            }
+            .header-side-bar {
+                display: block;
+                .base-button {
+                    border-radius: 0;
+                    padding: 2px 10px;
+                    margin-right: 5px;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    .anticon {
+                        font-size: 25px;
+                    }
+                }
+                >.ant-menu-inline-collapsed {
                     display: none;
                 }
-                .header-search {
+                > .ant-menu {
+                    position: absolute;
+                    z-index: 500;
+                    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.24), 0px 0px 16px rgba(0, 0, 0, 0.12);
+                }
+                .ant-menu.ant-menu-inline {
+                    width: 200px;
+                }
+            }
+            .header-content{
+                margin-bottom: 0;
+                .header-content-top {
+                    padding-bottom: 0;
+                    margin-top: 0;
+                    justify-content: flex-start;
+                    flex-wrap: wrap;
+                    
+                    .link-new-post {
+                        display: none;
+                    }
+                    .anticon.anticon-bell {
+                        font-size: 25px;
+                    }
+                    .user-info {
+                        display: none;
+                    }
                     .ant-input-wrapper {
                         .ant-input-affix-wrapper {
                             height: 30px;
@@ -108,22 +159,21 @@
                             button {
                                 height: 30px;
                             }
-                        } 
+                        }
                     }
                 }
-                .anticon.anticon-bell {
-                    font-size: 25px;
-                }
-            }
-            .header-content-bottom {
-                margin-top: 0;
-                margin-left: 0;
-                width: 100%;
-                flex-wrap: wrap;
-                .link {
+                .header-content-bottom {
                     display: none;
                 }
             }
+        }
+    }
+}
+@media(min-width: 1024px) {
+    .header{
+        padding: 0;
+        .container {
+            width: 1000px;
         }
     }
 }

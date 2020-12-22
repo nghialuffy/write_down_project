@@ -1,0 +1,23 @@
+.page-no-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    .ant-form {
+        .ant-row {
+            .ant-form-item-label {
+                min-width: 150px;
+                text-align: left;
+            }
+        }
+    }
+}
+
+@media(min-width: 768px) {
+    .page-no-wrap {
+        .container {
+            max-width: 700px;
+        }
+    }
+}

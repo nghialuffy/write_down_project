@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.scss';
 import gif from '../../assets/cool-loading-animated-gif-1.gif';
+import { Spin } from 'antd';
 export function Loading() {
     return (
         <div className='loading'>
@@ -11,4 +12,13 @@ export function Loading() {
             <p>Please wait for a minute...</p>
         </div>
     );
+}
+type Loading = {
+    size?: 'large' | 'default' | 'small',
+    className?: string,
+}
+export function LoadingFullView ({size = 'default', className} : Loading) {
+    return (
+        <Spin size={size} className={`loading-fullview ${className ?? ''}`}/>
+    )
 }
