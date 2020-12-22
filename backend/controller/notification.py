@@ -10,8 +10,4 @@ from bs4 import BeautifulSoup
 from app import socketio
 
 
-@socketio.on('tenmessage')
-def handle_message(data):
-    print('received message: ' + data)
-
 
