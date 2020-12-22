@@ -4,7 +4,7 @@ from flask import g, abort
 from controller.auth import token_auth
 
 @bp.route('/user/<id>', methods=['GET'])
-def get_user(_id):
+def get_user(id):
     list_post = []
     user = db.user.find_one({"_id": ObjectId(id)},
                             {"password": 0, "link_facebook": 0, "email": 0, "list_draft": 0, "list_category": 0})
@@ -13,7 +13,7 @@ def get_user(_id):
             for id_post in user["list_post"]:
                 post = Post(db.post.find_one({"_id": id_post}))
                 list_post.append(post.get_mini_post(get_username=False))
-        followers = len(list(db.user.find({"list_follow": user["_id"]})))
+        followings = len(list(db.user.find({"list_follow": user["_id"]})))
 
         return {
                     "_id" : str(user["_id"]),
@@ -23,8 +23,8 @@ def get_user(_id):
                     "cover_img": user["cover_img"],
                     "bio": user["bio"],
                     "list_post": list_post,
-                    "followings": len(user["list_follow"]),
-                    "followers": followers
+                    "followings": followings,
+                    "followers": len(user["list_follow"])
                 }
 
 
