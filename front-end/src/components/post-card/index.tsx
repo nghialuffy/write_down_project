@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { ErrorText } from '../style-components';
 import { HTTPCodeLabel } from '../../const';
 import { Spin } from 'antd';
+import { LoadingFullView } from '../loading';
 
 export function PostCard({ data }: { data: PostCardType }) {
     const { loading: userLoading, data: user, status: userStatus } = useEntityData<UserType>(`user/${data.created_by}`);
@@ -17,11 +18,8 @@ export function PostCard({ data }: { data: PostCardType }) {
     return (
         <div className='post-card'>
             <div className='post-card-info'>
-                {(userLoading || categoryLoading) && <Spin className='item-loading' />}
-                <UserAvatar data={{
-                    _id: user?._id ?? user?.username ?? '',
-                    avatar_url: user?.avatar
-                }} />
+                {(userLoading || categoryLoading) && <LoadingFullView className='item-loading' />}
+                {user && <UserAvatar data={user} />}
                 <div className='info-content'>
                     <div className='info-content-top'>
                         <Link
@@ -38,8 +36,8 @@ export function PostCard({ data }: { data: PostCardType }) {
                     </div>
                     <div className='info-content-bottom'>
                         {moment(data.created_date).fromNow()}
+                        <span>{`${data.time_to_read} phút đọc`}</span>
                     </div>
-                    <div>{`${data.time_to_read} phút đọc`}</div>
                 </div>
             </div>
             <Link className='post-card-content' to={`/post/detail/${data._id}`}>
@@ -49,7 +47,7 @@ export function PostCard({ data }: { data: PostCardType }) {
                     />
                 </div>}
                 <h3 className='content-title'>{data.title}</h3>
-                <p className='content-truncate'>{data.content}...
+                <p className='content-truncate'>{data.content}
                 </p>
             </Link>
             <div className='post-card-footer'>

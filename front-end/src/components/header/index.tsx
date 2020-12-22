@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import logo from '../../assets/logo.png';
-import { Button, Dropdown, Input, Menu } from 'antd';
+import { Dropdown, Input, Menu } from 'antd';
 import {
     BellOutlined,
     DownOutlined,
@@ -8,7 +8,6 @@ import {
     HomeOutlined,
     UserOutlined,
     LogoutOutlined,
-    LoginOutlined,
     FormOutlined,
     ShopOutlined
 } from '@ant-design/icons';
@@ -17,17 +16,35 @@ import './style.scss';
 import { BaseButton, BaseDropDown } from '../base';
 import { Link } from 'react-router-dom';
 import { Categories } from '../../constants';
+import { useEntityData } from '../../access';
+import { LoadingFullView } from '../loading';
 const { SubMenu } = Menu;
 
-export function Header() {
-    const [user, setUser] = useState<any>({
-        _id: '1343444',
-        avatar_url: 'https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-xs-avatar/4db955d02a8911ebacbfc9142b6c25a5.jpg',
-        displayName: 'Username'
-    })
+type UserInfo = {
+    _id: string,
+    avatar: string,
+    display_name: string,
+    username: string,
+}
+
+export const Header = memo(() => {
     const SearchHandler = (value: string) => {
         console.log('text search', value);
     }
+    const token = localStorage.getItem('token') ?? undefined;
+    const [user, setUser] = useState<UserInfo>();
+
+    const { loading, data } = useEntityData<UserInfo>('/auth', token);
+
+    useEffect(() => {
+        setUser(data);
+    }, [data]);
+
+    const logout = () => {
+        localStorage.removeItem('token');
+        setUser(undefined);
+    }
+
     return (
         <div className='header'>
             <div className='container'>
@@ -43,30 +60,35 @@ export function Header() {
                             allowClear
                             className='header-search'
                         />
-                        <Link to='/new-post' className='link-new-post'>
-                            <BaseButton type='primary'>Viết bài</BaseButton>
-                        </Link>
-                        <BellOutlined />
-                        <div className='user-info'>
-                            {user.avatar_url && <UserAvatar data={user} />}
-                            <Dropdown
-                                trigger={['click']}
-                                overlay={
-                                    <Menu className='menu-base-dropdown'>
-                                        <Menu.Item>
-                                            <Link to={`/profile/${user._id}`}>Trang cá nhân</Link>
-                                        </Menu.Item>
-                                        <Menu.Item>
-                                            <Link to='/setting'>Cài đặt tài khoản</Link>
-                                        </Menu.Item>
-                                        <Menu.Item>
-                                            <span onClick={() => console.log('Log out')}>Đăng xuất</span>
-                                        </Menu.Item>
-                                    </Menu>
-                                }>
-                                <div className='username' onClick={e => e.preventDefault()}>{user.displayName ?? ''} <DownOutlined /></div>
-                            </Dropdown>
-                        </div>
+                        {user ? <div className='header-content-top-right'>
+                            {loading && <LoadingFullView />}
+                            <Link to='/new-post' className='link-new-post'>
+                                <BaseButton type='primary'>Viết bài</BaseButton>
+                            </Link>
+                            <BellOutlined />
+                            <div className='user-info'>
+                                {user.avatar && <UserAvatar data={user} />}
+                                <Dropdown
+                                    trigger={['click']}
+                                    overlay={
+                                        <Menu className='menu-base-dropdown'>
+                                            <Menu.Item>
+                                                <Link to={`/profile/${user._id}`}>Trang cá nhân</Link>
+                                            </Menu.Item>
+                                            <Menu.Item>
+                                                <Link to='/setting'>Cài đặt tài khoản</Link>
+                                            </Menu.Item>
+                                            <Menu.Item>
+                                                <span onClick={logout}>Đăng xuất</span>
+                                            </Menu.Item>
+                                        </Menu>
+                                    }>
+                                    <div className='username' onClick={e => e.preventDefault()}>{user.display_name ?? ''} <DownOutlined /></div>
+                                </Dropdown>
+                            </div>
+                        </div> : <><Link to='/login'><BaseButton type='primary'>Login</BaseButton></Link>
+                                <Link to='/register'><BaseButton type='primary'>Register</BaseButton></Link>
+                            </>}
                     </div>
                     <div className='header-content-bottom'>
                         <BaseDropDown
@@ -84,8 +106,8 @@ export function Header() {
             </div>
 
         </div>
-    )
-}
+    );
+});
 
 function HeaderSideBar({ user }: { user: any }) {
     const [showSideBar, setShowSideBar] = useState(false);
@@ -94,7 +116,7 @@ function HeaderSideBar({ user }: { user: any }) {
             <BaseButton type='primary' onClick={(e) => {
                 setShowSideBar(!showSideBar);
                 e.stopPropagation();
-                }}><MenuOutlined /></BaseButton>
+            }}><MenuOutlined /></BaseButton>
             <Menu
                 defaultSelectedKeys={['home']}
                 mode="inline"

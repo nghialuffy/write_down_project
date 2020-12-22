@@ -36,8 +36,8 @@ export function RegisterPage() {
 
 
     return (
-        <AppWrap>
-            <img src={logo} alt='Write Down logo' className='logo' height='300' width='300' />
+        <div className='page-no-wrap'>
+            <img src={logo} alt='Write Down logo' className='logo' height='300' width = '300'/>
             <Form
                 form={register_form}
                 {...layout}
@@ -101,13 +101,10 @@ export function RegisterPage() {
                 >
                     <Input.Password />
                 </Form.Item>
-
-
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit">Submit</Button>
                 </Form.Item>
             </Form>
-
-        </AppWrap>
-    )
+        </div>
+    );
 }
