@@ -6,8 +6,8 @@ GET:
                 Top
     postmonth           Bài viết của tháng
     foryou              Phù hợp với bạn
-    user/<username>                Thông tin user
-        Ví dụ: http://127.0.0.1:5000/user/Araragikoyomioc
+    user/<id_user>                Thông tin user
+        Nếu có token thì xuất hiện trường followed: 1 (đã follow) hoặc 0 (chưa follow)
     login       Đăng nhập. Trả về token. Mẫu như login.json
         Ví dụ: curl -H "Content-Type: application/json" -d @login.json http://127.0.0.1:5000/login
             --> {"token":"a370IpyCScYxFZfRbXi/8u9KgU8qA7Fo"}
@@ -62,6 +62,14 @@ POST:
 
     post/<id_post>/comment/vote     Vote bình luận. Cần có token. Mẫu như file vote_cmt.json và vote_reply.json
         "upordown" phải là "up"/"down"/"unvote"
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+
+    user/<id_user>/follow   Follow user. Cần có token.
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+
+    user/<id_user>/unfollow   Unfollow user. Cần có token.
         Error 401: Token sai
         Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
 
