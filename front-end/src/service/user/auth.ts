@@ -1,7 +1,7 @@
 import { UserContext } from './../../context/index';
 import axios from "axios";
 
-const API_URL = "http://192.168.1.197:5000/";
+const API_URL = "http://192.168.1.196:5000/";
 const headers = {
    'Content-Type': 'application/json',
    'accept': "*/*",

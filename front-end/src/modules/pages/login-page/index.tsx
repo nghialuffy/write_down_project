@@ -1,16 +1,13 @@
 import { Form, Input, Button, Checkbox, notification } from 'antd';
 import React, { useState } from 'react';
 import { AppWrap } from '../../../components';
-import AuthService from "../../../service/user/auth";
-import { AxiosError, AxiosResponse } from 'axios';
 import { useHistory } from 'react-router-dom';
 import logo from './../../../assets/logo.png'
 import { DataAccess } from '../../../access';
+import { HTTPCodeLabel } from '../../../const';
 
 export function LoginPage () {
-    const [register_form] = Form.useForm();
-    const [successful, setSuccessful] = useState(false);
-    const [message, setMessage] = useState("");
+    const [login_form] = Form.useForm();
     let history = useHistory();
     const layout = {
         labelCol: { span: 8 },
@@ -23,12 +20,16 @@ export function LoginPage () {
         DataAccess.Post('login ', JSON.stringify(values)).then(res => {
             if (res) history.push("/");
             localStorage.setItem('token', res.data?.token);
-        }).catch(e => notification.error({
-            message: 'Error',
-            description: e,
-        }));
-        // setMessage(localStorage.getItem('user')+"");
-
+            notification.success({
+                message: "Login successfully!"
+            })
+        })
+        .catch(e => {
+            
+            notification.error({
+            message: "Error",
+            description: e.response ? `[${e.response.status}] ${HTTPCodeLabel(e.response.status)}` : `[${500}] ${HTTPCodeLabel('500')}`
+        }); });
     };
 
 
@@ -36,9 +37,9 @@ export function LoginPage () {
         <AppWrap>
             <img src={logo} alt='Write Down logo' className='logo' height='300' width = '300'/>
             <Form
-                form={register_form}
+                form={login_form}
                 {...layout}
-                name="register_form"
+                name="login_form"
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
             >

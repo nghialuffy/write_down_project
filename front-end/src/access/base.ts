@@ -6,7 +6,7 @@ const headers = {
     'accept': "*/*",
     "Access-Control-Allow-Origin": '*'
 }
-const BASE_URL = 'http://192.168.1.197:5000';
+const BASE_URL = 'http://192.168.1.196:5000';
 
 const APIPost = async (url: string, data: string) => {
     return await axios({
