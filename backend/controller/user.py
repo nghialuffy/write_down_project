@@ -1,5 +1,5 @@
-from controller import bp, db, ObjectId
-from controller.model import Post
+from controller import bp, db
+from controller.model import Post, ObjectId
 from flask import g, abort
 from controller.auth import token_auth
 
