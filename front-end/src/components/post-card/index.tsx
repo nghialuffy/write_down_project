@@ -39,14 +39,14 @@ export function PostCard({ data }: { data: PostCardType }) {
                     </div>
                 </div>
             </div>
-            <Link className='post-card-content' to={`/post/detail/${data._id}`}>
+            <Link className='post-card-content' to={`/post-detail/${data._id}`}>
                 {data.url_image && <div className='card-img'>
                     <img src='https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-thumbnails/30ec2e70379d11eb9e72bd946431b3ae.jpg'
                         alt='post-card-img'
                     />
                 </div>}
                 <h3 className='content-title'>{data.title}</h3>
-                <p className='content-truncate'>{data.content}
+                <p className='content-truncate'>{data.content.slice(0,200)}...
                 </p>
             </Link>
             <div className='post-card-footer'>

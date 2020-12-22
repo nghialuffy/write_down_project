@@ -11,7 +11,7 @@ export function HomePage () {
     let { type } = useParams<{type: string}>();
     let history = useHistory();
     if (!type) {
-        history.push('/hot');
+        history.push('/all/hot');
     }
     const [currentPage, setCurrentPage] = useState(1);
     const {loading, data } = useEntityDataList<ListPost>(`s/all/${type ?? 'hot'}`, currentPage)

@@ -55,9 +55,7 @@ export class UserContextProvider extends React.Component<any, StateType> {
     }
 
     updateUser = (newInfo: StateType) => {
-        this.setState(newInfo, () => {
-            console.log(this.state);
-        });
+        this.setState(newInfo);
     }
     render() {
         return (
