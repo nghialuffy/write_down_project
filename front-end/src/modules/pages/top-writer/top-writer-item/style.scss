@@ -1,0 +1,13 @@
+.top-writer-item {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+    margin-top: 10px;
+    .display-name {
+        font-weight: bold;
+        font-size: 16px;
+    }
+}

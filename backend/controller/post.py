@@ -9,8 +9,7 @@ from bson.objectid import ObjectId
 def get_comment(data_cmt, is_reply=False):
     cmt = {"_id": str(data_cmt["_id"]), "content": data_cmt["content"], "created_date": data_cmt["created_date"],
            "vote": data_cmt["vote"],
-           "created_by": db.user.find_one({"_id": data_cmt["created_by"]}, {"_id": 0, "username": 1, "display_name": 1,
-                                                                            "avatar": 1})}
+           "created_by": db.user.find_one({"_id": data_cmt["created_by"]}, {"_id": 1, "display_name": 1, "avatar": 1})}
     if g.current_token is not None:
         token = g.current_token.get_token()
         if str(token.id_user) in data_cmt["voted_user"]:
@@ -36,9 +35,11 @@ def get_post(id):
         post["vote"] = data["vote"]
         post["views"] = data["views"] + 1
         post["edit_history"] = len(data["edit_history"]) > 0
-        post["category"] = db.category.find_one({"_id": data["category"]}, {"_id": 0, "name_category": 1, "url": 1})
-        post["created_by"] = db.user.find_one({"_id": data["created_by"]}, {"_id": 0, "username": 1, "display_name": 1,
-                                                                            "avatar": 1})
+        category = db.category.find_one({"_id": data["category"]}, {"_id": 1, "name_category": 1, "url": 1})
+        post["category"] = str(category["_id"])
+
+        user = db.user.find_one({"_id": data["created_by"]}, {"_id": 1, "display_name": 1, "avatar": 1})
+        post["created_by"]=str(user["_id"])
         post["list_comment"] = []
         for data_cmt in data["list_comment"]:
             post["list_comment"].append(get_comment(data_cmt))

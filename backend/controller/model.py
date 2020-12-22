@@ -113,8 +113,8 @@ class Post():
 
         mini_content = soup.text[:150] + "..."
         if get_username:
-            user = db.user.find_one({"_id": self.created_by}, {"_id": 0, "username": 1, "display_name": 1})
-            return {"username": user["username"], "display_username": user["display_username"], "title": self.title,
+            user = db.user.find_one({"_id": self.created_by}, {"_id": 1, "display_name": 1})
+            return {"_id": user["_id"], "display_username": user["display_username"], "title": self.title,
                     "category": category, "created_date": self.created_date, "id": str(self._id),
                     "time_to_read": self.time_to_read, "image": img_post, "content": mini_content, "vote": self.vote,
                     "comment": len(self.list_comment)}
