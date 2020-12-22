@@ -29,6 +29,42 @@ def get_userid_from_token(token):
     except Exception as exc:
         print("Error" + exc)
     return res
+@bp.route('/categories/', defaults={'_id' : None})
+@bp.route('/categories/<_id>', methods=['GET'])
+@token_auth.login_required(optional=True)
+def get_categories(_id):
+    res = {}
+    
+    print(id)
+    try:
+        if _id != None:
+            query = db["category"].find({"_id" : ObjectId(_id)})
+            if query !=None:
+                temp_res = list(query)[0]
+                res["_id"] = str(temp_res["_id"])
+                res["url"] = temp_res["url"]
+                res["name_category"] = temp_res["name_category"]
+                res["url_images"] = temp_res["url_images"]
+                res["rule"] = temp_res["rule"]
+                return res
+        else:
+            query = db["category"].find({})
+            list_res = []
+            if (query != None):
+                for raw_data in list(query):
+                    temp_res = {}
+                    temp_res["_id"] = str(raw_data["_id"])
+                    temp_res["url"] = raw_data["url"]
+                    temp_res["name_category"] = raw_data["name_category"]
+                    temp_res["url_images"] = raw_data["url_images"]
+                    temp_res["rule"] = raw_data["rule"]
+                    list_res.append(temp_res)
+            res["data"] = list_res
+            return res
+
+    except Exception as exc:
+        print(exc)
+    abort(403)
 
 @bp.route('/s/all/hot', methods=['GET'])
 @token_auth.login_required(optional=True)
@@ -42,7 +78,7 @@ def get_hot_post_unverified():
         res ={
             "data" : [],
             "current_page" : page ,
-            "max_page" : max_page
+            "total_page" : max_post
         }
         if(max_page < page):
             return res
@@ -64,11 +100,12 @@ def get_hot_post_unverified():
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:100],
-                    "post_id" : str(list_post[index_page]["_id"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:200],
+                    "_id" : str(list_post[index_page]["_id"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"])
+                    "comments" : len(list_post[index_page]["list_comment"]),
+                    "url_image" : ""
                 })
         return res
         
@@ -88,7 +125,7 @@ def get_new_post_unverified():
         res ={
             "data" : [],
             "current_page" : page ,
-            "max_page" : max_page
+            "total_page" : max_post
         }
         if(max_page < page):
             return res
@@ -110,11 +147,12 @@ def get_new_post_unverified():
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : str(list_post[index_page]["content"]),
-                    "post_id" : str(list_post[index_page]["_id"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"])),
+                    "_id" : str(list_post[index_page]["_id"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"])
+                    "comments" : len(list_post[index_page]["list_comment"]),
+                    "url_image" : ""
                 })
         return res
         
@@ -134,7 +172,7 @@ def get_controversial_post_unverified():
         res ={
             "data" : [],
             "current_page" : page ,
-            "max_page" : max_page
+            "total_page" : max_post
         }
         if(max_page < page):
             return res
@@ -187,11 +225,12 @@ def get_controversial_post_unverified():
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:100],
-                    "post_id" : str(list_post[index_page]["_id"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:200],
+                    "_id" : str(list_post[index_page]["_id"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"])
+                    "comments" : len(list_post[index_page]["list_comment"]),
+                    "url_image" : ""
                 })
         return res
         
@@ -211,7 +250,7 @@ def get_top_post_unverified():
         res ={
             "data" : [],
             "current_page" : page ,
-            "max_page" : max_page
+            "total_page" : max_post
         }
         if(max_page < page):
             return res
@@ -233,11 +272,12 @@ def get_top_post_unverified():
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:100],
-                    "post_id" : str(list_post[index_page]["_id"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:200],
+                    "_id" : str(list_post[index_page]["_id"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"])
+                    "comments" : len(list_post[index_page]["list_comment"]),
+                    "url_image" : ""
                 })
         return res
         
@@ -266,7 +306,7 @@ def get_category_hot(category_name):
         res ={
             "data" : [],
             "current_page" : page ,
-            "max_page" : max_page
+            "total_page" : max_post
         }
         if(max_page < page):
             return res
@@ -289,11 +329,12 @@ def get_category_hot(category_name):
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:100],
-                    "post_id" : str(list_post[index_page]["_id"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:200],
+                    "_id" : str(list_post[index_page]["_id"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"])
+                    "comments" : len(list_post[index_page]["list_comment"]),
+                    "url_image" : ""
                 })
         return res
 
@@ -321,7 +362,7 @@ def get_category_new(category_name):
         res ={
             "data" : [],
             "current_page" : page ,
-            "max_page" : max_page
+            "total_page" : max_post
         }
         if(max_page < page):
             return res
@@ -344,11 +385,12 @@ def get_category_new(category_name):
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:100],
-                    "post_id" : str(list_post[index_page]["_id"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:200],
+                    "_id" : str(list_post[index_page]["_id"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"])
+                    "comments" : len(list_post[index_page]["list_comment"]),
+                    "url_image" : ""
                 })
         return res
 
@@ -377,7 +419,7 @@ def get_category_controversial(category_name):
         res ={
             "data" : [],
             "current_page" : page ,
-            "max_page" : max_page
+            "total_page" : max_post
         }
         if(max_page < page):
             return res
@@ -435,11 +477,12 @@ def get_category_controversial(category_name):
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : str(list_post[index_page]["content"]),
-                    "post_id" : str(list_post[index_page]["_id"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"])),
+                    "_id" : str(list_post[index_page]["_id"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"])
+                    "comments" : len(list_post[index_page]["list_comment"]),
+                    "url_image" : ""
                 })
         return res
     except Exception as exc:
@@ -466,7 +509,7 @@ def get_category_top(category_name):
         res ={
             "data" : [],
             "current_page" : page ,
-            "max_page" : max_page
+            "total_page" : max_post
         }
         if(max_page < page):
             return res
@@ -489,11 +532,12 @@ def get_category_top(category_name):
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : str(list_post[index_page]["content"]),
-                    "post_id" : str(list_post[index_page]["_id"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"])),
+                    "_id" : str(list_post[index_page]["_id"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"])
+                    "comments" : len(list_post[index_page]["list_comment"]),
+                    "url_image" : ""
                 })
         return res
 
@@ -524,7 +568,7 @@ def get_category_hot_verified(category_name):
         res ={
             "data" : [],
             "current_page" : page ,
-            "max_page" : max_page
+            "total_page" : max_post
         }
         if(max_page < page):
             return res
@@ -547,11 +591,12 @@ def get_category_hot_verified(category_name):
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:100],
-                    "post_id" : str(list_post[index_page]["_id"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:200],
+                    "_id" : str(list_post[index_page]["_id"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"])
+                    "comments" : len(list_post[index_page]["list_comment"]),
+                    "url_image" : ""
                 })
         return res
 
@@ -580,7 +625,7 @@ def get_category_new_verified(category_name):
         res ={
             "data" : [],
             "current_page" : page ,
-            "max_page" : max_page
+            "total_page" : max_post
         }
         if(max_page < page):
             return res
@@ -603,11 +648,12 @@ def get_category_new_verified(category_name):
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:100],
-                    "post_id" : str(list_post[index_page]["_id"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:200],
+                    "_id" : str(list_post[index_page]["_id"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"])
+                    "comments" : len(list_post[index_page]["list_comment"]),
+                    "url_image" : ""
                 })
         return res
 
@@ -637,7 +683,7 @@ def get_category_controversial_verified(category_name):
         res ={
             "data" : [],
             "current_page" : page ,
-            "max_page" : max_page
+            "total_page" : max_post
         }
         if(max_page < page):
             return res
@@ -695,11 +741,12 @@ def get_category_controversial_verified(category_name):
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : str(list_post[index_page]["content"]),
-                    "post_id" : str(list_post[index_page]["_id"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"])),
+                    "_id" : str(list_post[index_page]["_id"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"])
+                    "comments" : len(list_post[index_page]["list_comment"]),
+                    "url_image" : ""
                 })
         return res
     except Exception as exc:
@@ -726,7 +773,7 @@ def get_category_top_verified(category_name):
         res ={
             "data" : [],
             "current_page" : page ,
-            "max_page" : max_page
+            "total_page" : max_post
         }
         if(max_page < page):
             return res
@@ -749,11 +796,12 @@ def get_category_top_verified(category_name):
                     "time_to_read" : str(list_post[index_page]["time_to_read"]),
                     "title" : str(list_post[index_page]["title"]),
                     "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : str(list_post[index_page]["content"]),
-                    "post_id" : str(list_post[index_page]["_id"]),
+                    "content" : get_content_post(str(list_post[index_page]["content"])),
+                    "_id" : str(list_post[index_page]["_id"]),
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"])
+                    "comments" : len(list_post[index_page]["list_comment"]),
+                    "url_image" : ""
                 })
         return res
 
