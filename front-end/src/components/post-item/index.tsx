@@ -13,7 +13,7 @@ export function PostItem ({data} : {data: PostItemType}) {
     const {loading, data: user, status} = useEntityData<UserType>(`user/${data.created_by}`);
     return (
         <div className='post-item'>
-            {loading && <LoadingFullView />}
+            {loading && <LoadingFullView className='loading-item'/>}
             {user && <UserAvatar data={user}/>}
             <div className='post-item-content'>
                 <Link to={`/post-detail/${data._id}`} className='post-title'>
