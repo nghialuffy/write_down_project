@@ -107,6 +107,10 @@ DELETE:
         Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
         Error 405: Không phải token của acc đăng bài
 
+    logout      Đăng xuất. Cần có token.
+        Error 401: Token sai
+        Error 403: Lỗi hệ thống
+
 
 
 

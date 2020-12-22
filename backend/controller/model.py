@@ -274,7 +274,11 @@ class Token():
 
     def revoke_token(self):
         self.token_expiration = datetime.datetime.utcnow() - datetime.timedelta(seconds=1)
-        db.session.delete_one({"_id": self._id})
+        e = db.session.update_one({"_id": self._id}, {"$set": {"token_expiration": self.token_expiration}})
+        if e.matched_count > 0:
+            return "ok"
+        else:
+            return "error"
 
     @staticmethod
     def check_token(id_token):
@@ -285,6 +289,7 @@ class Token():
         token._id = data["_id"]
         token.token_expiration = data["token_expiration"]
         return token
+
     def show_token(self):
         return self._id
 
