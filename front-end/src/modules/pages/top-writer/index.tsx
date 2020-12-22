@@ -1,3 +1,4 @@
+import { Empty } from 'antd';
 import React from 'react';
 import { useEntityDataList } from '../../../access';
 import { AppWrap, BaseList, LoadingFullView } from '../../../components';
@@ -8,7 +9,8 @@ export function TopWriterPage () {
     return(
         <AppWrap>
             {loading && <LoadingFullView />}
-            {data && <BaseList<TopUserType> data={data as any} Item={TopWriterPage}/>}
+            {data ? <BaseList<TopUserType> data={data as any} Item={TopWriterPage}/> : 
+                <Empty description='Sorry, something went wrong!' />}
         </AppWrap>
     )
 }
