@@ -89,3 +89,8 @@ export const topUser = {
 };
 
 export type TopUserType = typeof topUser;
+
+export type MiniData = {
+    _id: string;
+    avatar?: string
+}

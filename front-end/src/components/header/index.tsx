@@ -32,7 +32,10 @@ export const Header = () => {
     const SearchHandler = (value: string) => {
         console.log('text search', value);
     }
+    
     const userContext = useContext(UserContext);
+    console.log('usercontext', userContext);
+
     return (
         <div className='header'>
             <div className='container'>

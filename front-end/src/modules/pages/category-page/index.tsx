@@ -5,7 +5,7 @@ import { useEntityDataList } from '../../../access';
 import { CategoryImage } from '../../../assets/Images';
 import { AppWrap, BaseButton, BaseList, LoadingFullView, MenuSideBar, PostCard, SideBarRight } from '../../../components';
 import { Categories } from '../../../constants';
-import { ListPost, PostCardType } from '../../../model';
+import { ListPostType, PostCardType } from '../../../model';
 import './style.scss';
 
 export function CategoryPage() {
@@ -16,7 +16,7 @@ export function CategoryPage() {
         history.push(`/posts/${category}/hot`)
     }
     const [currentPage, setCurrentPage] = useState(1);
-    const { loading, data } = useEntityDataList<ListPost>(`s/${category}/${type ?? 'hot'}`, currentPage);
+    const { loading, data } = useEntityDataList<ListPostType>(`s/${category}/${type ?? 'hot'}`, currentPage);
 
     return (
         <AppWrap>
