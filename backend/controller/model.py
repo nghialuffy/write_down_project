@@ -127,10 +127,10 @@ class Post():
                     "comment": len(self.list_comment)}
 
     def get_micro_post(self):
-        user = db.user.find_one({"_id": self.created_by}, {"_id": 1, "display_name": 1})
+        user = db.user.find_one({"_id": self.created_by}, {"_id": 1, "display_name": 1, "avatar": 1})
         return {"title": self.title, "_id_user": str(user["_id"]), "created_date": self.created_date,
                 "_id": str(self._id),
-                "display_name_user": user["display_name"]}
+                "display_name_user": user["display_name"], "avatar_user": user["avatar"]}
 
     def toDraft(self):
         draft = Draft(history=True)
