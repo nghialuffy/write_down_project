@@ -1,16 +1,50 @@
-import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from controller.model import *
 import re
 from time import sleep
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.firefox.options import Options
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('headless')
 chrome_options.add_argument('window-size=1920x1080')
 chrome_options.add_argument("disable-gpu")
 
+options = Options()
+options.add_argument('--headless')
+options.add_argument('window-size=1920x1080')
+options.add_argument("disable-gpu")
+
+tiny_driver=webdriver.Firefox(options=options)
+tiny_driver.get("https://www.tiny.cloud/docs/demo/tinydrive/")
+
+def get_tiny_html(content_html):
+    tiny_driver.find_element(By.XPATH, "//button[@aria-label='Source code']").click()
+    sleep(1)
+    elem = tiny_driver.find_element(By.XPATH, "//textarea[@class='tox-textarea']")
+    elem.send_keys(Keys.CONTROL, 'a')
+    elem.send_keys(Keys.DELETE)
+    elem.send_keys(content_html)
+    sleep(1)
+    try:
+        tiny_driver.find_element(By.XPATH, "//button[@title='Save']").click()
+    except:
+        tiny_driver.find_element(By.XPATH, "//button[@class='ub-emb-close']").click()
+        sleep(1)
+        tiny_driver.find_element(By.XPATH, "//button[@title='Save']").click()
+    sleep(1)
+    tiny_driver.find_elements(By.XPATH, "//button[@class='tox-mbtn tox-mbtn--select']")[-1].click()
+    sleep(1)
+    tiny_driver.find_element(By.XPATH, "//div[@class='tox tox-silver-sink tox-tinymce-aux']"). \
+        find_element(By.XPATH,
+                     "//div[@class='tox-menu-nav__js tox-collection__item tox-collection__item--active']").click()
+    sleep(1)
+    content = tiny_driver.find_element(By.XPATH, "//textarea[@class='tox-textarea']").get_attribute("value")
+    sleep(1)
+    tiny_driver.find_element(By.XPATH, "//button[@title='Save']").click()
+    sleep(1)
+    return content
 
 def get_date(str):
     str = str.strip()
@@ -63,7 +97,7 @@ def crawl_post(url, time_to_read=0, category_id=None):
 
     post.created_by = user._id
     post.title = driver.find_element(By.XPATH, "//div[@class='title']").find_element(By.XPATH, "//h1").text.strip()
-    post.content = driver.find_element(By.XPATH, "//div[@class='fr-element fr-view']").get_attribute('innerHTML')
+    post.content = get_tiny_html(driver.find_element(By.XPATH, "//div[@class='fr-element fr-view']").get_attribute('innerHTML'))
     post.created_date = get_date(driver.find_element(By.XPATH, "//div[@class='created']").text)
     post.vote = int(driver.find_element(By.XPATH, "//span[@class='vote-count']").text)
     post.time_to_read = time_to_read
@@ -114,7 +148,10 @@ def crawl_post(url, time_to_read=0, category_id=None):
         list_driver_reply = driver_cmt.find_elements(By.XPATH, ".//li[@class='subcomment-li']")
         for driver_reply in list_driver_reply:
             reply = Comment()
-            reply.content = driver_reply.find_element(By.XPATH, ".//div[@class='content']").text
+            try:
+                reply.content = driver_reply.find_element(By.XPATH, ".//div[@class='content']").text
+            except:
+                continue
             reply.created_date = get_date(driver_reply.find_element(By.XPATH, ".//div[@class='created']").text.strip())
 
             user_url = driver_reply.find_element(By.XPATH, ".//h3[@class='name']").find_element_by_tag_name(
@@ -226,13 +263,4 @@ def crawl():
 
 
 if __name__ == "__main__":
-    driver = webdriver.Chrome("C:/Users/DELL/Downloads/chromedriver_win32/chromedriver.exe")
-    driver.get("https://spiderum.com/bai-dang/Attack-on-Titan-Tom-tat-toan-bo-dong-thoi-gian-tinh-den-chap-135-manga-Phan-1-SPOILERS-wij")
-    content_html=driver.find_element(By.XPATH, "//div[@class='fr-element fr-view']").get_attribute('innerHTML')
-    driver.get("https://www.tiny.cloud/docs/demo/tinydrive/")
-    driver.find_element(By.XPATH, "//button[@aria-label='Source code']").click()
-    elem=driver.find_element(By.XPATH, "//textarea[@class='tox-textarea']")
-    elem.send_keys(Keys.CONTROL, 'a')
-    elem.send_keys(Keys.DELETE)
-    elem.send_keys(content_html)
-    driver.find_element(By.XPATH, "//button[@title='Save']").click()
+    crawl()
