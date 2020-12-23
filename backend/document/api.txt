@@ -8,14 +8,76 @@ GET:
     foryou              Phù hợp với bạn
     user/<id_user>                Thông tin user
         Nếu có token thì xuất hiện trường followed: 1 (đã follow) hoặc 0 (chưa follow)
+        Output:
+            - _id
+            - avatar
+            - bio
+            - cover_img
+            - display_name
+            - followers
+            - followings
+            - list_post: là một list, mỗi phần tử bao gồm: {
+                - _id
+                - category
+                    - _id
+                    - name_category
+                    - url
+                - comment: Số comment
+                - content: Nội dung tóm tắt, không quá 150 ký tự
+                - created_date
+                - image: là ảnh đầu tiên của bài post, trả về "" nếu post không có ảnh
+                - time_to_read
+                - title
+                - vote
+            }
+            - username
+
     login       Đăng nhập. Trả về token. Mẫu như login.json
         Ví dụ: curl -H "Content-Type: application/json" -d @login.json http://127.0.0.1:5000/login
             --> {"token":"a370IpyCScYxFZfRbXi/8u9KgU8qA7Fo"}
         Error 401: Không đúng tài khoản hoặc mật khẩu
     post/<id>     Xem bài đăng
         Có thể có token hoặc không.
-        Nếu có token và user đã vote bài đăng thì trường voted_user hiển thị 1 (upvote), -1 (downvote), 0 (đã xóa vote)
-            Tương tự với vote bình luận
+        Output:
+            - category
+                - _id
+                - name_category
+                - url
+            - content
+            - created_by
+                - _id
+                - avatar
+                - display_name
+            - created_date
+            - edit_history
+            - list_comment: là một list, mỗi phần tử gồm: {
+                - _id
+                - content
+                - created_by
+                    - _id
+                    - avatar
+                    - display_name
+                - created_date
+                - list_comment: là một list, mỗi phần tử gồm: {
+                    - _id
+                    - content
+                    - created_by
+                        - _id
+                        - avatar
+                        - display_name
+                    - created_date
+                    -vote
+                    Nếu có token và user đã vote bài đăng thì trường voted_user hiển thị 1 (upvote), -1 (downvote), 0 (đã xóa vote)
+                    }
+                - vote
+                Nếu có token và user đã vote bài đăng thì trường voted_user hiển thị 1 (upvote), -1 (downvote), 0 (đã xóa vote)
+                }
+            - list_hashtag
+            - title
+            - views
+            - vote
+            Nếu có token và user đã vote bài đăng thì trường voted_user hiển thị 1 (upvote), -1 (downvote), 0 (đã xóa vote)
+
     post/<id>/edit-history    Xem lịch sử chỉnh sửa
     draft/<id>      Xem nháp (Cần token của user cần xem)
     draft           Xem danh sách các nháp

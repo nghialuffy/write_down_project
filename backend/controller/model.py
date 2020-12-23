@@ -102,7 +102,7 @@ class Post():
         db.user.update_one({'_id': self.created_by}, {'$push': {'list_post': self._id}})
 
     def get_mini_post(self, get_username=True):
-        category = db.category.find_one({"_id": self.category}, {"_id": 0, "name_category": 1, "url": 1})
+        category = db.category.find_one({"_id": self.category}, {"_id": 1, "name_category": 1, "url": 1})
         soup = BeautifulSoup(self.content, "lxml")
 
         img_soup = soup.find("img")
@@ -114,12 +114,14 @@ class Post():
         mini_content = soup.text[:150] + "..."
         if get_username:
             user = db.user.find_one({"_id": self.created_by}, {"_id": 1, "display_name": 1})
-            return {"_id": user["_id"], "display_username": user["display_username"], "title": self.title,
-                    "category": category, "created_date": self.created_date, "id": str(self._id),
+            return {"_id": str(user["_id"]), "display_username": user["display_username"], "title": self.title,
+                    "category": {"_id": str(category["_id"]), "name_category": category["name_category"],
+                            "url": category["url"]}, "created_date": self.created_date, "_id": str(self._id),
                     "time_to_read": self.time_to_read, "image": img_post, "content": mini_content, "vote": self.vote,
                     "comment": len(self.list_comment)}
         else:
-            return {"title": self.title, "category": category, "created_date": self.created_date, "id": str(self._id),
+            return {"title": self.title, "category": {"_id": str(category["_id"]), "name_category": category["name_category"],
+                            "url": category["url"]}, "created_date": self.created_date, "_id": str(self._id),
                     "time_to_read": self.time_to_read, "image": img_post, "content": mini_content, "vote": self.vote,
                     "comment": len(self.list_comment)}
 
