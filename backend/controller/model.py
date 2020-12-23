@@ -116,20 +116,21 @@ class Post():
             user = db.user.find_one({"_id": self.created_by}, {"_id": 1, "display_name": 1})
             return {"_id": str(user["_id"]), "display_username": user["display_username"], "title": self.title,
                     "category": {"_id": str(category["_id"]), "name_category": category["name_category"],
-                            "url": category["url"]}, "created_date": self.created_date, "_id": str(self._id),
+                                 "url": category["url"]}, "created_date": self.created_date, "_id": str(self._id),
                     "time_to_read": self.time_to_read, "image": img_post, "content": mini_content, "vote": self.vote,
                     "comment": len(self.list_comment)}
         else:
-            return {"title": self.title, "category": {"_id": str(category["_id"]), "name_category": category["name_category"],
-                            "url": category["url"]}, "created_date": self.created_date, "_id": str(self._id),
+            return {"title": self.title,
+                    "category": {"_id": str(category["_id"]), "name_category": category["name_category"],
+                                 "url": category["url"]}, "created_date": self.created_date, "_id": str(self._id),
                     "time_to_read": self.time_to_read, "image": img_post, "content": mini_content, "vote": self.vote,
                     "comment": len(self.list_comment)}
 
     def get_micro_post(self):
-        user = db.user.find_one({"_id": self.created_by}, {"_id": 0, "username": 1, "display_name": 1})
-        return {"title": self.title, "username": user["username"], "created_date": self.created_date,
-                "id": str(self._id),
-                "display_username": user["display_name"]}
+        user = db.user.find_one({"_id": self.created_by}, {"_id": 1, "display_name": 1})
+        return {"title": self.title, "_id_user": str(user["_id"]), "created_date": self.created_date,
+                "_id": str(self._id),
+                "display_name_user": user["display_name"]}
 
     def toDraft(self):
         draft = Draft(history=True)
@@ -174,7 +175,7 @@ class Draft:
             db.user.update_one({'_id': self.created_by}, {'$push': {'list_draft': self._id}})
 
     def get_mini_draft(self):
-        category = db.category.find_one({"_id": self.category}, {"_id": 0, "name_category": 1, "url": 1})
+        category = db.category.find_one({"_id": self.category}, {"_id": 1, "name_category": 1, "url": 1})
         soup = BeautifulSoup(self.content, "lxml")
 
         img_soup = soup.find("img")
@@ -184,7 +185,9 @@ class Draft:
             img_post = ""
 
         mini_content = soup.text[:150] + "..."
-        return {"title": self.title, "category": category, "created_date": self.created_date, "id": str(self._id),
+        return {"title": self.title,
+                "category": {"_id": str(category["_id"]), "name_category": category["name_category"],
+                             "url": category["url"]}, "created_date": self.created_date, "_id": str(self._id),
                 "image": img_post, "content": mini_content}
 
     def toPost(self):
