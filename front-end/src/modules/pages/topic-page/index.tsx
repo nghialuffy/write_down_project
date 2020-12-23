@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useEntityDataList } from '../../../access';
 import { AppWrap, BaseList, LoadingFullView, MenuSideBar, PostCard, SideBarRight } from '../../../components';
-import { ListPost, PostCardType } from '../../../model';
+import { ListPostType, PostCardType } from '../../../model';
 
 export function TopicPage () {
     let { topic } = useParams<{ topic: string }>();
 
     const [currentPage, setCurrentPage] = useState(1);
-    const {loading, data } = useEntityDataList<ListPost>(`s/categories/${topic}`, currentPage)
+    const {loading, data } = useEntityDataList<ListPostType>(`s/categories/${topic}`, currentPage)
 
     return(
         <AppWrap>

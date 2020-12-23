@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useEntityDataList } from '../../../access';
 import { PostItemType } from '../../../model';
 import { BaseList, ComposeHeader, PostItem } from '../../index';
 
-export function ForYouPosts () {
+export const ForYouPosts = memo(() => {
     const {loading, data} = useEntityDataList<PostItemType>('/foryou');
     return (
         <div>
@@ -13,4 +13,4 @@ export function ForYouPosts () {
             </div>
         </div>
     );
-}
+});

@@ -11,9 +11,8 @@ export function MenuSideBar() {
     const processPath = (type: string) => {
         const currentPath = location.pathname;
         const path = currentPath.split('/');
-        return `${path.slice(0, path.length - 1).join('/')}${type}`
+        return `${path.slice(0, path.length - 1).join('/')}/${type}`
     }
-    console.log("processPath('hot')", processPath('hot'));
 
     return (
         <div className='menu-side-bar'>

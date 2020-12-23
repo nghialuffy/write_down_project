@@ -6,12 +6,17 @@ export type UseEntityData<T> = {
     status: HTTP_STATUS_CODE;
     loading: boolean,
     data?: T,
+    reload: () => void
 };
 
 export function useEntityData<T>(url: string | undefined, keyUpdate?: any, defaultData?: T): UseEntityData<T> {
     let [data, setData] = useState<T>();
     const [loading, setLoading] = useState(defaultData ? false : true);
     const [errorStatus, setStatus] = useState<HTTP_STATUS_CODE>('200');
+
+    const reload = () => {
+        fetchUser();
+    }
 
     const fetchUser = useCallback(async () => {
         try {
@@ -42,9 +47,9 @@ export function useEntityData<T>(url: string | undefined, keyUpdate?: any, defau
             setLoading(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchUser, url, defaultData, keyUpdate]);
+    }, [url, defaultData, keyUpdate]);
 
-    return { loading, data, status: errorStatus };
+    return { loading, data, status: errorStatus, reload };
 }
 
 export type UseEntityDataList<T> = {
@@ -63,7 +68,7 @@ export function useEntityDataList<T>(url: string | undefined, page?: number, def
         try {
             if (!url) return;
             setLoading(true);
-            const res = await DataAccess.Get(`${url}${page ?`?page=${page}` : ''}`);
+            const res = await DataAccess.Get(`${url}${page ? `?page=${page}` : ''}`);
             setData(res.data);
             setStatus(res?.status?.toString());
         } catch (e) {
