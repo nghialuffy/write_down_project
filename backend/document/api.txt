@@ -187,8 +187,17 @@ PUT:
 
     profile     Chỉnh sửa thông tin người dùng. Mẫu như update_profile.json. Cần có token
         Các trường có thể đầy đủ hoặc không tùy vào trường muốn sửa.
+        Trả về "ok" nếu thành công
         Error 400: Không đúng cú pháp
         Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+
+    update_password     Thay đổi mật khẩu. Mẫu như update_password.json. Cần có token
+        Trả về "ok" nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Mật khẩu cũ sai
 
 DELETE:
     post/<id>     Xóa bài đăng. Cần có token của acc đăng bài.
