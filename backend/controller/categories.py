@@ -29,6 +29,7 @@ def get_userid_from_token(token):
     except Exception as exc:
         print("Error" + exc)
     return res
+
 @bp.route('/categories/', defaults={'_id' : None})
 @bp.route('/categories/<_id>', methods=['GET'])
 @token_auth.login_required(optional=True)
@@ -65,6 +66,27 @@ def get_categories(_id):
     except Exception as exc:
         print(exc)
     abort(403)
+
+# Get list category ma user follow
+@bp.route('/categories/user/<_id>', methods=['GET'])
+@token_auth.login_required(optional=True)
+def get_category_user_follow(_id):
+    try:
+        user = db["user"].find_one({"_id" : ObjectId(_id)})
+        if user != None:
+            list_id_category = user["list_category"]
+            res_category = []
+            for id_category in list_id_category:
+                temp_category = db["category"].find_one({"_id": ObjectId(id_category)})
+                if(temp_category!=None):
+                    temp_category["_id"] = str(temp_category["_id"])
+                    res_category.append(temp_category)
+            return {"data" : res_category}
+    except Exception as exc:
+        print(f"Error {exc}")
+        abort(403)
+
+
 
 @bp.route('/s/all/hot', methods=['GET'])
 @token_auth.login_required(optional=True)
@@ -836,6 +858,8 @@ def unfollow_category(id):
         return "ok"
     else:
         abort(403)
+
+
 
 if __name__ == "__main__":
     print()

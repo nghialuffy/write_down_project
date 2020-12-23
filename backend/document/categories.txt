@@ -326,3 +326,18 @@ response:
     {}
 ]}
 
+List categories user follow
+/categories/user/<id_user>
+Method: GET
+response:
+{
+    "data": [
+        {
+            "_id": "5fe2ef2293e33abfe3b4ec41",
+            "name_category": "English Zone",
+            "rule": "<div>\n    <p> This category is for English lovers: News, discussions must be in English.\n    </p>\n    <p>If you love catching the latest stories in the world, or simply love English, this category is for you. Reading and writing regularly\n    can improve your skills significantly</p>\n\n    <p><b>Rules</b></p>\n    <ul>\n        <li>Your English might be better than others, but never discourage anyone from trying and learning. Please feedback politely a</li>\n\n        <li> No spam &amp; advertising </li>\n\n        <li> No extreme content related to politics or religions</li>\n\n        <li> No personal attacks</li>\n    </ul>\n</div>",
+            "url": "english-zone",
+            "url_images": "https://spiderum.com/assets/images/categories/english-min.jpg"
+        },{},{}...
+    ]
+}
