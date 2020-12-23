@@ -7,7 +7,7 @@ from bson.objectid import ObjectId
 import pymongo
 from bs4 import BeautifulSoup
 import re
-from controller.categories import get_content_post
+from controller.categories import get_content_post, get_image_url
 
 @bp.route('/search', methods=['GET'])
 @token_auth.login_required(optional=True)
@@ -49,7 +49,7 @@ def search_post_by_title():
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : ""
+                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
                 })
             return res
     except Exception as exc:
