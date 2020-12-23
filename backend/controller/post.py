@@ -9,7 +9,7 @@ from bson.objectid import ObjectId
 def get_comment(data_cmt, is_reply=False):
     cmt = {"_id": str(data_cmt["_id"]), "content": data_cmt["content"], "created_date": data_cmt["created_date"],
            "vote": data_cmt["vote"],
-           "created_by": db.user.find_one({"_id": data_cmt["created_by"]}, {"_id": 1, "display_name": 1, "avatar": 1})}
+           "created_by": str(data_cmt["created_by"])}
     if g.current_token is not None:
         token = g.current_token.get_token()
         if str(token.id_user) in data_cmt["voted_user"]:
