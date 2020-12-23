@@ -1,6 +1,10 @@
 .layout-container.post-detail-layout {
     background-color: white;
+    .left-content.list-tools {
+
+    }
     .main-content.post-detail {
+        padding-right: 10px;
         align-items: baseline;
         .post-info {
             display: flex;
@@ -37,19 +41,32 @@
                 font-weight: bold;
                 font-family: 'Courier New', Courier, monospace;
             }
-            div:not(:first-child) {
-                padding: 6px 0;
-            }
-            figure.aligncenter {
-                display: flex;
-                justify-content: center;
-                margin-top: 10px;
-                img {
+            .content {
+                div:not(:first-child) {
+                    padding: 6px 0;
+                }
+                figure {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    margin-top: 10px;
                     max-width: 100%;
-                    height: auto;
+                    img {
+                        max-width: 100%;
+                        height: auto;
+                    }
+                }
+                a {
+                    color: #1890ff;
                 }
             }
         }
+        .comment-section {
+            width: 100%;
+        }
+    }
+    .right-content {
+        width: 10%;
     }
 }
 @media(min-width: 1024px) {

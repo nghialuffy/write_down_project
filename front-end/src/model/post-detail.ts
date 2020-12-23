@@ -1,3 +1,5 @@
+import { CommentType } from "./comment";
+
 export const defaultPostDetail = {
     "category": {
         "name_category": "Truyện tranh",
@@ -12,7 +14,7 @@ export const defaultPostDetail = {
     },
     "created_date": "Wed, 07 Oct 2020 00:00:00 GMT",
     "edit_history": false,
-    "list_comment": [],
+    "list_comment": [] as CommentType[],
     "list_hashtag": [
         "MARVEL COMICS"
     ],

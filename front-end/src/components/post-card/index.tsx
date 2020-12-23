@@ -3,7 +3,7 @@ import React from 'react';
 import { UserAvatar } from '..';
 import { CaretUpOutlined, CaretDownOutlined, EyeOutlined, CommentOutlined } from '@ant-design/icons';
 import './style.scss';
-import { PostCardType } from '../../model';
+import { MiniData, PostCardType, UserPostCardType } from '../../model';
 import { useEntityData } from '../../access';
 import { UserType, CategoryType } from '../../model';
 import { Link } from 'react-router-dom';
@@ -63,6 +63,51 @@ export function PostCard({ data }: { data: PostCardType }) {
                     <div className='comment-number'>
                         <CommentOutlined />
                         {data.comments}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export function UserPostCard ({data} : {data: UserPostCardType & {user: MiniData}}) {
+    return (
+        <div className='post-card'>
+            <div className='post-card-info'>
+                <UserAvatar data={data.user} />
+                <div className='info-content'>
+                    <div className='info-content-top'>
+                        <span className='linking-word'>trong</span>
+                        <Link to={`/posts/${data.category?.url}`} className='category'>
+                            {data.category?.name_category}
+                        </Link>
+                    </div>
+                    <div className='info-content-bottom'>
+                        {moment(data.created_date).fromNow()}
+                        <span>{`${data.time_to_read} phút đọc`}</span>
+                    </div>
+                </div>
+            </div>
+            <Link className='post-card-content' to={`/post-detail/${data._id}`}>
+                {data.image && <div className='card-img'>
+                    <img src='https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-thumbnails/30ec2e70379d11eb9e72bd946431b3ae.jpg'
+                        alt='post-card-img'
+                    />
+                </div>}
+                <h3 className='content-title'>{data.title}</h3>
+                <p className='content-truncate'>{data.content.slice(0,200)}...
+                </p>
+            </Link>
+            <div className='post-card-footer'>
+                <div className='footer-content-left'>
+                    <span className='vote-number'>{data.vote}</span>
+                    <CaretUpOutlined className='up-vote' />
+                    <CaretDownOutlined className='down-vote' />
+                </div>
+                <div className='footer-content-right'>
+                    <div className='comment-number'>
+                        <CommentOutlined />
+                        {data.comment}
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@ import { AppWrap, BaseList, LoadingFullView, PostCard, SideBarRight } from '../.
 import { MenuSideBar } from '../../../components/menu-side-bar';
 import { useEntityDataList} from '../../../access';
 import './style.scss';
-import { ListPost, PostCardType } from '../../../model';
+import { ListPostType, PostCardType } from '../../../model';
 
 export function HomePage () {
     let { type } = useParams<{type: string}>();
@@ -14,7 +14,7 @@ export function HomePage () {
         history.push('/all/hot');
     }
     const [currentPage, setCurrentPage] = useState(1);
-    const {loading, data } = useEntityDataList<ListPost>(`s/all/${type ?? 'hot'}`, currentPage)
+    const {loading, data } = useEntityDataList<ListPostType>(`s/all/${type ?? 'hot'}`, currentPage)
     return(
         <AppWrap>
             <div className='layout-container'>
