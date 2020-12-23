@@ -15,3 +15,4 @@ from controller.post_of_month import *
 from controller.categories import *
 from controller.notification import *
 from controller.top_user import *
+from controller.search_post import *
