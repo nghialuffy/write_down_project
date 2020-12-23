@@ -1,6 +1,6 @@
 from controller import bp, db
 from controller.model import Post, ObjectId
-from flask import g, abort
+from flask import g, abort, request
 from controller.auth import token_auth
 
 @bp.route('/user/<id>', methods=['GET'])
@@ -69,6 +69,29 @@ def unfollow(id):
     if str(token.id_user) not in user["list_follow"]:
         abort(403)
     e=db.user.update_one({"_id": ObjectId(id)}, {"$pull": {"list_follow": str(token.id_user)}})
+    if e.matched_count > 0:
+        return "ok"
+    else:
+        abort(403)
+
+@bp.route('/profile', methods=['PUT'])
+@token_auth.login_required
+def update_profile():
+    token = g.current_token.get_token()
+    rq = request.json
+    if not rq:
+        abort(400)
+    update={}
+    if "display_name" in rq:
+        update["display_name"]=rq["display_name"]
+    if "email" in rq:
+        update["email"] = rq["email"]
+    if "avatar" in rq:
+        update["avatar"] = rq["avatar"]
+    if "cover_img" in rq:
+        update["cover_img"] = rq["cover_img"]
+
+    e=db.user.update_one({"_id": token.id_user}, {"$set": update})
     if e.matched_count > 0:
         return "ok"
     else:
