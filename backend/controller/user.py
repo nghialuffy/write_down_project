@@ -27,7 +27,9 @@ def get_user(id):
                         "bio": user["bio"],
                         "list_post": list_post,
                         "followings": followings,
-                        "followers": len(user["list_follow"])
+                        "followers": len(user["list_follow"]),
+                        "sex": user["sex"],
+                        "birthday": user["birthday"]
                     }
 
             if g.current_token is not None:
