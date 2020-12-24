@@ -159,6 +159,9 @@ POST:
         Error 401: Token sai
         Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
 
+    user/<id>/ban       Khóa tài khoản
+    user/<id>/unban     Mở khóa tài khoản
+
 PUT:
     post/<id>     Chỉnh sửa bài đăng. Mẫu như file post.json. Cần có token của acc đăng bài.
         Trả về url post nếu thành công

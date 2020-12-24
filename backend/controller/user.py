@@ -116,6 +116,24 @@ def update_password():
     else:
         abort(403)
 
+@bp.route('/user/<id>/ban', methods=['POST'])
+@token_auth.login_required(role="admin")
+def ban(id):
+    e=db.user.update_one({"_id": ObjectId(id)}, {"$set": {"ban": 1}})
+    if e.matched_count > 0:
+        return "ok"
+    else:
+        abort(403)
+
+@bp.route('/user/<id>/unban', methods=['POST'])
+@token_auth.login_required(role="admin")
+def unban(id):
+    e=db.user.update_one({"_id": ObjectId(id)}, {"$set": {"ban": 0}})
+    if e.matched_count > 0:
+        return "ok"
+    else:
+        abort(403)
+
 if __name__ == "__main__":
     # print(get_user("Araragikoyomioc"))
     pass

@@ -219,6 +219,7 @@ class User():
             self.list_draft = []
             self.list_category = []
             self.list_follow = []
+            self.role="user"
 
         else:
             self._id = dict['_id']
@@ -234,6 +235,7 @@ class User():
             self.list_draft = dict['list_draft']
             self.list_category = dict['list_category']
             self.list_follow = dict['list_follow']
+            self.role = dict['role']
 
     def add_post(self, post):
         self.list_post.append(post.__dict__)
