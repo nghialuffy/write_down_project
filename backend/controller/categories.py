@@ -160,7 +160,7 @@ def get_hot_post_unverified():
         abort(403)
 
 @bp.route('/s/all/new', methods=['GET'])
-# @token_auth.login_required(optional=True)
+@token_auth.login_required(optional=True)
 def get_new_post_unverified():
     try:
         user_id = None
