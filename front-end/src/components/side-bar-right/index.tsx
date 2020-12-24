@@ -8,7 +8,6 @@ export function SideBarRight () {
         <div className='side-bar-right'>
             <TopMonthPosts />
             <ForYouPosts />
-            <FeatutedTags />
         </div>
     );
 }
