@@ -44,11 +44,14 @@ class RootApplication extends React.Component<{}, { loading: boolean }> {
                     displayName: res.data.display_name
                 }
                 this.context.updateUser(user, () => this.setState({loading: false}));
+            }).catch(e => {
+                console.log('Error > ', e);
+                this.setState({loading: false});
             });
+
         } else {
-            this.setState({ loading: false });
+            this.setState({ loading: false }) 
         }
-        console.log(this.state);
     }
 
     componentWillUnmount() {
