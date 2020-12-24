@@ -17,9 +17,9 @@ cors = CORS(app)
 if __name__ == "__main__":
     try:
         app.register_blueprint(bp)
-        eventlet.wsgi.server(eventlet.listen(('103.113.83.246', 8006)), app, debug=True)
-        # app.debug = True
-        # app.run(threaded=True, host="0.0.0.0", port=9999)
+        # eventlet.wsgi.server(eventlet.listen(('103.113.83.246', 8006)), app, debug=True)
+        app.debug = True
+        app.run(threaded=True, host="0.0.0.0", port=5000)
     except Exception as exc:
         print(f"Error in main: {exc}")
     
