@@ -54,6 +54,12 @@ def get_post(id):
             token = g.current_token.get_token()
             if str(token.id_user) in data["voted_user"]:
                 post["user_voted"] = data["voted_user"][str(token.id_user)]
+            user=db.user.find_one({"_id": token.id_user}, {"_id":0, "list_read": 1, "list_hashtag": 1})
+            if not id in user["list_read"]:
+                db.user.update_one({"_id": token.id_user}, {"$push": {"list_read": id}})
+            for hashtag in data["list_hashtag"]:
+                if not hashtag in user["list_hashtag"]:
+                    db.user.update_one({"_id": token.id_user}, {"$push": {"list_hashtag": hashtag}})
 
         db.post.update_one({"_id": ObjectId(id)}, {"$set": {"views": data["views"] + 1}})
         return post
