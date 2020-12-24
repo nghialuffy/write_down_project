@@ -20,7 +20,6 @@ export function LoginPage() {
     const onFinish = (values: any) => {
         console.log('value', JSON.stringify(values));
         DataAccess.Post('login ', JSON.stringify(values)).then(res => {            
-            if (res) history.push("/");
             localStorage.setItem('token', res.data?.token);
             userContext.updateUser({
                 _id: res.data._id,
@@ -29,7 +28,8 @@ export function LoginPage() {
             });
             notification.success({
                 message: "Login successfully!"
-            })
+            });
+            if (res) history.push("/");
 
         })
             .catch(e => {
