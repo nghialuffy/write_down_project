@@ -1,23 +1,16 @@
 import moment from 'moment';
 import React, { useContext, useState } from 'react';
-import { UserAvatar } from '..';
-import { CaretUpOutlined, CaretDownOutlined, EyeOutlined, CommentOutlined } from '@ant-design/icons';
-import './style.scss';
-import { MiniData, PostCardType, UserPostCardType } from '../../model';
-import { DataAccess, useEntityData } from '../../access';
-import { UserType, CategoryType } from '../../model';
 import { Link, useHistory } from 'react-router-dom';
-import { ErrorText } from '../style-components';
-import { HTTPCodeLabel } from '../../const';
-import { LoadingFullView } from '../loading';
-import { UserContext } from '../../context';
+import { UserAvatar } from '../..';
+import { DataAccess } from '../../../access';
+import { UserContext } from '../../../context';
+import { MiniData, UserPostCardType } from '../../../model';
+import { CaretUpOutlined, CaretDownOutlined, CommentOutlined } from '@ant-design/icons';
 
-export function PostCard({ data }: { data: PostCardType }) {
-    const { loading: userLoading, data: user, status: userStatus } = useEntityData<UserType>(`user/${data.created_by}`);
-    const { loading: categoryLoading, data: category, status: categoryStatus } = useEntityData<CategoryType>(`categories/${data.category}`);
+export function UserPostCard({ data }: { data: UserPostCardType & { user: MiniData } }) {
     const userContext = useContext(UserContext);
     const history = useHistory();
-    const [status, setStatus] = useState(data.is_voted ?? 0);
+    const [status, setStatus] = useState(data.voted_user ?? 0);
     const [voteNumber, setVoteNumber] = useState(data.vote);
     const voteHandler = (action: 'up' | 'down') => {
         if (!userContext._id) {
@@ -61,20 +54,12 @@ export function PostCard({ data }: { data: PostCardType }) {
     return (
         <div className='post-card'>
             <div className='post-card-info'>
-                {(userLoading || categoryLoading) && <LoadingFullView className='item-loading' />}
-                {user && <UserAvatar data={user} />}
+                <UserAvatar data={data.user} />
                 <div className='info-content'>
                     <div className='info-content-top'>
-                        <Link
-                            to={`/profile/${user?._id}`}
-                            className='username'
-                        >
-                            {userStatus === "200" ? user?.username : <ErrorText>{`[${userStatus}] ${HTTPCodeLabel(userStatus)}`}</ErrorText>}
-                        </Link>
                         <span className='linking-word'>trong</span>
-                        <Link to={`/posts/${category?.url}`} className='category'>
-                            {categoryStatus === "200" ? category?.name_category :
-                                <ErrorText>{`[${categoryStatus}] ${HTTPCodeLabel(categoryStatus)}`}</ErrorText>}
+                        <Link to={`/posts/${data.category?.url}`} className='category'>
+                            {data.category?.name_category}
                         </Link>
                     </div>
                     <div className='info-content-bottom'>
@@ -84,8 +69,8 @@ export function PostCard({ data }: { data: PostCardType }) {
                 </div>
             </div>
             <Link className='post-card-content' to={`/post-detail/${data._id}`}>
-                {data.url_image && <div className='card-img'>
-                    <img src={data.url_image}
+                {data.image && <div className='card-img'>
+                    <img src={data.image}
                         alt='post-card-img'
                     />
                 </div>}
@@ -106,18 +91,12 @@ export function PostCard({ data }: { data: PostCardType }) {
                     />
                 </div>
                 <div className='footer-content-right'>
-                    <div className='seen-number'>
-                        <EyeOutlined />
-                        {data.views}
-                    </div>
                     <div className='comment-number'>
                         <CommentOutlined />
-                        {data.comments}
+                        {data.comment}
                     </div>
                 </div>
             </div>
         </div>
     );
 }
-
-export {UserPostCard} from './user-post-card';

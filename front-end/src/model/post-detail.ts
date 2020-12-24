@@ -21,7 +21,8 @@ export const defaultPostDetail = {
     "title": "Những siêu anh hùng quyền năng nhất Marvel Comics",
     "views": 20071,
     "vote": 9,
-    "_id": '124'
+    "_id": '124',
+    "is_voted": 1,
 };
 
 export type PostDetailType = typeof defaultPostDetail;

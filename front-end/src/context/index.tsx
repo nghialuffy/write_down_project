@@ -59,7 +59,7 @@ export class UserContextProvider extends React.Component<any, StateType> {
                 avatar: ''
             }
         });
-        localStorage.removeItem('item');
+        localStorage.removeItem('token');
     }
 
     updateUser = (newInfo: UserInfo, cb?: () => void) => {

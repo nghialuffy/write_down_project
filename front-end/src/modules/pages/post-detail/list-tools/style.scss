@@ -15,11 +15,23 @@
         font-size: 16px;
         .anticon {
             font-size: 20px;
-            color: #BDC3C7;
+            color: #999;
         }
         .anticon.anticon-caret-down,
         .anticon.anticon-caret-up {
             font-size: 30px;
+        }
+        .up-vote.voted {
+            color: green;
+        }
+        .down-vote.voted {
+            color: red;
+        }
+        .up-vote:hover {
+            color: chartreuse;
+        }
+        .down-vote:hover {
+            color: brown;
         }
     }
 }

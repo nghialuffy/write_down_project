@@ -10,6 +10,7 @@ export const defaultPostCard = {
     "views": 20069,
     "vote": 9,
     "url_image": "",
+    "is_voted": 1
 };
 
 export type PostCardType = typeof defaultPostCard;
@@ -28,7 +29,8 @@ export const ListPost = {
             "title": "Những giọng ca ấn tượng trong cộng đồng indie",
             "url_image": "",
             "views": 4746,
-            "vote": 42
+            "vote": 42,
+            "is_voted": -1
         }
     ],
     "total_page": 324
@@ -48,7 +50,8 @@ export const UserPostCard = {
     "image": "",
     "time_to_read": 5,
     "title": "Three grievances against ride-sharing apps: A Vietnamese perspective",
-    "vote": 3
+    "vote": 3,
+    "voted_user": 1
 };
 
 export type UserPostCardType = typeof UserPostCard;

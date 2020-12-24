@@ -59,6 +59,12 @@
                 font-weight: bold;
                 margin-right: 5px;
             }
+            .up-vote.voted {
+                color: green;
+            }
+            .down-vote.voted {
+                color: red;
+            }
             .up-vote:hover {
                 color: chartreuse;
             }
