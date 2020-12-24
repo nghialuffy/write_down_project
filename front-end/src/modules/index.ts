@@ -10,7 +10,8 @@ import {
     TopicPage, 
     TopWriterPage,
     ListCategoriesPage,
-    PostDetailPage
+    PostDetailPage,
+    SearchPage
 } from './pages';
 
 export function setup(module: Module) {
@@ -79,5 +80,10 @@ export function setup(module: Module) {
         path: '/post-detail/:postId',
         exact: false,
         component: PostDetailPage,
+    });
+    module.route({
+        path: '/search/:text',
+        exact: false,
+        component: SearchPage,
     });
 }

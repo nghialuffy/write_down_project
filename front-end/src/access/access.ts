@@ -59,16 +59,16 @@ export type UseEntityDataList<T> = {
 };
 
 
-export function useEntityDataList<T>(url: string | undefined, page?: number, defaultData?: T): UseEntityDataList<T> {
+export function useEntityDataList<T>(url: string | undefined, page?: number, textSearch?: string): UseEntityDataList<T> {
     let [data, setData] = useState<T>();
-    const [loading, setLoading] = useState(defaultData ? false : true);
+    const [loading, setLoading] = useState(false);
     const [errorStatus, setStatus] = useState<HTTP_STATUS_CODE>('200');
 
     const fetchUser = useCallback(async () => {
         try {
             if (!url) return;
             setLoading(true);
-            const res = await DataAccess.Get(`${url}${page ? `?page=${page}` : ''}`);
+            const res = await DataAccess.Get(`${url}${page ? `?page=${page}` : ''}${textSearch ? `&query=${textSearch}` : ''}`);
             setData(res.data);
             setStatus(res?.status?.toString());
         } catch (e) {
@@ -84,16 +84,13 @@ export function useEntityDataList<T>(url: string | undefined, page?: number, def
     }, [url, page]);
 
     useEffect(() => {
-        if (defaultData) {
-            setData(defaultData);
-        }
         if (url) {
             fetchUser();
         } else {
             setLoading(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [url, page, defaultData]);
+    }, [url, page]);
 
     return { loading, data, status: errorStatus };
 }
