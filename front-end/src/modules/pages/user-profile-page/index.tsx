@@ -18,7 +18,7 @@ export function UserProfilePage() {
             {loading && <LoadingFullView />}
             {user ? <div className='user-detail layout-container'>
                 <div className='user-profile'>
-                    <img src={user.cover_img} alt='user-background' className='user-background' />
+                    <div style={{ backgroundImage: `${user.cover_img ? `url(${user.cover_img})` : '#ccc'}` }} className='user-background' />
                     <div className='user-info-slot'>
                         {user._id === userContext._id &&
                             <Link to='/setting'>
