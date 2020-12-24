@@ -1,12 +1,12 @@
-import { Form, Input, Button, notification } from 'antd';
-import React, { useContext} from 'react';
+import { Form, Input, Button, notification, Checkbox } from 'antd';
+import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import logo from './../../../assets/logo.png'
 import { DataAccess } from '../../../access';
 import { HTTPCodeLabel } from '../../../const';
 import { UserContext } from '../../../context';
 
-export function LoginPage () {
+export function LoginPage() {
     const userContext = useContext(UserContext)
     const [login_form] = Form.useForm();
     let history = useHistory();
@@ -30,18 +30,20 @@ export function LoginPage () {
             notification.success({
                 message: "Login successfully!"
             })
+
         })
-        .catch(e => {
-            notification.error({
-            message: "Error",
-            description: e.response ? `[${e.response.status}] ${HTTPCodeLabel(e.response.status)}` : `[${500}] ${HTTPCodeLabel('500')}`
-        }); });
+            .catch(e => {
+                notification.error({
+                    message: "Error",
+                    description: e.response ? `[${e.response.status}] ${HTTPCodeLabel(e.response.status)}` : `[${500}] ${HTTPCodeLabel('500')}`
+                });
+            });
     };
 
 
     return (
         <div className='page-no-wrap'>
-            <img src={logo} alt='Write Down logo' className='logo' height='300' width = '300'/>
+            <img src={logo} alt='Write Down logo' className='logo' height='300' width='300' />
             <Form
                 form={login_form}
                 {...layout}
@@ -69,12 +71,15 @@ export function LoginPage () {
                 >
                     <Input.Password />
                 </Form.Item>
-                
+
 
 
                 <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit">Submit</Button>
+                    <Button type="primary" htmlType="submit">Login</Button>
                 </Form.Item>
+                    {/* <a className="login-form-forgot" href="">Forgot password </a> */}
+                 Or <a href="\register">register now!</a>
+
             </Form>
 
         </div>

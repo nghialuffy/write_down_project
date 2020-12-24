@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment'
 import { UserAvatar } from '..';
 import './style.scss';
-import { PostItemType, UserType } from '../../model';
+import { PostForYou, PostItemType, UserType } from '../../model';
 import { useEntityData } from '../../access';
 import { Link } from 'react-router-dom';
 import { LoadingFullView } from '../loading';
@@ -23,6 +23,29 @@ export function PostItem ({data} : {data: PostItemType}) {
                     <span>bởi</span>
                     <Link to={`/profile/${user?._id}`} className='username'>
                         {status === '200' ? user?.display_name : <ErrorText>{`[${status}] ${HTTPCodeLabel(status)}`}</ErrorText>}
+                    </Link>
+                    <span>{moment(data.created_date).fromNow()}</span>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export function PostItemForYou ({data} : {data: PostForYou}) {
+    return (
+        <div className='post-item'>
+            <UserAvatar data={{
+                _id: data._id_user,
+                avatar: data.avatar_user
+            }}/>
+            <div className='post-item-content'>
+                <Link to={`/post-detail/${data._id}`} className='post-title'>
+                    {data.title} 
+                </Link>
+                <div className='sub-title'>
+                    <span>bởi</span>
+                    <Link to={`/profile/${data._id_user}`} className='username'>
+                        {data.display_name_user}
                     </Link>
                     <span>{moment(data.created_date).fromNow()}</span>
                 </div>

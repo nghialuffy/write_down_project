@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import logo from './../../../assets/logo.png'
 import { DataAccess } from '../../../access';
 import './style.scss';
+import { HTTPCodeLabel } from '../../../const';
 export function RegisterPage() {
     const [register_form] = Form.useForm();
 
@@ -30,8 +31,10 @@ export function RegisterPage() {
             })
         }).catch(e => {
             notification.error({
-            message: e,
-        }); });
+                message: "Error",
+                description: e.response ? `[${e.response.status}] ${HTTPCodeLabel(e.response.status)}` : `[${500}] ${HTTPCodeLabel('500')}`
+            });
+        });
     };
 
 

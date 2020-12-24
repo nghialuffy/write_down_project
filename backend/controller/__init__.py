@@ -16,3 +16,4 @@ from controller.categories import *
 from controller.notification import *
 from controller.top_user import *
 from controller.search_post import *
+from controller.for_you import *

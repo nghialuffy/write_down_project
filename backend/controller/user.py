@@ -27,7 +27,9 @@ def get_user(id):
                         "bio": user["bio"],
                         "list_post": list_post,
                         "followings": followings,
-                        "followers": len(user["list_follow"])
+                        "followers": len(user["list_follow"]),
+                        "sex": user["sex"],
+                        "birthday": user["birthday"]
                     }
 
             if g.current_token is not None:
@@ -92,6 +94,12 @@ def update_profile():
             update["avatar"] = rq["avatar"]
         if "cover_img" in rq:
             update["cover_img"] = rq["cover_img"]
+        if "bio" in rq:
+            update["bio"] = rq["bio"]
+        if "sex" in rq:
+            update["sex"]=rq["sex"]
+        if "birthday" in rq:
+            update["birthday"]=rq["birthday"]
 
         e=db.user.update_one({"_id": token.id_user}, {"$set": update})
         if e.matched_count > 0:

@@ -32,3 +32,29 @@ export const listPostItem = [
     }
 ];
 export type ListPostItem = typeof listPostItem;
+
+export const postForYou = {
+    "_id": "5fe2dc9293e33abfe3b4ea8d",
+    "_id_user": "5fe2da3993e33abfe3b4ea83",
+    "avatar_user": "https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-xs-avatar/96f3c960367a11e982e3a955ed656eaa.jpg",
+    "created_date": "Sat, 10 Oct 2020 00:00:00 GMT",
+    "display_name_user": "Nguyệt",
+    "title": "Những nhân vật đã từng hóa thân thành Thor!"
+}
+
+export type PostForYou = typeof postForYou;
+
+export const listPostForYou = {
+    "for_you": [
+        {
+            "_id": "5fe2dc9293e33abfe3b4ea8d",
+            "_id_user": "5fe2da3993e33abfe3b4ea83",
+            "avatar_user": "https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-xs-avatar/96f3c960367a11e982e3a955ed656eaa.jpg",
+            "created_date": "Sat, 10 Oct 2020 00:00:00 GMT",
+            "display_name_user": "Nguyệt",
+            "title": "Những nhân vật đã từng hóa thân thành Thor!"
+        },
+    ]
+}
+
+export type ListPostForYou = typeof listPostForYou;

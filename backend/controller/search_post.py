@@ -13,6 +13,9 @@ from controller.categories import get_content_post, get_image_url
 @token_auth.login_required(optional=True)
 def search_post_by_title():
     try:
+        user_id = None
+        if g.current_token != None:
+            user_id = str(get_userid_from_token(str(g.current_token.show_token())))
         query = str(request.args.get('query', None))
         page = int(request.args.get('page', 1))
 
@@ -38,6 +41,10 @@ def search_post_by_title():
             for index_page in range((page-1)*20, page*20):
                 if(index_page >= len(list_post)):
                     break
+                is_voted = 0
+                if user_id != None:
+                    if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
+                        is_voted = int(list_post[index_page]["voted_user"][user_id])
                 res["data"].append({
                     "created_by" : str(list_post[index_page]["created_by"]),
                     "category" : str(list_post[index_page]["category"]),

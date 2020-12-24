@@ -54,11 +54,40 @@ def get_post(id):
             token = g.current_token.get_token()
             if str(token.id_user) in data["voted_user"]:
                 post["user_voted"] = data["voted_user"][str(token.id_user)]
+            user = db.user.find_one({"_id": token.id_user}, {"_id": 0, "list_read": 1, "list_hashtag": 1})
+            if not id in user["list_read"]:
+                db.user.update_one({"_id": token.id_user}, {"$push": {"list_read": id}})
+            for hashtag in data["list_hashtag"]:
+                if not hashtag in user["list_hashtag"]:
+                    db.user.update_one({"_id": token.id_user}, {"$push": {"list_hashtag": hashtag}})
 
         db.post.update_one({"_id": ObjectId(id)}, {"$set": {"views": data["views"] + 1}})
         return post
     except:
         abort(403)
+
+
+@bp.route('/post/<id>/comment', methods=['GET'])
+@token_auth.login_required(optional=True)
+def get_comment(id):
+    data = db.post.find_one({"_id": ObjectId(id)}, {"_id": 0, "list_comment": 1})
+    post= {"list_comment": []}
+    for data_cmt in data["list_comment"]:
+        post["list_comment"].append(get_comment(data_cmt))
+    return post
+
+
+@bp.route('/post/<id>/vote', methods=['GET'])
+@token_auth.login_required(optional=True)
+def get_vote(id):
+    data = db.post.find_one({"_id": ObjectId(id)}, {"_id": 0, "vote": 1, "voted_user": 1})
+    post = {"vote": data["vote"]}
+    if g.current_token is not None:
+        post["user_voted"] = 0
+        token = g.current_token.get_token()
+        if str(token.id_user) in data["voted_user"]:
+            post["user_voted"] = data["voted_user"][str(token.id_user)]
+    return post
 
 
 @bp.route('/post/<id>/edit-history', methods=['GET'])
