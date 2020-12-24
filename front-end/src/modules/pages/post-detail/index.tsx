@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { CaretUpOutlined, CaretDownOutlined, MessageOutlined, EyeOutlined } from '@ant-design/icons';
 import { Link, useParams } from 'react-router-dom';
 import { useEntityData } from '../../../access';
 import { PostDetailType } from '../../../model';
