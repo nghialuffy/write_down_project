@@ -7,6 +7,11 @@ from bson.objectid import ObjectId
 import pymongo
 from bs4 import BeautifulSoup
 
+
+# print(str(g.current_token.show_token()))
+# user_id = get_userid_from_token(str(g.current_token.show_token()))
+
+
 def get_content_post(data):
     res = ""
     try:
@@ -103,6 +108,9 @@ def get_category_user_follow(_id):
 @token_auth.login_required(optional=True)
 def get_hot_post_unverified():
     try:
+        user_id = None
+        if g.current_token != None:
+            user_id = str(get_userid_from_token(str(g.current_token.show_token())))
         page = int(request.args.get('page', 1))
         if(page < 1):
             page = 1
@@ -127,6 +135,10 @@ def get_hot_post_unverified():
             for index_page in range((page-1)*20, page*20):
                 if(index_page >= len(list_post)):
                     break
+                is_voted = 0
+                if user_id != None:
+                    if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
+                        is_voted = int(list_post[index_page]["voted_user"][user_id])
                 res["data"].append({
                     "created_by" : str(list_post[index_page]["created_by"]),
                     "category" : str(list_post[index_page]["category"]),
@@ -138,7 +150,8 @@ def get_hot_post_unverified():
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : get_image_url(str(list_post[index_page]["content"])),
+                    "is_voted" : is_voted
                 })
         return res
         
@@ -150,6 +163,10 @@ def get_hot_post_unverified():
 # @token_auth.login_required(optional=True)
 def get_new_post_unverified():
     try:
+        user_id = None
+        if g.current_token != None:
+            user_id = str(get_userid_from_token(str(g.current_token.show_token())))
+
         page = int(request.args.get('page', 1))
         if(page < 1):
             page = 1
@@ -174,6 +191,10 @@ def get_new_post_unverified():
             for index_page in range((page-1)*20, page*20):
                 if(index_page >= len(list_post)):
                     break
+                is_voted = 0
+                if user_id != None:
+                    if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
+                        is_voted = int(list_post[index_page]["voted_user"][user_id])
                 res["data"].append({
                     "created_by" : str(list_post[index_page]["created_by"]),
                     "category" : str(list_post[index_page]["category"]),
@@ -185,7 +206,8 @@ def get_new_post_unverified():
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : get_image_url(str(list_post[index_page]["content"])),
+                    "is_voted" : is_voted
                 })
         return res
         
@@ -197,6 +219,10 @@ def get_new_post_unverified():
 @token_auth.login_required(optional=True)
 def get_controversial_post_unverified():
     try:
+        user_id = None
+        if g.current_token != None:
+            user_id = str(get_userid_from_token(str(g.current_token.show_token())))
+
         page = int(request.args.get('page', 1))
         if(page < 1):
             page = 1
@@ -252,6 +278,10 @@ def get_controversial_post_unverified():
             for index_page in range((page-1)*20, page*20):
                 if(index_page >= len(list_post)):
                     break
+                is_voted = 0
+                if user_id != None:
+                    if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
+                        is_voted = int(list_post[index_page]["voted_user"][user_id])
                 res["data"].append({
                     "created_by" : str(list_post[index_page]["created_by"]),
                     "category" : str(list_post[index_page]["category"]),
@@ -263,7 +293,8 @@ def get_controversial_post_unverified():
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : get_image_url(str(list_post[index_page]["content"])),
+                    "is_voted" : is_voted
                 })
         return res
         
@@ -275,6 +306,10 @@ def get_controversial_post_unverified():
 @token_auth.login_required(optional=True)
 def get_top_post_unverified():
     try:
+        user_id = None
+        if g.current_token != None:
+            user_id = str(get_userid_from_token(str(g.current_token.show_token())))
+
         page = int(request.args.get('page', 1))
         if(page < 1):
             page = 1
@@ -299,6 +334,10 @@ def get_top_post_unverified():
             for index_page in range((page-1)*20, page*20):
                 if(index_page >= len(list_post)):
                     break
+                is_voted = 0
+                if user_id != None:
+                    if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
+                        is_voted = int(list_post[index_page]["voted_user"][user_id])
                 res["data"].append({
                     "created_by" : str(list_post[index_page]["created_by"]),
                     "category" : str(list_post[index_page]["category"]),
@@ -310,7 +349,8 @@ def get_top_post_unverified():
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : get_image_url(str(list_post[index_page]["content"])),
+                    "is_voted" : is_voted
                 })
         return res
         
@@ -322,6 +362,10 @@ def get_top_post_unverified():
 @token_auth.login_required(optional=True)
 def get_category_hot(category_name):
     try:
+        user_id = None
+        if g.current_token != None:
+            user_id = str(get_userid_from_token(str(g.current_token.show_token())))
+
         page = int(request.args.get('page', 1))
         if(page < 1):
             page = 1
@@ -356,6 +400,10 @@ def get_category_hot(category_name):
             for index_page in range((page-1)*20, page*20):
                 if(index_page >= len(list_post)):
                     break
+                is_voted = 0
+                if user_id != None:
+                    if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
+                        is_voted = int(list_post[index_page]["voted_user"][user_id])
                 res["data"].append({
                     "created_by" : str(list_post[index_page]["created_by"]),
                     "category" : str(list_post[index_page]["category"]),
@@ -367,7 +415,8 @@ def get_category_hot(category_name):
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : get_image_url(str(list_post[index_page]["content"])),
+                    "is_voted" : is_voted
                 })
         return res
 
@@ -378,6 +427,10 @@ def get_category_hot(category_name):
 @token_auth.login_required(optional=True)
 def get_category_new(category_name):
     try:
+        user_id = None
+        if g.current_token != None:
+            user_id = str(get_userid_from_token(str(g.current_token.show_token())))
+
         page = int(request.args.get('page', 1))
         if(page < 1):
             page = 1
@@ -412,6 +465,10 @@ def get_category_new(category_name):
             for index_page in range((page-1)*20, page*20):
                 if(index_page >= len(list_post)):
                     break
+                is_voted = 0
+                if user_id != None:
+                    if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
+                        is_voted = int(list_post[index_page]["voted_user"][user_id])
                 res["data"].append({
                     "created_by" : str(list_post[index_page]["created_by"]),
                     "category" : str(list_post[index_page]["category"]),
@@ -423,7 +480,8 @@ def get_category_new(category_name):
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : get_image_url(str(list_post[index_page]["content"])),
+                    "is_voted" : is_voted
                 })
         return res
 
@@ -435,6 +493,10 @@ def get_category_new(category_name):
 @token_auth.login_required(optional=True)
 def get_category_controversial(category_name):
     try:
+        user_id = None
+        if g.current_token != None:
+            user_id = str(get_userid_from_token(str(g.current_token.show_token())))
+
         page = int(request.args.get('page', 1))
         if(page < 1):
             page = 1
@@ -504,6 +566,10 @@ def get_category_controversial(category_name):
             for index_page in range((page-1)*20, page*20):
                 if(index_page >= len(list_post)):
                     break
+                is_voted = 0
+                if user_id != None:
+                    if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
+                        is_voted = int(list_post[index_page]["voted_user"][user_id])
                 res["data"].append({
                     "created_by" : str(list_post[index_page]["created_by"]),
                     "category" : str(list_post[index_page]["category"]),
@@ -515,7 +581,8 @@ def get_category_controversial(category_name):
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : get_image_url(str(list_post[index_page]["content"])),
+                    "is_voted" : is_voted
                 })
         return res
     except Exception as exc:
@@ -525,6 +592,10 @@ def get_category_controversial(category_name):
 @token_auth.login_required(optional=True)
 def get_category_top(category_name):
     try:
+        user_id = None
+        if g.current_token != None:
+            user_id = str(get_userid_from_token(str(g.current_token.show_token())))
+            
         page = int(request.args.get('page', 1))
         if(page < 1):
             page = 1
@@ -559,6 +630,10 @@ def get_category_top(category_name):
             for index_page in range((page-1)*20, page*20):
                 if(index_page >= len(list_post)):
                     break
+                is_voted = 0
+                if user_id != None:
+                    if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
+                        is_voted = int(list_post[index_page]["voted_user"][user_id])
                 res["data"].append({
                     "created_by" : str(list_post[index_page]["created_by"]),
                     "category" : str(list_post[index_page]["category"]),
@@ -570,271 +645,8 @@ def get_category_top(category_name):
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
-                })
-        return res
-
-    except Exception as exc:
-        abort(403)
-# =================================================================================
-
-@bp.route('/<category_name>/hot', methods = ['GET'])
-@token_auth.login_required
-def get_category_hot_verified(category_name):
-    try:
-        # print(str(g.current_token.show_token()))
-        # user_id = get_userid_from_token(str(g.current_token.show_token()))
-        page = int(request.args.get('page', 1))
-        if(page < 1):
-            page = 1
-        category = db["category"].find({
-            "url" : category_name
-        },{"_id":1})
-        category_id = None
-        if(category !=None):
-            category_id = list(category)[0]
-            # print(category_id)
-        if(category_id == None):
-            abort(403)
-        max_post = db["post"].find({"category" : category_id["_id"]},{"_id" : 1}).count()
-        max_page = int(max_post/20)
-        res ={
-            "data" : [],
-            "current_page" : page ,
-            "total_page" : max_post
-        }
-        if(max_page < page):
-            return res
-        
-        query = db["post"].find({
-            "category" : category_id["_id"]
-        }).sort([
-            ("views", -1)
-        ]).limit(page*20)
-
-        list_post = []
-        if(query!=None):
-            list_post = list(query)
-            for index_page in range((page-1)*20, page*20):
-                if(index_page >= len(list_post)):
-                    break
-                res["data"].append({
-                    "created_by" : str(list_post[index_page]["created_by"]),
-                    "category" : str(list_post[index_page]["category"]),
-                    "time_to_read" : str(list_post[index_page]["time_to_read"]),
-                    "title" : str(list_post[index_page]["title"]),
-                    "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:200],
-                    "_id" : str(list_post[index_page]["_id"]),
-                    "vote" : list_post[index_page]["vote"],
-                    "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
-                })
-        return res
-
-    except Exception as exc:
-        print("Error = " + str(exc))
-        abort(403)
-    
-@bp.route('/<category_name>/new', methods = ['GET'])
-@token_auth.login_required
-def get_category_new_verified(category_name):
-    try:
-        page = int(request.args.get('page', 1))
-        if(page < 1):
-            page = 1
-        category = db["category"].find({
-            "url" : category_name
-        },{"_id":1})
-        category_id = None
-        if(category !=None):
-            category_id = list(category)[0]
-            # print(category_id)
-        if(category_id == None):
-            abort(403)
-        max_post = db["post"].find({"category" : category_id["_id"]},{"_id" : 1}).count()
-        max_page = int(max_post/20)
-        res ={
-            "data" : [],
-            "current_page" : page ,
-            "total_page" : max_post
-        }
-        if(max_page < page):
-            return res
-        
-        query = db["post"].find({
-            "category" : category_id["_id"]
-        }).sort(
-            "created_date", -1
-        ).limit(page*20)
-
-        list_post = []
-        if(query!=None):
-            list_post = list(query)
-            for index_page in range((page-1)*20, page*20):
-                if(index_page >= len(list_post)):
-                    break
-                res["data"].append({
-                    "created_by" : str(list_post[index_page]["created_by"]),
-                    "category" : str(list_post[index_page]["category"]),
-                    "time_to_read" : str(list_post[index_page]["time_to_read"]),
-                    "title" : str(list_post[index_page]["title"]),
-                    "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : get_content_post(str(list_post[index_page]["content"]))[0:200],
-                    "_id" : str(list_post[index_page]["_id"]),
-                    "vote" : list_post[index_page]["vote"],
-                    "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
-                })
-        return res
-
-    except Exception as exc:
-        print(exc)
-        abort(403)
-
-
-@bp.route('/<category_name>/controversial', methods = ['GET'])
-@token_auth.login_required
-def get_category_controversial_verified(category_name):
-    try:
-        page = int(request.args.get('page', 1))
-        if(page < 1):
-            page = 1
-        category = db["category"].find({
-            "url" : category_name
-        },{"_id":1})
-        category_id = None
-        if(category !=None):
-            category_id = list(category)[0]
-            # print(category_id)
-        if(category_id == None):
-            abort(403)
-        max_post = db["post"].find({"category" : category_id["_id"]},{"_id" : 1}).count()
-        max_page = int(max_post/20)
-        res ={
-            "data" : [],
-            "current_page" : page ,
-            "total_page" : max_post
-        }
-        if(max_page < page):
-            return res
-        
-        query = db["post"].aggregate([{
-            "$find":{
-                "category" : category_id["_id"]
-            }
-        },
-            {
-                "$project":{
-                    "created_by" : 1,
-                    "category" : 1,
-                    "time_to_read" : 1,
-                    "title" : 1,
-                    "created_date" : 1,
-                    "content": 1,
-                    "_id": 1,
-                    "vote": 1,
-                    "views": 1,
-                    "list_comment" : 1,
-                    "comment" : { "$sum" : "$list_comment"}
-                }
-            },{
-                "$sort":{
-                    "comment" : -1
-                }
-            },{
-                "$limit" : page*20
-            },{
-                "$project" :{
-                    "created_by" : 1,
-                    "category" : 1,
-                    "time_to_read" : 1,
-                    "title" : 1,
-                    "created_date" : 1,
-                    "content": 1,
-                    "_id": 1,
-                    "vote": 1,
-                    "views": 1,
-                    "list_comment" : 1
-                }
-            }
-        ])
-
-        list_post = []
-        if(query!=None):
-            list_post = list(query)
-            for index_page in range((page-1)*20, page*20):
-                if(index_page >= len(list_post)):
-                    break
-                res["data"].append({
-                    "created_by" : str(list_post[index_page]["created_by"]),
-                    "category" : str(list_post[index_page]["category"]),
-                    "time_to_read" : str(list_post[index_page]["time_to_read"]),
-                    "title" : str(list_post[index_page]["title"]),
-                    "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : get_content_post(str(list_post[index_page]["content"])),
-                    "_id" : str(list_post[index_page]["_id"]),
-                    "vote" : list_post[index_page]["vote"],
-                    "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
-                })
-        return res
-    except Exception as exc:
-        abort(403)
-
-@bp.route('/<category_name>/top', methods = ['GET'])
-@token_auth.login_required
-def get_category_top_verified(category_name):
-    try:
-        page = int(request.args.get('page', 1))
-        if(page < 1):
-            page = 1
-        category = db["category"].find({
-            "url" : category_name
-        },{"_id":1})
-        category_id = None
-        if(category !=None):
-            category_id = list(category)[0]
-            # print(category_id)
-        if(category_id == None):
-            abort(403)
-        max_post = db["post"].find({"category" : category_id["_id"]},{"_id" : 1}).count()
-        max_page = int(max_post/20)
-        res ={
-            "data" : [],
-            "current_page" : page ,
-            "total_page" : max_post
-        }
-        if(max_page < page):
-            return res
-        
-        query = db["post"].find({
-            "category" : category_id["_id"]
-        }).sort([(
-            "vote", -1
-        )]).limit(page*20)
-
-        list_post = []
-        if(query!=None):
-            list_post = list(query)
-            for index_page in range((page-1)*20, page*20):
-                if(index_page >= len(list_post)):
-                    break
-                res["data"].append({
-                    "created_by" : str(list_post[index_page]["created_by"]),
-                    "category" : str(list_post[index_page]["category"]),
-                    "time_to_read" : str(list_post[index_page]["time_to_read"]),
-                    "title" : str(list_post[index_page]["title"]),
-                    "created_date" : (list_post[index_page]["created_date"]),
-                    "content" : get_content_post(str(list_post[index_page]["content"])),
-                    "_id" : str(list_post[index_page]["_id"]),
-                    "vote" : list_post[index_page]["vote"],
-                    "views" : list_post[index_page]["views"],
-                    "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : get_image_url(str(list_post[index_page]["content"])),
+                    "is_voted" : is_voted
                 })
         return res
 
