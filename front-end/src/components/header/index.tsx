@@ -14,10 +14,8 @@ import {
 import { UserAvatar } from '../user-avatar';
 import './style.scss';
 import { BaseButton, BaseDropDown } from '../base';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Categories } from '../../constants';
-import { DataAccess, useEntityData } from '../../access';
-import { LoadingFullView } from '../loading';
 import { UserContext } from '../../context';
 import { CategoryType } from '../../model';
 const { SubMenu } = Menu;
@@ -30,8 +28,9 @@ type UserInfo = {
 }
 
 export const Header = () => {
+    const history = useHistory();
     const SearchHandler = (value: string) => {
-        console.log('text search', value);
+        history.push(`/search/${value}`);
     }
 
     const userContext = useContext(UserContext);
@@ -104,6 +103,7 @@ export const Header = () => {
 
 function HeaderSideBar({ user }: { user: any }) {
     const [showSideBar, setShowSideBar] = useState(false);
+    const userContext = useContext(UserContext);
     return (
         <div className='header-side-bar'>
             <BaseButton type='primary' onClick={(e) => {
@@ -114,10 +114,10 @@ function HeaderSideBar({ user }: { user: any }) {
                 defaultSelectedKeys={['home']}
                 mode="inline"
                 theme="light"
-                inlineCollapsed={showSideBar}
+                inlineCollapsed={!showSideBar}
             >
                 <Menu.Item key="home" icon={<HomeOutlined />}>
-                    <Link to='/hot'>Trang chủ</Link>
+                    <Link to='/'>Trang chủ</Link>
                 </Menu.Item>
                 <SubMenu key="catigories" icon={<ShopOutlined />} title="Tất cả chủ đề">
                     {Categories.map(item =>
@@ -130,7 +130,7 @@ function HeaderSideBar({ user }: { user: any }) {
                     <Menu.Item key="profile" icon={<UserOutlined />}>
                         <Link to={`/profile/${user._id}`}>Trang cá nhân</Link>
                     </Menu.Item>
-                    <Menu.Item key="log-out" icon={<LogoutOutlined />}>
+                    <Menu.Item key="log-out" icon={<LogoutOutlined />} onClick={userContext.logout}>
                         Đăng xuất
                 </Menu.Item>
                 </> :

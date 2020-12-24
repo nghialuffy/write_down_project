@@ -2,11 +2,13 @@
     margin-top: 10px;
     display: flex;
     flex-direction: column;
+    position: relative;
     .user-profile {
         box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.24), 0px 0px 10px rgba(0, 0, 0, 0.12);
         margin-bottom: 20px;
         .user-background {
             width: 100%;
+            height: auto;
             max-height: 300px;
             overflow: hidden;
         }
