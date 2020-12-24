@@ -19,6 +19,7 @@ import { Categories } from '../../constants';
 import { DataAccess, useEntityData } from '../../access';
 import { LoadingFullView } from '../loading';
 import { UserContext } from '../../context';
+import { CategoryType } from '../../model';
 const { SubMenu } = Menu;
 
 type UserInfo = {
@@ -32,7 +33,7 @@ export const Header = () => {
     const SearchHandler = (value: string) => {
         console.log('text search', value);
     }
-    
+
     const userContext = useContext(UserContext);
     console.log('usercontext', userContext);
 
@@ -81,11 +82,13 @@ export const Header = () => {
                             </>}
                     </div>
                     <div className='header-content-bottom'>
-                        <BaseDropDown
-                            button='Đang theo dõi'
-                            data={Categories}
-                            Item={CategoryLink}
-                        />
+                        {userContext.followCategories.length !== 0 &&
+                            <BaseDropDown
+                                button='Đang theo dõi'
+                                data={userContext.followCategories}
+                                Item={CategoryLink}
+                            />
+                        }
                         <Link to='/top-writer'>Top Writers</Link>
                         {Categories.slice(0, 5).map(item => {
                             return <Link to={`/posts/${item.value}`} className='link'>{item.label}</Link>
@@ -144,8 +147,8 @@ function HeaderSideBar({ user }: { user: any }) {
     )
 }
 
-function CategoryLink({ data }: { data: typeof Categories[0] }) {
+function CategoryLink({ data }: { data: CategoryType }) {
     return (
-        <Link to={`/posts/${data.value}`} className='link'>{data.label}</Link>
+        <Link to={`/posts/${data.url}`} className='link'>{data.name_category}</Link>
     )
 }

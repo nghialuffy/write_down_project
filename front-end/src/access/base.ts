@@ -9,7 +9,7 @@ const headers = {
 const BASE_URL = 'http://localhost:9999';
 
 const CLOUD_NAME = 'dj5xafymg';
-const APIPost = async (url: string, data: string) => {
+const APIPost = async (url: string, data?: string) => {
     const token = localStorage.getItem('token');
     return await axios({
         method: 'POST',
