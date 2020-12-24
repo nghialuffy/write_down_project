@@ -16,6 +16,16 @@ def get_user(id):
                 for id_post in user["list_post"]:
                     post = Post(db.post.find_one({"_id": id_post}))
                     list_post.append(post.get_mini_post(get_username=False))
+                for i in range(len(list_post)-1):
+                    haveSwap = False
+                    for j in range(len(list_post)-i-1):
+                        if list_post[j]["created_date"] < list_post[j+1]["created_date"]:
+                            temp=list_post[j]
+                            list_post[j]=list_post[j+1]
+                            list_post[j+1]=temp
+                            haveSwap = True
+                    if not haveSwap:
+                        break
             followings = len(list(db.user.find({"list_follow": user["_id"]})))
 
             rs={
