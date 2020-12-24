@@ -8,7 +8,7 @@ export const defaultComment = {
     },
     "created_date": "Fri, 18 Dec 2020 00:00:00 GMT",
     "list_comment": [] as ReplyType[],
-    "vote": "8"
+    "vote": 8
 };
 
 export type CommentType = typeof defaultComment;
@@ -26,3 +26,22 @@ const defaultReply = {
 };
 
 export type ReplyType = typeof defaultReply; 
+
+export const listComment = {
+    "list_comment": [
+        {
+            "_id": "5fe43314817ad99889d17d74",
+            "content": "Lỗi lúc trước chưa có nội dung.",
+            "created_by": {
+                "_id": "5fe4277b817ad99889d17d59",
+                "avatar": "http://res.cloudinary.com/dj5xafymg/image/upload/v1608753409/bsp5c1yjlxosj9smznfr.jpg",
+                "display_name": "Lê Văn Cần"
+            },
+            "created_date": "Thu, 24 Dec 2020 13:20:04 GMT",
+            "list_comment": [] as ReplyType[],
+            "vote": 0
+        }
+    ]
+}
+
+export type ListCommentType = typeof listComment;
