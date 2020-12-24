@@ -1,61 +1,133 @@
 .cover-upload {
-   top: 0;
-   left: 0;
-   right: 0;
-   bottom: 0;
-   background: rgba(255, 255, 255, 1);
-   cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 1);
+    cursor: pointer;
 }
 .hidden {
-   display: none !important;
+    display: none !important;
 }
 .user-detail {
-   margin-top: 10px;
-   display: flex;
-   flex-direction: column;
-   .user-profile {
-       box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.24), 0px 0px 10px rgba(0, 0, 0, 0.12);
-       margin-bottom: 20px;
-       .user-background {
-           width: 100%;
-           max-height: 300px;
-           overflow: hidden;
-       }
-       .user-info-slot {
-           background-color: white;
-           padding: 10px;
-           display: flex;
-           column-gap: 20px;
-           position: relative;
-           .slot-content {
-               justify-content: center;
-               display: flex;
-               flex-direction: column;
-               row-gap: 5px;
-               .slot-content-top {
-                   font-size: 16px;
-                   font-weight: bold;
-                   align-content: center;
-                   .username {
-                       color: #5eabbc;
-                       font-weight: normal;
-                   }
-               }
-               .slot-content-middle {
-                   font-size: 15px;
-               }
-               .slot-content-bottom {
-                   display: flex;
-                   column-gap: 10px;
-                   color: #999;
-               }
-           }
-           .right-btn {
-               position: absolute;
-               top: 10px;
-               right: 10px;
-               width: fit-content;
-           }
-       }
-   }
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    .user-profile {
+        box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.24), 0px 0px 10px rgba(0, 0, 0, 0.12);
+        margin-bottom: 20px;
+        position: relative;
+        .ant-form-item-control-input-content {
+            display: flex;
+            justify-content: center;
+        }
+        .user-background {
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .upload-cover {
+                background-color: #bbb;
+                opacity: .5;
+                width: 200px;
+                height: 100px;
+                border: 4px dashed black;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                .input-file {
+                    display: none;
+                }
+                .anticon {
+                    font-size: 50px;
+                    color: black;
+                }
+            }
+            .upload-cover:hover {
+                width: 210px;
+                height: 110px;
+                background-color: #999;
+                .anticon {
+                    font-size: 55px;
+                }
+            }
+            .loading-fullview {
+                opacity: .5;
+            }
+        }
+        .top-content {
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            column-gap: 10px;
+            .user-avatar {
+                background-size: 100px 100px;
+                background-position: center;
+                width: 100px;
+                height: 100px;
+                border-radius: 99px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                .loading-fullview {
+                    border-radius: 99px;
+                    opacity: .5;
+                }
+                .cover-upload {
+                    background-color: #bbb;
+                    opacity: .5;
+                    border: 2px dashed black;
+                    padding: 5px 10px;
+                    .anticon {
+                        font-size: 25px;
+                        color: black;
+                    }
+                    .input-file {
+                        display: none;
+                    }
+                }
+                .cover-upload:hover {
+                    background-color: #999;
+                    .anticon {
+                        font-size: 30px;
+                    }
+                }
+            }
+            .basic-info {
+                flex: 1;
+                .ant-form {
+                    width: 100%;
+                    .ant-row {
+                        min-width: 300px;
+                        .ant-form-item-label {
+                            min-width: 150px;
+                        }
+                        .ant-form-item-control {
+                            flex: 1;
+                        }
+                        .ant-btn {
+                            left: -55px
+                        }
+                    }
+                }
+            }
+            
+        }
+        .bottom-content {
+            padding: 20px;
+            .ant-form {
+                .ant-row {
+                    .ant-form-item-label {
+                        min-width: 260px;
+                    }
+                }
+            }
+        }
+    }
 }
