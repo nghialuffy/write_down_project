@@ -841,35 +841,33 @@ def get_category_top_verified(category_name):
     except Exception as exc:
         abort(403)
 
-@bp.route('/categories/<id>/follow', methods=['POST'])
+@bp.route('/categories/<category_name>/follow', methods=['POST'])
 @token_auth.login_required
-def follow_category(id):
+def follow_category(category_name):
     token = g.current_token.get_token()
     try:
-        db.category.find_one({"_id": ObjectId(id)})
+        category=db.category.find_one({"url": category_name})
+        e = db.user.update_one({"_id": token.id_user}, {"$push": {"list_category": category["_id"]}})
+        if e.matched_count > 0:
+            return "ok"
+        else:
+            abort(403)
     except:
         abort(403)
-    e=db.user.update_one({"_id": token.id_user}, {"$push": {"list_category": id}})
-    if e.matched_count > 0:
-        return "ok"
-    else:
-        abort(403)
 
-
-@bp.route('/categories/<id>/unfollow', methods=['POST'])
+@bp.route('/categories/<category_name>/unfollow', methods=['POST'])
 @token_auth.login_required
-def unfollow_category(id):
+def unfollow_category(category_name):
     token = g.current_token.get_token()
     try:
-        db.category.find_one({"_id": ObjectId(id)})
+        category = db.category.find_one({"url": category_name})
+        e = db.user.update_one({"_id": token.id_user}, {"$pull": {"list_category": category["_id"]}})
+        if e.matched_count > 0:
+            return "ok"
+        else:
+            abort(403)
     except:
         abort(403)
-    e = db.user.update_one({"_id": token.id_user}, {"$pull": {"list_category": id}})
-    if e.matched_count > 0:
-        return "ok"
-    else:
-        abort(403)
-
 
 
 if __name__ == "__main__":
