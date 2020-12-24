@@ -159,6 +159,9 @@ POST:
         Error 401: Token sai
         Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
 
+    user/<id>/ban       Khóa tài khoản
+    user/<id>/unban     Mở khóa tài khoản
+
 PUT:
     post/<id>     Chỉnh sửa bài đăng. Mẫu như file post.json. Cần có token của acc đăng bài.
         Trả về url post nếu thành công
@@ -188,6 +191,8 @@ PUT:
     profile     Chỉnh sửa thông tin người dùng. Mẫu như update_profile.json. Cần có token
         Các trường có thể đầy đủ hoặc không tùy vào trường muốn sửa.
         Trả về "ok" nếu thành công
+        Các trường có thể sửa: display_name, avatar, cover_img, email, bio, sex, birthday
+        Trường sex giá trị là 0 hoặc 1
         Error 400: Không đúng cú pháp
         Error 401: Token sai
         Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống

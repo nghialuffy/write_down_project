@@ -92,6 +92,12 @@ def update_profile():
             update["avatar"] = rq["avatar"]
         if "cover_img" in rq:
             update["cover_img"] = rq["cover_img"]
+        if "bio" in rq:
+            update["bio"] = rq["bio"]
+        if "sex" in rq:
+            update["sex"]=rq["sex"]
+        if "birthday" in rq:
+            update["birthday"]=rq["birthday"]
 
         e=db.user.update_one({"_id": token.id_user}, {"$set": update})
         if e.matched_count > 0:
@@ -111,6 +117,24 @@ def update_password():
     if db.user.find_one({"_id": token.id_user, "password": hashlib.md5(rq["old_password"].encode('utf-8')).hexdigest()}) is None:
         abort(405)
     e=db.user.update_one({"_id": token.id_user}, {"$set": {"password": hashlib.md5(rq["new_password"].encode('utf-8')).hexdigest()}})
+    if e.matched_count > 0:
+        return "ok"
+    else:
+        abort(403)
+
+@bp.route('/user/<id>/ban', methods=['POST'])
+@token_auth.login_required(role="admin")
+def ban(id):
+    e=db.user.update_one({"_id": ObjectId(id)}, {"$set": {"ban": 1}})
+    if e.matched_count > 0:
+        return "ok"
+    else:
+        abort(403)
+
+@bp.route('/user/<id>/unban', methods=['POST'])
+@token_auth.login_required(role="admin")
+def unban(id):
+    e=db.user.update_one({"_id": ObjectId(id)}, {"$set": {"ban": 0}})
     if e.matched_count > 0:
         return "ok"
     else:

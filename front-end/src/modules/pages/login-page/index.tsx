@@ -18,14 +18,15 @@ export function LoginPage () {
         wrapperCol: { offset: 8, span: 16 },
     };
     const onFinish = (values: any) => {
+        console.log('value', JSON.stringify(values));
         DataAccess.Post('login ', JSON.stringify(values)).then(res => {            
+            if (res) history.push("/");
             localStorage.setItem('token', res.data?.token);
             userContext.updateUser({
-                _id: res.data?._id,
-                avatar: res.data?.avatar,
-                displayName: res.data?.display_name
+                _id: res.data._id,
+                avatar: res.data.avatar,
+                displayName: res.data.display_name
             });
-            history.push("/");
             notification.success({
                 message: "Login successfully!"
             })

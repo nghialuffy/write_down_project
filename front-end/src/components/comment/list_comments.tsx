@@ -15,7 +15,7 @@ export function ListComment () {
     return (
         <>
         <div className='list-comment'>
-            {loading && <LoadingFullView />}
+            {loading && <LoadingFullView className='opacity'/>}
             {data && data.list_comment.length !== 0 &&
                 data.list_comment.map(item => {
                     return <OldComment data={{...item, post_id: data._id}} onReply={reload}/>;

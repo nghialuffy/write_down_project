@@ -219,6 +219,10 @@ class User():
             self.list_draft = []
             self.list_category = []
             self.list_follow = []
+            self.role="user"
+            self.ban=0
+            self.sex=0
+            self.birthday=datetime.datetime.now()
 
         else:
             self._id = dict['_id']
@@ -234,6 +238,10 @@ class User():
             self.list_draft = dict['list_draft']
             self.list_category = dict['list_category']
             self.list_follow = dict['list_follow']
+            self.role = dict['role']
+            self.ban=dict['ban']
+            self.sex = dict['sex']
+            self.birthday = dict['birthday']
 
     def add_post(self, post):
         self.list_post.append(post.__dict__)

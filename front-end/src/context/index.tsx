@@ -10,6 +10,7 @@ type UserContextType = {
     followCategories: CategoryType[],
     logout: () => void
     updateUser: (newInfo: UserInfo) => void
+    getFollowingCategories: () => void
 }
 
 export const UserContext = React.createContext<UserContextType>({
@@ -19,7 +20,8 @@ export const UserContext = React.createContext<UserContextType>({
     followUsers: [],
     followCategories: [],
     logout: () => undefined,
-    updateUser: (newInfo: UserInfo) => undefined
+    updateUser: (newInfo: UserInfo) => undefined,
+    getFollowingCategories: () => undefined,
 });
 
 type StateType = {
@@ -35,11 +37,9 @@ type UserInfo = {
     displayName: string
     avatar: string
 }
-
 export class UserContextProvider extends React.Component<any, StateType> {
     constructor(props: any) {
         super(props);
-        const token = localStorage.getItem('token');
         this.state = {
             _id: '',
             displayName: '',
@@ -47,16 +47,6 @@ export class UserContextProvider extends React.Component<any, StateType> {
             followUsers: [],
             followCategories: [],
         };
-        if (token) {
-            DataAccess.Get('auth').then(res => {
-                this.setState({
-                    _id: res.data._id,
-                    avatar: res.data.avatar,
-                    displayName: res.data.display_name
-                })
-            })
-        }
-        console.log(this.state);
     }
 
     logout = () => {
@@ -69,15 +59,30 @@ export class UserContextProvider extends React.Component<any, StateType> {
                 avatar: ''
             }
         });
-        localStorage.removeItem('item');
+        localStorage.removeItem('token');
     }
 
-    updateUser = (newInfo: UserInfo) => {
+    updateUser = (newInfo: UserInfo, cb?: () => void) => {
         this.setState(prev => {
             return {
                 ...prev,
                 ...newInfo,
             }
+        }, () => {
+            this.getFollowingCategories(cb);
+        });
+    }
+    getFollowingCategories = (cb?: () => void) => {
+        DataAccess.Get(`categories/user/${this.state._id}`).then(res => {
+            this.setState(prev => {
+                return {
+                    ...prev,
+                    followCategories: res.data.data
+                }
+            }, cb)
+        }).catch (e => {
+            console.log('Fetch following categories failed > ', e);
+            if (cb) cb();
         });
     }
     render() {
@@ -86,6 +91,7 @@ export class UserContextProvider extends React.Component<any, StateType> {
                 ...this.state,
                 updateUser: this.updateUser,
                 logout: this.logout,
+                getFollowingCategories: this.getFollowingCategories,
             }}>
                 {this.props.children}
             </UserContext.Provider >

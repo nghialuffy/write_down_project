@@ -1,0 +1,37 @@
+.list-tools {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 150px;
+    .tool{
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 10px;
+        color: #34495E;
+        font-size: 16px;
+        .anticon {
+            font-size: 20px;
+            color: #999;
+        }
+        .anticon.anticon-caret-down,
+        .anticon.anticon-caret-up {
+            font-size: 30px;
+        }
+        .up-vote.voted {
+            color: green;
+        }
+        .down-vote.voted {
+            color: red;
+        }
+        .up-vote:hover {
+            color: chartreuse;
+        }
+        .down-vote:hover {
+            color: brown;
+        }
+    }
+}
