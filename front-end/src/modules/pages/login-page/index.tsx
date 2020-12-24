@@ -19,13 +19,13 @@ export function LoginPage () {
     };
     const onFinish = (values: any) => {
         DataAccess.Post('login ', JSON.stringify(values)).then(res => {            
+            if (res) history.push("/");
             localStorage.setItem('token', res.data?.token);
             userContext.updateUser({
-                _id: res.data?._id,
-                avatar: res.data?.avatar,
-                displayName: res.data?.display_name
+                _id: res.data._id,
+                avatar: res.data.avatar,
+                displayName: res.data.display_name
             });
-            history.push("/");
             notification.success({
                 message: "Login successfully!"
             })

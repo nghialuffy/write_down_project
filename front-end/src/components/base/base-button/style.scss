@@ -19,6 +19,7 @@
     padding: 0 20px;
     outline: none;
     line-height: 29px;
+    position: relative;
 }
 .btn-primary {
     background: #5eabbc;
@@ -39,6 +40,7 @@
 .btn-primary:hover {
     background: #138999;
     border-color: #138999;
+    color: white;
 }
 .btn-default:hover {
     color: #5eabbc;

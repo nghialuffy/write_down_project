@@ -26,7 +26,7 @@ export function NewPostPage() {
     }
     return (
         <AppWrap>
-            <Form>
+            <Form className='new-post-form'>
                 <Input type="text" placeholder="Title"></Input>
                 <Editor
                     apiKey="unjo0maub5xvytcqn7sb3ilawv9s91yy05kwktk2f3sbzaiw"
