@@ -101,6 +101,8 @@ GET:
             ]
         }
 
+    foryou
+
 POST:
     post      Đăng bài. Mẫu như file post.json. Cần có token.
         Trả về url post nếu thành công

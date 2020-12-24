@@ -223,6 +223,8 @@ class User():
             self.ban=0
             self.sex=0
             self.birthday=datetime.datetime.now()
+            self.list_read=[]
+            self.list_hashtag=[]
 
         else:
             self._id = dict['_id']
@@ -242,6 +244,8 @@ class User():
             self.ban=dict['ban']
             self.sex = dict['sex']
             self.birthday = dict['birthday']
+            self.list_read = dict['list_read']
+            self.list_hashtag = dict['list_hashtag']
 
     def add_post(self, post):
         self.list_post.append(post.__dict__)
