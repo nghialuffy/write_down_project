@@ -8,10 +8,12 @@ from bson.objectid import ObjectId
 
 def get_comment(data_cmt, is_reply=False):
     cmt = {"_id": str(data_cmt["_id"]), "content": data_cmt["content"], "created_date": data_cmt["created_date"],
-           "vote": data_cmt["vote"],
-           "created_by": db.user.find_one({"_id": data_cmt["created_by"]}, {"_id": 0, "username": 1, "display_name": 1,
-                                                                            "avatar": 1})}
+           "vote": data_cmt["vote"]}
+    created_by = db.user.find_one({"_id": data_cmt["created_by"]}, {"_id": 1, "display_name": 1, "avatar": 1})
+    cmt["created_by"] = {"_id": str(created_by["_id"]), "display_name": created_by["display_name"],
+                         "avatar": created_by["avatar"]}
     if g.current_token is not None:
+        cmt["user_voted"] = 0
         token = g.current_token.get_token()
         if str(token.id_user) in data_cmt["voted_user"]:
             cmt["user_voted"] = data_cmt["voted_user"][str(token.id_user)]
@@ -28,45 +30,34 @@ def get_comment(data_cmt, is_reply=False):
 def get_post(id):
     try:
         post = {}
-        data = db.post.find_one({"_id": ObjectId(id)}, {"url_post": 0, "time_to_read": 0})
-        if data != None:
-            post["_id"] = str(data["_id"])
-            post["title"] = data["title"]
-            post["content"] = data["content"]
-            post["created_date"] = data["created_date"]
-            post["list_hashtag"] = data["list_hashtag"]
-            post["vote"] = data["vote"]
-            post["views"] = data["views"] + 1
-            post["edit_history"] = len(data["edit_history"]) > 0
+        data = db.post.find_one({"_id": ObjectId(id)}, {"_id": 0, "url_post": 0, "time_to_read": 0})
+        post["title"] = data["title"]
+        post["content"] = data["content"]
+        post["created_date"] = data["created_date"]
+        post["list_hashtag"] = data["list_hashtag"]
+        post["vote"] = data["vote"]
+        post["views"] = data["views"] + 1
+        post["edit_history"] = len(data["edit_history"]) > 0
+        category = db.category.find_one({"_id": data["category"]}, {"_id": 1, "name_category": 1, "url": 1})
+        post["category"] = {"_id": str(category["_id"]), "name_category": category["name_category"],
+                            "url": category["url"]}
 
-            post["category"] = {}
-            query1 = db.category.find_one({"_id": ObjectId(data["category"])})
-            if(query1 != None):
-                post["category"]["_id"] = str(query1["_id"])
-                post["category"]["name_category"] = query1["name_category"]
-                post["category"]["url"] = query1["url"]
+        user = db.user.find_one({"_id": data["created_by"]}, {"_id": 1, "display_name": 1, "avatar": 1})
+        post["created_by"] = {"_id": str(user["_id"]), "display_name": user["display_name"], "avatar": user["avatar"]}
+        post["len_list_comment"] = len(data["list_comment"])
+        post["list_comment"] = []
+        for data_cmt in data["list_comment"]:
+            post["list_comment"].append(get_comment(data_cmt))
 
-            post["created_by"] = {}
-            query2 = db.user.find_one({"_id": ObjectId(data["created_by"])})
-            if(query2 != None):
-                post["created_by"]["_id"] = str(query2["_id"])
-                post["created_by"]["username"] = query2["username"]
-                post["created_by"]["display_name"] = query2["display_name"]
-                post["created_by"]["avatar"] = query2["avatar"]
-            
-            post["list_comment"] = []
-            for data_cmt in data["list_comment"]:
-                post["list_comment"].append(get_comment(data_cmt))
+        if g.current_token is not None:
+            post["user_voted"] = 0
+            token = g.current_token.get_token()
+            if str(token.id_user) in data["voted_user"]:
+                post["user_voted"] = data["voted_user"][str(token.id_user)]
 
-            if g.current_token is not None:
-                token = g.current_token.get_token()
-                if str(token.id_user) in data["voted_user"]:
-                    post["user_voted"] = data["voted_user"][str(token.id_user)]
-
-            db.post.update_one({"_id": ObjectId(id)}, {"$set": {"views": data["views"] + 1}})
-            return post
-    except Exception as exc:
-        print(f"Error: {exc}")
+        db.post.update_one({"_id": ObjectId(id)}, {"$set": {"views": data["views"] + 1}})
+        return post
+    except:
         abort(403)
 
 
@@ -151,7 +142,8 @@ def delete_post(id):
     token = g.current_token.get_token()
     try:
         post = Post(db.post.find_one({"_id": ObjectId(id)}))
-        if token.id_user != post.created_by:
+        if token.id_user != post.created_by and db.user.find_one({"_id": token.id_user}, {"_id": 0, "role": 1})[
+            "role"] != "admin":
             abort(405)
 
         for id_draft in post.edit_history:
@@ -385,4 +377,5 @@ def vote_cmt(id):
 
 
 if __name__ == "__main__":
-    print()
+    post = Post(db.post.find_one({"_id": ObjectId("5fe243e2bc62d295137ead37")}))
+    print(post.created_date)

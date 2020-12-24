@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import logo from '../../assets/logo.png';
 import { Dropdown, Input, Menu } from 'antd';
 import {
@@ -16,8 +16,10 @@ import './style.scss';
 import { BaseButton, BaseDropDown } from '../base';
 import { Link } from 'react-router-dom';
 import { Categories } from '../../constants';
-import { useEntityData } from '../../access';
+import { DataAccess, useEntityData } from '../../access';
 import { LoadingFullView } from '../loading';
+import { UserContext } from '../../context';
+import { CategoryType } from '../../model';
 const { SubMenu } = Menu;
 
 type UserInfo = {
@@ -27,28 +29,18 @@ type UserInfo = {
     username: string,
 }
 
-export const Header = memo(() => {
+export const Header = () => {
     const SearchHandler = (value: string) => {
         console.log('text search', value);
     }
-    const token = localStorage.getItem('token') ?? undefined;
-    const [user, setUser] = useState<UserInfo>();
 
-    const { loading, data } = useEntityData<UserInfo>('/auth', token);
-
-    useEffect(() => {
-        setUser(data);
-    }, [data]);
-
-    const logout = () => {
-        localStorage.removeItem('token');
-        setUser(undefined);
-    }
+    const userContext = useContext(UserContext);
+    console.log('usercontext', userContext);
 
     return (
         <div className='header'>
             <div className='container'>
-                <HeaderSideBar user={user} />
+                <HeaderSideBar user={userContext} />
                 <Link to='/'>
                     <img src={logo} alt='logo' className='logo' />
                 </Link>
@@ -60,30 +52,29 @@ export const Header = memo(() => {
                             allowClear
                             className='header-search'
                         />
-                        {user ? <div className='header-content-top-right'>
-                            {loading && <LoadingFullView />}
+                        {userContext._id ? <div className='header-content-top-right'>
                             <Link to='/new-post' className='link-new-post'>
                                 <BaseButton type='primary'>Viết bài</BaseButton>
                             </Link>
                             <BellOutlined />
                             <div className='user-info'>
-                                {user.avatar && <UserAvatar data={user} />}
+                                {userContext.avatar && <UserAvatar data={userContext} />}
                                 <Dropdown
                                     trigger={['click']}
                                     overlay={
                                         <Menu className='menu-base-dropdown'>
                                             <Menu.Item>
-                                                <Link to={`/profile/${user._id}`}>Trang cá nhân</Link>
+                                                <Link to={`/profile/${userContext._id}`}>Trang cá nhân</Link>
                                             </Menu.Item>
                                             <Menu.Item>
                                                 <Link to='/setting'>Cài đặt tài khoản</Link>
                                             </Menu.Item>
                                             <Menu.Item>
-                                                <span onClick={logout}>Đăng xuất</span>
+                                                <span onClick={userContext.logout}>Đăng xuất</span>
                                             </Menu.Item>
                                         </Menu>
                                     }>
-                                    <div className='username' onClick={e => e.preventDefault()}>{user.display_name ?? ''} <DownOutlined /></div>
+                                    <div className='username' onClick={e => e.preventDefault()}>{userContext.displayName ?? ''} <DownOutlined /></div>
                                 </Dropdown>
                             </div>
                         </div> : <><Link to='/login'><BaseButton type='primary'>Login</BaseButton></Link>
@@ -91,11 +82,13 @@ export const Header = memo(() => {
                             </>}
                     </div>
                     <div className='header-content-bottom'>
-                        <BaseDropDown
-                            button='Đang theo dõi'
-                            data={Categories}
-                            Item={CategoryLink}
-                        />
+                        {userContext.followCategories.length !== 0 &&
+                            <BaseDropDown
+                                button='Đang theo dõi'
+                                data={userContext.followCategories}
+                                Item={CategoryLink}
+                            />
+                        }
                         <Link to='/top-writer'>Top Writers</Link>
                         {Categories.slice(0, 5).map(item => {
                             return <Link to={`/posts/${item.value}`} className='link'>{item.label}</Link>
@@ -107,7 +100,7 @@ export const Header = memo(() => {
 
         </div>
     );
-});
+};
 
 function HeaderSideBar({ user }: { user: any }) {
     const [showSideBar, setShowSideBar] = useState(false);
@@ -154,8 +147,8 @@ function HeaderSideBar({ user }: { user: any }) {
     )
 }
 
-function CategoryLink({ data }: { data: typeof Categories[0] }) {
+function CategoryLink({ data }: { data: CategoryType }) {
     return (
-        <Link to={`/posts/${data.value}`} className='link'>{data.label}</Link>
+        <Link to={`/posts/${data.url}`} className='link'>{data.name_category}</Link>
     )
 }

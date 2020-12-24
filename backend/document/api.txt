@@ -4,24 +4,102 @@ GET:
                 Mới nhất
                 Sôi Nổi
                 Top
-    postmonth           Bài viết của tháng
+    postofmonth           Bài viết của tháng
     foryou              Phù hợp với bạn
     user/<id_user>                Thông tin user
         Nếu có token thì xuất hiện trường followed: 1 (đã follow) hoặc 0 (chưa follow)
+        Output:
+            - _id
+            - avatar
+            - bio
+            - cover_img
+            - display_name
+            - followers
+            - followings
+            - list_post: là một list, mỗi phần tử bao gồm: {
+                - _id
+                - category
+                    - _id
+                    - name_category
+                    - url
+                - comment: Số comment
+                - content: Nội dung tóm tắt, không quá 150 ký tự
+                - created_date
+                - image: là ảnh đầu tiên của bài post, trả về "" nếu post không có ảnh
+                - time_to_read
+                - title
+                - vote
+            }
+            - username
+
     login       Đăng nhập. Trả về token. Mẫu như login.json
         Ví dụ: curl -H "Content-Type: application/json" -d @login.json http://127.0.0.1:5000/login
             --> {"token":"a370IpyCScYxFZfRbXi/8u9KgU8qA7Fo"}
         Error 401: Không đúng tài khoản hoặc mật khẩu
     post/<id>     Xem bài đăng
         Có thể có token hoặc không.
-        Nếu có token và user đã vote bài đăng thì trường voted_user hiển thị 1 (upvote), -1 (downvote), 0 (đã xóa vote)
-            Tương tự với vote bình luận
+        Output:
+            - category
+                - _id
+                - name_category
+                - url
+            - content
+            - created_by
+                - _id
+                - avatar
+                - display_name
+            - created_date
+            - edit_history
+            - list_comment: là một list, mỗi phần tử gồm: {
+                - _id
+                - content
+                - created_by
+                    - _id
+                    - avatar
+                    - display_name
+                - created_date
+                - list_comment: là một list, mỗi phần tử gồm: {
+                    - _id
+                    - content
+                    - created_by
+                        - _id
+                        - avatar
+                        - display_name
+                    - created_date
+                    -vote
+                    Nếu có token và user đã vote bài đăng thì trường voted_user hiển thị 1 (upvote), -1 (downvote), 0 (đã xóa vote)
+                    }
+                - vote
+                Nếu có token và user đã vote bài đăng thì trường voted_user hiển thị 1 (upvote), -1 (downvote), 0 (đã xóa vote)
+                }
+            - list_hashtag
+            - title
+            - views
+            - vote
+            Nếu có token và user đã vote bài đăng thì trường voted_user hiển thị 1 (upvote), -1 (downvote), 0 (đã xóa vote)
+
     post/<id>/edit-history    Xem lịch sử chỉnh sửa
     draft/<id>      Xem nháp (Cần token của user cần xem)
     draft           Xem danh sách các nháp
     auth            Lấy thông tin user hiện tại. Cần token
         Error 401: Token sai
         Error 403: Lỗi hệ thống
+    /topuser/             top user (nhiều bài đăng)
+        {
+            "data": [
+                {
+                    "_id": "5fb23496685674ae279f0e24",
+                    "avatar": "https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-xs-avatar/549da160f73711eaa3740de1963a09bb.jpg",
+                    "bio": "♬♪♫ ♬♪♫♬♪♫♪♩♫♪",
+                    "cover_img": "https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-cover/558b7ef0cc0c11e98333537ccdd8d8e6.jpg",
+                    "display_name": "Trà Kha",
+                    "email": "",
+                    "link_facebook": "",
+                    "username": "inrajakha"
+                },
+                {},..
+            ]
+        }
 
 POST:
     post      Đăng bài. Mẫu như file post.json. Cần có token.
@@ -73,6 +151,17 @@ POST:
         Error 401: Token sai
         Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
 
+    categories/<id_category>/follow     Follow category. Cần có token.
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+
+    categories/<id_category>/unfollow     Unfollow category. Cần có token.
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+
+    user/<id>/ban       Khóa tài khoản
+    user/<id>/unban     Mở khóa tài khoản
+
 PUT:
     post/<id>     Chỉnh sửa bài đăng. Mẫu như file post.json. Cần có token của acc đăng bài.
         Trả về url post nếu thành công
@@ -98,6 +187,20 @@ PUT:
         Error 401: Token sai
         Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
         Error 405: Token không phải của acc đăng bài
+
+    profile     Chỉnh sửa thông tin người dùng. Mẫu như update_profile.json. Cần có token
+        Các trường có thể đầy đủ hoặc không tùy vào trường muốn sửa.
+        Trả về "ok" nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+
+    update_password     Thay đổi mật khẩu. Mẫu như update_password.json. Cần có token
+        Trả về "ok" nếu thành công
+        Error 400: Không đúng cú pháp
+        Error 401: Token sai
+        Error 403: Dữ liệu nhập vào bị sai/ lỗi hệ thống
+        Error 405: Mật khẩu cũ sai
 
 DELETE:
     post/<id>     Xóa bài đăng. Cần có token của acc đăng bài.

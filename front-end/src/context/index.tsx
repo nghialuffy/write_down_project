@@ -1,65 +1,97 @@
 import React from 'react';
-import {DataAccess} from '../access';
+import { DataAccess } from '../access';
+import { CategoryType, UserType } from '../model';
 
 type UserContextType = {
-    auth: boolean
     _id: string
     displayName: string,
-    avatar_url: string
-    authenticated: () => void
+    avatar: string,
+    followUsers: UserType[],
+    followCategories: CategoryType[],
     logout: () => void
-    updateUser: (newInfo: StateType) => void
+    updateUser: (newInfo: UserInfo) => void
+    getFollowingCategories: () => void
 }
 
 export const UserContext = React.createContext<UserContextType>({
-    auth: false,
     _id: '',
     displayName: '',
-    avatar_url: '',
-    authenticated: () => undefined,
+    avatar: '',
+    followUsers: [],
+    followCategories: [],
     logout: () => undefined,
-    updateUser: (newInfo: StateType) => undefined
+    updateUser: (newInfo: UserInfo) => undefined,
+    getFollowingCategories: () => undefined,
 });
 
 type StateType = {
-    auth: boolean
     _id: string
     displayName: string
-    avatar_url: string
+    avatar: string
+    followUsers: UserType[],
+    followCategories: CategoryType[],
 }
 
+type UserInfo = {
+    _id: string
+    displayName: string
+    avatar: string
+}
 export class UserContextProvider extends React.Component<any, StateType> {
     constructor(props: any) {
         super(props);
         this.state = {
-            auth: false,
             _id: '',
             displayName: '',
-            avatar_url: ''
+            avatar: '',
+            followUsers: [],
+            followCategories: [],
         };
-        console.log(this.state);
-    }
-
-    authenticated = () => {
-        this.setState({ auth: true });
     }
 
     logout = () => {
-        this.setState({ auth: false });
+        DataAccess.Delete('logout');
+        this.setState(prev => {
+            return {
+                ...prev,
+                _id: '',
+                displayName: '',
+                avatar: ''
+            }
+        });
+        localStorage.removeItem('token');
     }
 
-    updateUser = (newInfo: StateType) => {
-        this.setState(newInfo, () => {
-            console.log(this.state);
+    updateUser = (newInfo: UserInfo, cb?: () => void) => {
+        this.setState(prev => {
+            return {
+                ...prev,
+                ...newInfo,
+            }
+        }, () => {
+            this.getFollowingCategories(cb);
+        });
+    }
+    getFollowingCategories = (cb?: () => void) => {
+        DataAccess.Get(`categories/user/${this.state._id}`).then(res => {
+            this.setState(prev => {
+                return {
+                    ...prev,
+                    followCategories: res.data.data
+                }
+            }, cb)
+        }).catch (e => {
+            console.log('Fetch following categories failed > ', e);
+            if (cb) cb();
         });
     }
     render() {
         return (
             <UserContext.Provider value={{
                 ...this.state,
-                authenticated: this.authenticated,
                 updateUser: this.updateUser,
                 logout: this.logout,
+                getFollowingCategories: this.getFollowingCategories,
             }}>
                 {this.props.children}
             </UserContext.Provider >
