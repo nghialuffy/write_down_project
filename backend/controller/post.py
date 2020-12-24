@@ -12,6 +12,7 @@ def get_comment(data_cmt, is_reply=False):
     created_by=db.user.find_one({"_id": data_cmt["created_by"]}, {"_id": 1, "display_name": 1, "avatar": 1})
     cmt["created_by"]={"_id": str(created_by["_id"]), "display_name": created_by["display_name"], "avatar": created_by["avatar"]}
     if g.current_token is not None:
+        cmt["user_voted"]=0
         token = g.current_token.get_token()
         if str(token.id_user) in data_cmt["voted_user"]:
             cmt["user_voted"] = data_cmt["voted_user"][str(token.id_user)]
@@ -41,11 +42,13 @@ def get_post(id):
 
         user = db.user.find_one({"_id": data["created_by"]}, {"_id": 1, "display_name": 1, "avatar": 1})
         post["created_by"]={"_id": str(user["_id"]), "display_name": user["display_name"], "avatar": user["avatar"]}
+        post["len_list_comment"]=len(data["list_comment"])
         post["list_comment"] = []
         for data_cmt in data["list_comment"]:
             post["list_comment"].append(get_comment(data_cmt))
 
         if g.current_token is not None:
+            post["user_voted"]=0
             token = g.current_token.get_token()
             if str(token.id_user) in data["voted_user"]:
                 post["user_voted"] = data["voted_user"][str(token.id_user)]
