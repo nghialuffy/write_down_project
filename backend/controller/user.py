@@ -152,6 +152,39 @@ def unban(id):
     else:
         abort(403)
 
+@bp.route('/user/<id>/follower', methods=['GET'])
+@token_auth.login_required(optional=True)
+def get_follower(id):
+    user = db.user.find_one({"_id": ObjectId(id)},
+                            {"_id": 0, "list_follow": 1})
+    rs=[]
+    for follower_id in user["list_follow"]:
+        follower=db.user.find_one({"_id": ObjectId(follower_id)}, {"_id": 1, "display_name": 1, "avatar": 1, "list_follow": 1})
+        follow_dict={"_id": str(follower["_id"]), "display_name": follower["display_name"], "avatar": follower["avatar"], "num_follow": len(follower["list_follow"])}
+        if g.current_token is not None:
+            token = g.current_token.get_token()
+            follow_dict["followed"]=0
+            if str(token.id_user) in follower["list_follow"]:
+                follow_dict["followed"]=1
+        rs.append(follow_dict)
+    return {"follower": rs}
+
+@bp.route('/user/<id>/following', methods=['GET'])
+@token_auth.login_required(optional=True)
+def get_following(id):
+    list_follow = list(db.user.find({"list_follow": id},
+                            {"_id": 1, "display_name": 1, "avatar": 1, "list_follow": 1}))
+    rs=[]
+    for follower in list_follow:
+        follow_dict={"_id": str(follower["_id"]), "display_name": follower["display_name"], "avatar": follower["avatar"], "num_follow": len(follower["list_follow"])}
+        if g.current_token is not None:
+            token = g.current_token.get_token()
+            follow_dict["followed"]=0
+            if str(token.id_user) in follower["list_follow"]:
+                follow_dict["followed"]=1
+        rs.append(follow_dict)
+    return {"following": rs}
+
 if __name__ == "__main__":
     # print(get_user("Araragikoyomioc"))
     pass
