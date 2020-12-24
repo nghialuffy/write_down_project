@@ -18,7 +18,7 @@ export function UserProfilePage() {
             {loading && <LoadingFullView />}
             {user ? <div className='user-detail layout-container'>
                 <div className='user-profile'>
-                    <img src={UserBackground} alt='user-background' className='user-background' />
+                    <img src={user.cover_img} alt='user-background' className='user-background' />
                     <div className='user-info-slot'>
                         {user._id === userContext._id &&
                             <Link to='/setting'>

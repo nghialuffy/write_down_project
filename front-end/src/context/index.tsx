@@ -11,6 +11,7 @@ type UserContextType = {
     logout: () => void
     updateUser: (newInfo: UserInfo) => void
     getFollowingCategories: () => void
+    updateAvatar: (imageURL: string) => void
 }
 
 export const UserContext = React.createContext<UserContextType>({
@@ -22,6 +23,7 @@ export const UserContext = React.createContext<UserContextType>({
     logout: () => undefined,
     updateUser: (newInfo: UserInfo) => undefined,
     getFollowingCategories: () => undefined,
+    updateAvatar: (imageURL: string) => undefined
 });
 
 type StateType = {
@@ -85,6 +87,14 @@ export class UserContextProvider extends React.Component<any, StateType> {
             if (cb) cb();
         });
     }
+    updateAvatar = (imageUrl: string) => {
+        this.setState(prev => {
+            return {
+                ...prev,
+                avatar: imageUrl,
+            }
+        })
+    }
     render() {
         return (
             <UserContext.Provider value={{
@@ -92,6 +102,7 @@ export class UserContextProvider extends React.Component<any, StateType> {
                 updateUser: this.updateUser,
                 logout: this.logout,
                 getFollowingCategories: this.getFollowingCategories,
+                updateAvatar: this.updateAvatar
             }}>
                 {this.props.children}
             </UserContext.Provider >
