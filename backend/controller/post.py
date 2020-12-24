@@ -69,7 +69,7 @@ def get_post(id):
 
 @bp.route('/post/<id>/comment', methods=['GET'])
 @token_auth.login_required(optional=True)
-def get_comment(id):
+def get_cmt(id):
     data = db.post.find_one({"_id": ObjectId(id)}, {"_id": 0, "list_comment": 1})
     post= {"list_comment": []}
     for data_cmt in data["list_comment"]:
