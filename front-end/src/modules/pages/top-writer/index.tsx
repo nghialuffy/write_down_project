@@ -7,7 +7,7 @@ import { TopWriterItem } from './top-writer-item';
 import './style.scss';
 
 export function TopWriterPage() {
-    const { loading, data } = useEntityData<{ data: TopUserType[] }>('topuser/');
+    const { loading, data } = useEntityData<{ data: TopUserType[] }>('topuser');
     return (
         <AppWrap>
             {loading && <LoadingFullView />}

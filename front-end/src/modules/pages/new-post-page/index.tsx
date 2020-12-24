@@ -13,34 +13,23 @@ import { HTTPCodeLabel } from '../../../const';
 export function NewPostPage() {
     const [new_post_form] = Form.useForm();
     let history = useHistory();
-    let [value, setValue] = useState("");
-    let [category, setCategory] = useState(Categories[0].value);
-    let [tags, setTags] = useState([]);
-    let handleCategoryChange = (e: string) => {
-        console.log(e);
-        setCategory(e);
-        console.log(category);
-    }
+    let [content, setContent] = useState("");
+    
     let handleEditorChange = (e: any) => {
-        setValue(e.target.getContent());
-        console.log(value);
+        setContent(e);
     }
-    let handleTagsChange = (value: any) => {
-        setTags(value);
-        console.log(tags);
-    }
+    
     const onFinish = (value: any) => {
         let data = {
             "title": value.title,
-            "content": value.editor.level.content,
+            "content": content,
             "list_hashtag": value.tags,
             "category": value.category,
         };
-        console.log(data);
         DataAccess.Post('post', JSON.stringify(data))
             .then(
                 res => {
-                    if (res) history.push(`/post/${res}`);
+                    if (res) history.push(`/post-detail/${res.data}`);
                     notification.success({
                         message: "Post success!"
                     });
@@ -82,7 +71,7 @@ export function NewPostPage() {
                                 "insertfile undo redo | fontselect fontsizeselect formatselect | forecolor backcolor |bold italic underline "
                                 + "| alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image "
                         }}
-                        onChange={handleEditorChange}
+                        onEditorChange={handleEditorChange}
                     />
                 </Form.Item>
 
@@ -94,8 +83,6 @@ export function NewPostPage() {
                     <Select
                         mode="multiple"
                         placeholder="Please select at least 3 tags"
-
-                        onSelect={handleTagsChange}
                         options={Categories}
                     />
                 </Form.Item>
@@ -105,9 +92,7 @@ export function NewPostPage() {
                     hasFeedback
                 >
                     <Select
-                        options={Categories} style={{ width: 200 }}
-                        // value={category} 
-                        onChange={handleCategoryChange} />
+                        options={Categories} style={{ width: 200 }}/>
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit"  >Submit</Button>

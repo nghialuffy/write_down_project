@@ -1,0 +1,61 @@
+.cover-upload {
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   background: rgba(255, 255, 255, 1);
+   cursor: pointer;
+}
+.hidden {
+   display: none !important;
+}
+.user-detail {
+   margin-top: 10px;
+   display: flex;
+   flex-direction: column;
+   .user-profile {
+       box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.24), 0px 0px 10px rgba(0, 0, 0, 0.12);
+       margin-bottom: 20px;
+       .user-background {
+           width: 100%;
+           max-height: 300px;
+           overflow: hidden;
+       }
+       .user-info-slot {
+           background-color: white;
+           padding: 10px;
+           display: flex;
+           column-gap: 20px;
+           position: relative;
+           .slot-content {
+               justify-content: center;
+               display: flex;
+               flex-direction: column;
+               row-gap: 5px;
+               .slot-content-top {
+                   font-size: 16px;
+                   font-weight: bold;
+                   align-content: center;
+                   .username {
+                       color: #5eabbc;
+                       font-weight: normal;
+                   }
+               }
+               .slot-content-middle {
+                   font-size: 15px;
+               }
+               .slot-content-bottom {
+                   display: flex;
+                   column-gap: 10px;
+                   color: #999;
+               }
+           }
+           .right-btn {
+               position: absolute;
+               top: 10px;
+               right: 10px;
+               width: fit-content;
+           }
+       }
+   }
+}

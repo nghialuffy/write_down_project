@@ -3,7 +3,7 @@ from pymongo import MongoClient
 
 
 bp = Blueprint('api', __name__)
-client = MongoClient('mongodb+srv://pikan:zpldDfKVSo1E6wDK@writedown.xtaf7.mongodb.net/')
+client = MongoClient('mongodb+srv://haihuynh:rb04Oe88i9FpVgG3@cluster0.jlv3c.mongodb.net/test')
 db = client.write_down
 
 from controller.register import *
@@ -15,3 +15,4 @@ from controller.post_of_month import *
 from controller.categories import *
 from controller.notification import *
 from controller.top_user import *
+from controller.search_post import *

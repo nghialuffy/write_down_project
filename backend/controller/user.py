@@ -1,7 +1,8 @@
 from controller import bp, db
 from controller.model import Post, ObjectId
-from flask import g, abort
+from flask import g, abort, request
 from controller.auth import token_auth
+import hashlib
 
 @bp.route('/user/<id>', methods=['GET'])
 @token_auth.login_required(optional=True)
@@ -69,6 +70,65 @@ def unfollow(id):
     if str(token.id_user) not in user["list_follow"]:
         abort(403)
     e=db.user.update_one({"_id": ObjectId(id)}, {"$pull": {"list_follow": str(token.id_user)}})
+    if e.matched_count > 0:
+        return "ok"
+    else:
+        abort(403)
+
+@bp.route('/profile', methods=['PUT'])
+@token_auth.login_required
+def update_profile():
+    try:
+        token = g.current_token.get_token()
+        rq = request.json
+        if not rq:
+            abort(400)
+        update={}
+        if "display_name" in rq:
+            update["display_name"]=rq["display_name"]
+        if "email" in rq:
+            update["email"] = rq["email"]
+        if "avatar" in rq:
+            update["avatar"] = rq["avatar"]
+        if "cover_img" in rq:
+            update["cover_img"] = rq["cover_img"]
+
+        e=db.user.update_one({"_id": token.id_user}, {"$set": update})
+        if e.matched_count > 0:
+            return "ok"
+        else:
+            abort(403)
+    except:
+        abort(403)
+
+@bp.route('/update_password', methods=["PUT"])
+@token_auth.login_required
+def update_password():
+    token = g.current_token.get_token()
+    rq = request.json
+    if not rq or not "old_password" in rq or not "new_password" in rq:
+        abort(400)
+    if db.user.find_one({"_id": token.id_user, "password": hashlib.md5(rq["old_password"].encode('utf-8')).hexdigest()}) is None:
+        abort(405)
+    e=db.user.update_one({"_id": token.id_user}, {"$set": {"password": hashlib.md5(rq["new_password"].encode('utf-8')).hexdigest()}})
+    if e.matched_count > 0:
+        return "ok"
+    else:
+        abort(403)
+
+@bp.route('/user/<id>/ban', methods=['POST'])
+@token_auth.login_required(role="admin")
+def ban(id):
+    e=db.user.update_one({"_id": ObjectId(id)}, {"$set": {"ban": 1}})
+    if e.matched_count > 0:
+        return "ok"
+    else:
+        abort(403)
+
+@bp.route('/user/<id>/unban', methods=['POST'])
+@token_auth.login_required(role="admin")
+def unban(id):
+    e=db.user.update_one({"_id": ObjectId(id)}, {"$set": {"ban": 0}})
     if e.matched_count > 0:
         return "ok"
     else:

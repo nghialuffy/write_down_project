@@ -33,4 +33,22 @@ export const ListPost = {
     ],
     "total_page": 324
 }
-export type ListPost = typeof ListPost;
+export type ListPostType = typeof ListPost;
+
+export const UserPostCard = {
+    "_id": "5fe2ef4593e33abfe3b4ec44",
+        "category": {
+        "_id": "5fe2ef2293e33abfe3b4ec41",
+        "name_category": "English Zone",
+        "url": "english-zone"
+    },
+    "comment": 0,
+    "content": "A few days ago, hundreds of Grab drivers turned off their app (smartphone application) and gathered in Hanoi and Ho Chi Minh City (HCMC) to protest Gr...",
+    "created_date": "Wed, 16 Dec 2020 00:00:00 GMT",
+    "image": "",
+    "time_to_read": 5,
+    "title": "Three grievances against ride-sharing apps: A Vietnamese perspective",
+    "vote": 3
+};
+
+export type UserPostCardType = typeof UserPostCard;

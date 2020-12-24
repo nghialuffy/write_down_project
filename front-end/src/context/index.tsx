@@ -1,23 +1,36 @@
 import React from 'react';
-import {DataAccess} from '../access';
+import { DataAccess } from '../access';
+import { CategoryType, UserType } from '../model';
 
 type UserContextType = {
     _id: string
     displayName: string,
-    avatar: string
+    avatar: string,
+    followUsers: UserType[],
+    followCategories: CategoryType[],
     logout: () => void
-    updateUser: (newInfo: StateType) => void
+    updateUser: (newInfo: UserInfo) => void
 }
 
 export const UserContext = React.createContext<UserContextType>({
     _id: '',
     displayName: '',
     avatar: '',
+    followUsers: [],
+    followCategories: [],
     logout: () => undefined,
-    updateUser: (newInfo: StateType) => undefined
+    updateUser: (newInfo: UserInfo) => undefined
 });
 
 type StateType = {
+    _id: string
+    displayName: string
+    avatar: string
+    followUsers: UserType[],
+    followCategories: CategoryType[],
+}
+
+type UserInfo = {
     _id: string
     displayName: string
     avatar: string
@@ -30,7 +43,9 @@ export class UserContextProvider extends React.Component<any, StateType> {
         this.state = {
             _id: '',
             displayName: '',
-            avatar: ''
+            avatar: '',
+            followUsers: [],
+            followCategories: [],
         };
         if (token) {
             DataAccess.Get('auth').then(res => {
@@ -46,17 +61,23 @@ export class UserContextProvider extends React.Component<any, StateType> {
 
     logout = () => {
         DataAccess.Delete('logout');
-        this.setState({
-            _id: '',
-            displayName: '',
-            avatar: ''
+        this.setState(prev => {
+            return {
+                ...prev,
+                _id: '',
+                displayName: '',
+                avatar: ''
+            }
         });
         localStorage.removeItem('item');
     }
 
-    updateUser = (newInfo: StateType) => {
-        this.setState(newInfo, () => {
-            console.log(this.state);
+    updateUser = (newInfo: UserInfo) => {
+        this.setState(prev => {
+            return {
+                ...prev,
+                ...newInfo,
+            }
         });
     }
     render() {

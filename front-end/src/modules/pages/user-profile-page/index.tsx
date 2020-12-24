@@ -1,22 +1,29 @@
-import React from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { AppWrap, BaseButton, BaseList, LoadingFullView, PostCard, UserAvatar } from '../../../components';
+import React, { useContext } from 'react';
+import { Link, Route, Switch, useParams } from 'react-router-dom';
+import { AppWrap, BaseButton, BaseList, LoadingFullView, PostCard, UserAvatar, UserPostCard } from '../../../components';
 import UserBackground from '../../../assets/user-background.jpg';
 import { useEntityData } from '../../../access';
-import { PostCardType, UserType } from '../../../model';
+import { MiniData, PostCardType, UserPostCardType, UserType } from '../../../model';
 import { Empty } from 'antd';
 import './style.scss';
+import { UserContext } from '../../../context';
+import Item from 'antd/lib/list/Item';
 
 export function UserProfilePage() {
     let { id } = useParams<{ id: string }>();
     const { loading, data: user } = useEntityData<UserType>(`user/${id}`);
+    const userContext = useContext(UserContext);
     return (
         <AppWrap>
             {loading && <LoadingFullView />}
             {user ? <div className='user-detail layout-container'>
                 <div className='user-profile'>
-                    <img src={UserBackground} alt='user-background' className='user-background' />
+                    <img src={user.cover_img} alt='user-background' className='user-background' />
                     <div className='user-info-slot'>
+                        {user._id === userContext._id &&
+                            <Link to='/setting'>
+                                <BaseButton type='primary' className='right-btn'>Edit</BaseButton>
+                            </Link>}
                         <UserAvatar data={user} size='large' />
                         <div className='slot-content'>
                             <div className='slot-content-top'>
@@ -29,9 +36,15 @@ export function UserProfilePage() {
                             </div>
                         </div>
                     </div>
+                    <div className='user-profile-router'>
+                        
+                    </div>
                 </div>
-                {user.list_post.length > 0 && 
-                    <BaseList<PostCardType> data={user.list_post as any} Item={PostCard} className='list-post'/>
+                {user.list_post.length > 0 &&
+                    <BaseList<UserPostCardType & {user: MiniData}> 
+                        data={user.list_post.map(item => { return {...item, user: {_id: user._id, avatar: user.avatar}}}) as any} 
+                        Item={UserPostCard} 
+                        className='list-post' />
                 }
             </div> : <Empty description='Sorry, something went wrong!' />}
         </AppWrap>
