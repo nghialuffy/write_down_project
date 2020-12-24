@@ -19,7 +19,7 @@ export function BaseTag({
 } : BaseTagProps) {
     return (
         <Link className={['base-tag', type, className].filter(Boolean).join(' ')}
-            to={`/posts-tags/${value}`}
+            to={`/posts/tags/${value}`}
             {...containerProps}
             >
             {label}

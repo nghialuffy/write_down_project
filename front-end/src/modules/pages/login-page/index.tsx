@@ -1,13 +1,12 @@
-import { Form, Input, Button, notification } from 'antd';
-import React, { useContext} from 'react';
+import { Form, Input, Button, Checkbox, notification } from 'antd';
+import React, { useState } from 'react';
+import { AppWrap } from '../../../components';
 import { useHistory } from 'react-router-dom';
 import logo from './../../../assets/logo.png'
 import { DataAccess } from '../../../access';
 import { HTTPCodeLabel } from '../../../const';
-import { UserContext } from '../../../context';
 
 export function LoginPage () {
-    const userContext = useContext(UserContext)
     const [login_form] = Form.useForm();
     let history = useHistory();
     const layout = {
@@ -18,20 +17,15 @@ export function LoginPage () {
         wrapperCol: { offset: 8, span: 16 },
     };
     const onFinish = (values: any) => {
-        console.log('value', JSON.stringify(values));
-        DataAccess.Post('login ', JSON.stringify(values)).then(res => {            
+        DataAccess.Post('login ', JSON.stringify(values)).then(res => {
             if (res) history.push("/");
             localStorage.setItem('token', res.data?.token);
-            userContext.updateUser({
-                _id: res.data._id,
-                avatar: res.data.avatar,
-                displayName: res.data.display_name
-            });
             notification.success({
                 message: "Login successfully!"
             })
         })
         .catch(e => {
+            
             notification.error({
             message: "Error",
             description: e.response ? `[${e.response.status}] ${HTTPCodeLabel(e.response.status)}` : `[${500}] ${HTTPCodeLabel('500')}`

@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MiniData } from '../../model';
 import './style.scss';
+
+type MiniData = {
+    _id: string;
+    avatar?: string
+}
 
 type UserAvatarProps <T extends MiniData> = {
     data: T

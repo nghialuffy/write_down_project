@@ -21,8 +21,7 @@ def get_post_of_month():
         if(query!=None):
             list_post = list(query)
         res_post = {}
-        list_res = []
-        for post in list_post:
+        for count, post in enumerate(list_post):
             temp_post = {
                 "_id" : str(post["_id"]),
                 "created_date" : post["created_date"],
@@ -30,8 +29,7 @@ def get_post_of_month():
                 "title" : post["title"],
                 "url_post" : post["url_post"]
             }
-            list_res.append(temp_post)
-        res_post["data"] = list_res
+            res_post[str(count)] = temp_post
         return res_post
     except Exception as exc:
         abort(403)

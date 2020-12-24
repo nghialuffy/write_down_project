@@ -1,16 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { BaseButton, UserAvatar } from '../../../../components';
-import { TopUserType } from '../../../../model';
-import './style.scss';
+import { UserAvatar } from '../../../../components';
 
-export function TopWriterItem({data} : {data: TopUserType}) {
+export function TopWriterItem() {
     return (
-        <Link className='top-writer-item' to={`profile/${data._id}`}>
-            <UserAvatar data={data} />
-            <div className='display-name'>
-                {data.display_name}
-            </div>
-        </Link>
+        <div className='top-writer-item'>
+            
+        </div>
     )
 }

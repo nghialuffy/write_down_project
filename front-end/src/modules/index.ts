@@ -26,7 +26,7 @@ export function setup(module: Module) {
         component: CategoryPage,
     });
     module.route({
-        path: '/posts-tags/:topic',
+        path: '/posts/tags/:topic',
         exact: true,
         component: TopicPage,
     });
@@ -71,12 +71,12 @@ export function setup(module: Module) {
         component: CategoryPage,
     });
     module.route({
-        path: '/all/:type',
+        path: '/:type',
         exact: false,
         component: HomePage,
     });
     module.route({
-        path: '/post-detail/:postId',
+        path: '/post/detail/:id',
         exact: false,
         component: PostDetailPage,
     });

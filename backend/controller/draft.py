@@ -37,12 +37,9 @@ def get_draft(id):
         if token.id_user != data["created_by"]:
             abort(405)
 
-        category=db.category.find_one({"_id": data["category"]}, {"_id": 1, "name_category": 1, "url": 1})
-
         draft = {"title": data["title"], "content": data["content"], "created_date": data["created_date"],
                  "list_hashtag": data["list_hashtag"],
-                 "category": {"_id": str(category["_id"]), "name_category": category["name_category"],
-                          "url": category["url"]}}
+                 "category": db.category.find_one({"_id": data["category"]}, {"_id": 0, "name_category": 1, "url": 1})}
 
         return draft
     except:

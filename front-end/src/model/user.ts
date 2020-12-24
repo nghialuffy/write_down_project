@@ -76,21 +76,3 @@ export const defaultUser = {
 }
 
 export type UserType = typeof defaultUser;
-
-export const topUser = {
-    "_id": "5fb23496685674ae279f0e24",
-    "avatar": "https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-xs-avatar/549da160f73711eaa3740de1963a09bb.jpg",
-    "bio": "♬♪♫ ♬♪♫♬♪♫♪♩♫♪",
-    "cover_img": "https://s3-ap-southeast-1.amazonaws.com/images.spiderum.com/sp-cover/558b7ef0cc0c11e98333537ccdd8d8e6.jpg",
-    "display_name": "Trà Kha",
-    "email": "",
-    "link_facebook": "",
-    "username": "inrajakha"
-};
-
-export type TopUserType = typeof topUser;
-
-export type MiniData = {
-    _id: string;
-    avatar?: string
-}

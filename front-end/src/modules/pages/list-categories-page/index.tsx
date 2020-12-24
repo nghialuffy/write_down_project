@@ -1,22 +1,17 @@
-import { Empty } from 'antd';
-import React, { useContext } from 'react';
-import { useEntityData } from '../../../access';
-import { AppWrap, BaseList, LoadingFullView } from '../../../components';
-import { UserContext } from '../../../context';
-import { CategoryType, ListCategoryType } from '../../../model';
+import React from 'react';
+import { AppWrap, BaseList } from '../../../components';
+import { UserCategory } from '../../../constants';
 import { CategoryItem } from './category-item';
 import './style.scss';
 
 export function ListCategoriesPage() {
-    const {loading, data, status} = useEntityData<ListCategoryType>('categories/');
     return (
         <AppWrap>
-            {loading && <LoadingFullView size='large'/>}
-            {data ? <BaseList<CategoryType> 
-                data={data.data as any} 
-                Item={CategoryItem} 
+            <BaseList<typeof UserCategory[0]> 
+                data={UserCategory} 
+                Item={CategoryItem as any} 
                 className='list-categories layout-container'
-            /> : <Empty description='Sorry,something went wrong!' />}
+            />
         </AppWrap>
     )
 }

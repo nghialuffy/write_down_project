@@ -18,17 +18,6 @@ def get_content_post(data):
         print("Error: " + exc)
     return res
 
-def get_image_url(data):
-    res = ""
-    try:
-        soup = BeautifulSoup(data, "lxml")
-        img_soup = soup.find("img")
-        if img_soup is not None:
-            res = img_soup.get_attribute_list("src")[0]
-    except Exception as exc:
-        print("Error: " + exc)
-    return res
-
 def get_userid_from_token(token):
     res = ""
     try:
@@ -40,7 +29,6 @@ def get_userid_from_token(token):
     except Exception as exc:
         print("Error" + exc)
     return res
-
 @bp.route('/categories/', defaults={'_id' : None})
 @bp.route('/categories/<_id>', methods=['GET'])
 @token_auth.login_required(optional=True)
@@ -77,27 +65,6 @@ def get_categories(_id):
     except Exception as exc:
         print(exc)
     abort(403)
-
-# Get list category ma user follow
-@bp.route('/categories/user/<_id>', methods=['GET'])
-@token_auth.login_required(optional=True)
-def get_category_user_follow(_id):
-    try:
-        user = db["user"].find_one({"_id" : ObjectId(_id)})
-        if user != None:
-            list_id_category = user["list_category"]
-            res_category = []
-            for id_category in list_id_category:
-                temp_category = db["category"].find_one({"_id": ObjectId(id_category)})
-                if(temp_category!=None):
-                    temp_category["_id"] = str(temp_category["_id"])
-                    res_category.append(temp_category)
-            return {"data" : res_category}
-    except Exception as exc:
-        print(f"Error {exc}")
-        abort(403)
-
-
 
 @bp.route('/s/all/hot', methods=['GET'])
 @token_auth.login_required(optional=True)
@@ -138,7 +105,7 @@ def get_hot_post_unverified():
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : ""
                 })
         return res
         
@@ -185,7 +152,7 @@ def get_new_post_unverified():
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : ""
                 })
         return res
         
@@ -263,7 +230,7 @@ def get_controversial_post_unverified():
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : ""
                 })
         return res
         
@@ -310,7 +277,7 @@ def get_top_post_unverified():
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : ""
                 })
         return res
         
@@ -367,7 +334,7 @@ def get_category_hot(category_name):
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : ""
                 })
         return res
 
@@ -423,7 +390,7 @@ def get_category_new(category_name):
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : ""
                 })
         return res
 
@@ -515,7 +482,7 @@ def get_category_controversial(category_name):
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : ""
                 })
         return res
     except Exception as exc:
@@ -570,7 +537,7 @@ def get_category_top(category_name):
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : ""
                 })
         return res
 
@@ -629,7 +596,7 @@ def get_category_hot_verified(category_name):
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : ""
                 })
         return res
 
@@ -686,7 +653,7 @@ def get_category_new_verified(category_name):
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : ""
                 })
         return res
 
@@ -779,7 +746,7 @@ def get_category_controversial_verified(category_name):
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : ""
                 })
         return res
     except Exception as exc:
@@ -834,41 +801,11 @@ def get_category_top_verified(category_name):
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : ""
                 })
         return res
 
     except Exception as exc:
-        abort(403)
-
-@bp.route('/categories/<category_name>/follow', methods=['POST'])
-@token_auth.login_required
-def follow_category(category_name):
-    token = g.current_token.get_token()
-    try:
-        category=db.category.find_one({"url": category_name})
-        e = db.user.update_one({"_id": token.id_user}, {"$push": {"list_category": category["_id"]}})
-        if e.matched_count > 0:
-            return "ok"
-        else:
-            abort(403)
-    except:
-        abort(403)
-
-@bp.route('/categories/<category_name>/unfollow', methods=['POST'])
-@token_auth.login_required
-def unfollow_category(category_name):
-    token = g.current_token.get_token()
-    try:
-        category = db.category.find_one({"url": category_name})
-        e = db.user.update_one({"_id": token.id_user}, {"$pull": {"list_category": category["_id"]}})
-        if e.matched_count > 0:
-            return "ok"
-        else:
-            abort(403)
-    except:
-        abort(403)
-
-
+        abort(403) 
 if __name__ == "__main__":
     print()

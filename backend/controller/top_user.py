@@ -8,7 +8,7 @@ import pymongo
 from bs4 import BeautifulSoup
 
 
-@bp.route('/topuser', methods=['GET'])
+@bp.route('/topuser/', methods=['GET'])
 @token_auth.login_required(optional=True)
 def get_top_user():
     try:

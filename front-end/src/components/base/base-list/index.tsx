@@ -1,5 +1,4 @@
 
-import { Empty } from 'antd';
 import React from 'react';
 import './style.scss';
 
@@ -16,9 +15,6 @@ export function BaseList<T extends {_id: string}>({
 }: BaseListProps<T>) {
     const renderItem = () => {
         return data.map((item) => <Item data={item} key={item._id} />);
-    }
-    if (data.length === 0) {
-        return <Empty description='No data'/>
     }
     return (
         <div className={['base-list', className].filter(Boolean).join(' ')}>{renderItem()}</div>

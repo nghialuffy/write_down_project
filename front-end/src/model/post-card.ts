@@ -10,7 +10,6 @@ export const defaultPostCard = {
     "views": 20069,
     "vote": 9,
     "url_image": "",
-    "is_voted": 1
 };
 
 export type PostCardType = typeof defaultPostCard;
@@ -29,29 +28,9 @@ export const ListPost = {
             "title": "Những giọng ca ấn tượng trong cộng đồng indie",
             "url_image": "",
             "views": 4746,
-            "vote": 42,
-            "is_voted": -1
+            "vote": 42
         }
     ],
     "total_page": 324
 }
-export type ListPostType = typeof ListPost;
-
-export const UserPostCard = {
-    "_id": "5fe2ef4593e33abfe3b4ec44",
-        "category": {
-        "_id": "5fe2ef2293e33abfe3b4ec41",
-        "name_category": "English Zone",
-        "url": "english-zone"
-    },
-    "comment": 0,
-    "content": "A few days ago, hundreds of Grab drivers turned off their app (smartphone application) and gathered in Hanoi and Ho Chi Minh City (HCMC) to protest Gr...",
-    "created_date": "Wed, 16 Dec 2020 00:00:00 GMT",
-    "image": "",
-    "time_to_read": 5,
-    "title": "Three grievances against ride-sharing apps: A Vietnamese perspective",
-    "vote": 3,
-    "voted_user": 1
-};
-
-export type UserPostCardType = typeof UserPostCard;
+export type ListPost = typeof ListPost;

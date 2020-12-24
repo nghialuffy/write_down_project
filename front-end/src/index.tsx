@@ -2,15 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import 'antd/dist/antd.css';
-import { RootApplication } from './App';
+import {RootApplication} from './App';
 import reportWebVitals from './reportWebVitals';
-import { UserContextProvider } from './context';
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserContextProvider>
-      <RootApplication />
-    </UserContextProvider>
+    <RootApplication />
   </React.StrictMode>,
   document.getElementById('root')
 );

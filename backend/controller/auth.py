@@ -20,8 +20,6 @@ def verify_password(username, password):
     user = db.user.find_one({"username": username, "password": hashlib.md5(password.encode('utf-8')).hexdigest()})
     if user is None:
         return False
-    if user["ban"]==1:
-        return False
     g.current_token = Token(user['_id'])
     return True
 
@@ -40,9 +38,3 @@ def verify_token(id_token):
 @token_auth.error_handler
 def token_auth_error():
     return abort(401)
-
-
-@token_auth.get_user_roles
-def get_user_roles(user):
-    token = g.current_token.get_token()
-    return db.user.find_one({"_id": token.id_user}, {"_id": 0, "role": 1})["role"]

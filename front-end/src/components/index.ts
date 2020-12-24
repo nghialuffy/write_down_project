@@ -10,4 +10,3 @@ export * from './app-wrap';
 export * from './menu-side-bar';
 export * from './style-components';
 export * from './side-bar-right';
-export * from './comment';
