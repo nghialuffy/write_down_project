@@ -14,10 +14,8 @@ import {
 import { UserAvatar } from '../user-avatar';
 import './style.scss';
 import { BaseButton, BaseDropDown } from '../base';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Categories } from '../../constants';
-import { DataAccess, useEntityData } from '../../access';
-import { LoadingFullView } from '../loading';
 import { UserContext } from '../../context';
 import { CategoryType } from '../../model';
 const { SubMenu } = Menu;
@@ -30,8 +28,9 @@ type UserInfo = {
 }
 
 export const Header = () => {
+    const history = useHistory();
     const SearchHandler = (value: string) => {
-        console.log('text search', value);
+        history.push(`/search/${value}`);
     }
 
     const userContext = useContext(UserContext);

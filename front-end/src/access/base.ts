@@ -6,7 +6,7 @@ const headers = {
     'accept': "*/*",
     "Access-Control-Allow-Origin": '*'
 }
-const BASE_URL = 'http://192.168.1.140:9999';
+const BASE_URL = 'http://103.113.83.246:8006';
 
 const CLOUD_NAME = 'dj5xafymg';
 const APIPost = async (url: string, data?: string) => {
