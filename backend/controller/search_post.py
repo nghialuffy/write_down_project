@@ -56,7 +56,8 @@ def search_post_by_title():
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : get_image_url(str(list_post[index_page]["content"])),
+                    "is_voted" : is_voted
                 })
             return res
     except Exception as exc:
