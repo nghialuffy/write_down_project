@@ -188,6 +188,10 @@ def get_following(id):
 @bp.route('/listuser/<page>')
 @token_auth.login_required(role="admin")
 def get_list_user(page):
+    if page!=None and page.isnumeric():
+        page=int(page)
+    else:
+        abort(403)
     if page<=0:
         abort(403)
     try:
