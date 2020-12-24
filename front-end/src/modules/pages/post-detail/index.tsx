@@ -1,5 +1,5 @@
 import React from 'react';
-import {UpOutlined, DownOutlined, MessageOutlined, EyeOutlined} from '@ant-design/icons';
+import {CaretUpOutlined, CaretDownOutlined, MessageOutlined, EyeOutlined} from '@ant-design/icons';
 import { Link, useParams } from 'react-router-dom';
 import { useEntityData } from '../../../access';
 import { PostDetailType } from '../../../model';
@@ -19,17 +19,8 @@ export function PostDetailPage() {
         <AppWrap>
             {loading && <LoadingFullView />}
             {data ? <div className='layout-container post-detail-layout'>
-                <div className='left-content list-tools'>
-                    <div className='tool'>
-                        <UpOutlined />
-                        {data.vote}
-                        <DownOutlined />
-                    </div>
-                    <div className='tool'>
-                        <EyeOutlined/>
-                        {data.views}
-                    </div>
-                    <div className='tool'></div>
+                <div className='left-content'>
+                    <ListTool />
                 </div>
                 <div className='main-content post-detail'>
                     <div className='post-info'>

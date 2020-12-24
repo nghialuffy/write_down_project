@@ -4,7 +4,7 @@ export const CategoryImage = {
     argument: require('./category-image/argument.png'),
     books: require('./category-image/book.jpg'),
     comics: require('./category-image/comic.jpg'),
-    english_zone: require('./category-image/english.jpg'),
+    'english-zone': require('./category-image/english.jpg'),
     film: require('./category-image/film.jpg'),
     game: require('./category-image/game.jpg'),
     music: require('./category-image/music.jpg'),
@@ -12,7 +12,7 @@ export const CategoryImage = {
     skill: require('./category-image/skill.jpg'),
     sport: require('./category-image/sport.jpg'),
     talk: require('./category-image/talk.jpeg'),
-    traveling_food: require('./category-image/travel_food.jpg')
+    'traveling-food': require('./category-image/travel_food.jpg')
 }
 
 const IconFire = () => (
