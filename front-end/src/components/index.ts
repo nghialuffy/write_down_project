@@ -11,3 +11,4 @@ export * from './menu-side-bar';
 export * from './style-components';
 export * from './side-bar-right';
 export * from './comment';
+export * from './editor';
