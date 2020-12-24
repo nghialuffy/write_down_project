@@ -94,6 +94,10 @@ def update_profile():
             update["cover_img"] = rq["cover_img"]
         if "bio" in rq:
             update["bio"] = rq["bio"]
+        if "sex" in rq:
+            update["sex"]=rq["sex"]
+        if "birthday" in rq:
+            update["birthday"]=rq["birthday"]
 
         e=db.user.update_one({"_id": token.id_user}, {"$set": update})
         if e.matched_count > 0:
