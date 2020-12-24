@@ -185,6 +185,23 @@ def get_following(id):
         rs.append(follow_dict)
     return {"following": rs}
 
+@bp.route('/listuser/<page>')
+@token_auth.login_required(role="admin")
+def get_list_user(page):
+    if page<=0:
+        abort(403)
+    try:
+        if int(page)==0:
+            list_user=list(db.user.find({}, {"_id": 1, "display_name": 1, "username": 1, "avatar": 1}).limit(20))
+        else:
+            list_user = list(db.user.find({}, {"_id": 1, "display_name": 1, "username": 1, "avatar": 1}).skip(
+                (int(page) - 1) * 20).limit(20))
+        for user in list_user:
+            user["_id"]=str(user["_id"])
+        return {"list_user": list_user}
+    except:
+        abort(403)
+
 if __name__ == "__main__":
     # print(get_user("Araragikoyomioc"))
     pass

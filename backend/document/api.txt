@@ -103,6 +103,9 @@ GET:
 
     foryou
 
+    listuser/<page>
+        page>0. Cần token của admin
+
 POST:
     post      Đăng bài. Mẫu như file post.json. Cần có token.
         Trả về url post nếu thành công
