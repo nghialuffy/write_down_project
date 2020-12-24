@@ -408,3 +408,4 @@ def vote_cmt(id):
 if __name__ == "__main__":
     post = Post(db.post.find_one({"_id": ObjectId("5fe243e2bc62d295137ead37")}))
     print(post.created_date)
+    

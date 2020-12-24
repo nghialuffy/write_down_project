@@ -7,7 +7,7 @@ from bson.objectid import ObjectId
 import pymongo
 from bs4 import BeautifulSoup
 import re
-from controller.categories import get_content_post, get_image_url
+from controller.categories import get_content_post, get_image_url, get_userid_from_token
 
 @bp.route('/search', methods=['GET'])
 @token_auth.login_required(optional=True)
