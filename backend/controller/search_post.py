@@ -27,7 +27,7 @@ def search_post_by_title():
             "title" : {
                 "$regex": str(processed_query),
                 "$options" :'i'
-            }})
+            }}).skip(int(page-1)*20).limit(20)
         if(list_post == None):
             return {"data" : []}
         else:
@@ -38,9 +38,7 @@ def search_post_by_title():
                 "current_page" : page ,
                 "total_page" : max_post
             }
-            for index_page in range((page-1)*20, page*20):
-                if(index_page >= len(list_post)):
-                    break
+            for index_page in range(0, len(list_post)):
                 is_voted = 0
                 if user_id != None:
                     if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:

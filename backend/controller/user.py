@@ -27,7 +27,6 @@ def get_user(id):
                     if not haveSwap:
                         break
             followings = len(list(db.user.find({"list_follow": user["_id"]})))
-
             rs={
                         "_id" : str(user["_id"]),
                         "username": user["username"],
@@ -50,7 +49,8 @@ def get_user(id):
                     rs["followed"] = 0
 
             return rs
-    except:
+    except Exception as exc:
+        print(f"Error : {exc}")
         abort(403)
 
 
@@ -196,12 +196,13 @@ def get_list_user(page):
         abort(403)
     try:
         if int(page)==0:
-            list_user=list(db.user.find({}, {"_id": 1, "display_name": 1, "username": 1, "avatar": 1}).limit(20))
+            list_user=list(db.user.find({}, {"_id": 1, "display_name": 1, "username": 1, "avatar": 1, "ban" : 1}).limit(20))
         else:
-            list_user = list(db.user.find({}, {"_id": 1, "display_name": 1, "username": 1, "avatar": 1}).skip(
+            list_user = list(db.user.find({}, {"_id": 1, "display_name": 1, "username": 1, "avatar": 1, "ban" : 1}).skip(
                 (int(page) - 1) * 20).limit(20))
         for user in list_user:
             user["_id"]=str(user["_id"])
+            user["ban"]=int(user["ban"])
         return {"list_user": list_user}
     except:
         abort(403)
