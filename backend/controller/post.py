@@ -178,6 +178,7 @@ def delete_post(id):
         for id_draft in post.edit_history:
             db.draft.delete_one({"_id": id_draft})
 
+        db.user.update_one({"_id": post.created_by}, {"$pull": {"list_post": ObjectId(id)}})
         db.post.delete_one({"_id": ObjectId(id)})
         return "ok"
     except:
