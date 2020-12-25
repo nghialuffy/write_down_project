@@ -4,6 +4,7 @@
     padding: 20px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
+    position: relative;
     .post-card-info {
         margin-bottom: 10px;
         position: relative;
@@ -81,6 +82,16 @@
                 column-gap: 5px;
             }
         } 
+    }
+    .btn-delete {
+        color: red;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        font-size: 20px;
+    }
+    .btn-delete:hover {
+        font-size: 22px;
     }
 }
 .ant-spin-spinning.item-loading {

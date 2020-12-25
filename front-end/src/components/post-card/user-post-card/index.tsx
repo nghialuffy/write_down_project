@@ -5,13 +5,17 @@ import { UserAvatar } from '../..';
 import { DataAccess } from '../../../access';
 import { UserContext } from '../../../context';
 import { MiniData, UserPostCardType } from '../../../model';
-import { CaretUpOutlined, CaretDownOutlined, CommentOutlined } from '@ant-design/icons';
+import { CaretUpOutlined, CaretDownOutlined, CommentOutlined, DeleteOutlined} from '@ant-design/icons';
+import { notification, Tooltip } from 'antd';
+import { HTTPCodeLabel } from '../../../const';
 
 export function UserPostCard({ data }: { data: UserPostCardType & { user: MiniData } }) {
     const userContext = useContext(UserContext);
     const history = useHistory();
     const [status, setStatus] = useState(data.voted_user ?? 0);
     const [voteNumber, setVoteNumber] = useState(data.vote);
+    const [deleted, setDeleted] = useState(false);
+
     const voteHandler = (action: 'up' | 'down') => {
         if (!userContext._id) {
             history.push('/login');
@@ -51,7 +55,20 @@ export function UserPostCard({ data }: { data: UserPostCardType & { user: MiniDa
             }
         }
     }
-    return (
+    const deleteHandler = () => {
+        DataAccess.Delete(`post/${data._id}`).then(() => {
+            notification.success({
+                message: "Xóa bài thành công!"
+            });
+            setDeleted(true);
+        }).catch((e) => {
+            notification.error({
+                message: "Error",
+                description: e.response ? `[${e.response.status}] ${HTTPCodeLabel(e.response.status)}` : `[${500}] ${HTTPCodeLabel('500')}`
+            })
+        });
+    }
+    return !deleted ? (
         <div className='post-card'>
             <div className='post-card-info'>
                 <UserAvatar data={data.user} />
@@ -97,6 +114,11 @@ export function UserPostCard({ data }: { data: UserPostCardType & { user: MiniDa
                     </div>
                 </div>
             </div>
+            {userContext._id === data.user._id && 
+                <Tooltip title='Xóa bài'>
+                    <DeleteOutlined className='btn-delete' onClick={deleteHandler}/>
+                </Tooltip>
+            }
         </div>
-    );
+    ): null;
 }
