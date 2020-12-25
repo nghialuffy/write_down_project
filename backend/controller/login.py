@@ -13,6 +13,21 @@ def login():
     except:
         abort(403)
 
+
+@bp.route('/loginadmin', methods=['POST'])
+@basic_auth.login_required()
+def login_admin():
+    token = g.current_token.get_token()
+    try:
+        user=db.user.find_one({"_id": token.id_user}, {"_id": 1, "username": 1, "display_name": 1, "avatar": 1, "role":1})
+        if user["role"]=="admin":
+            return {'token': token._id, "_id": str(user["_id"]), "username": user["username"],
+                    "display_name": user["display_name"], "avatar": user["avatar"]}
+        else:
+            abort(401)
+    except:
+        abort(401)
+
 @bp.route('/logout', methods=['DELETE'])
 @token_auth.login_required
 def logout():
