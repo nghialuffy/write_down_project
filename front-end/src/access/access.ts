@@ -11,7 +11,7 @@ export type UseEntityData<T> = {
 
 export function useEntityData<T>(url: string | undefined, keyUpdate?: any, defaultData?: T): UseEntityData<T> {
     let [data, setData] = useState<T>();
-    const [loading, setLoading] = useState(defaultData ? false : true);
+    const [loading, setLoading] = useState(true);
     const [errorStatus, setStatus] = useState<HTTP_STATUS_CODE>('200');
 
     const reload = () => {
@@ -38,9 +38,6 @@ export function useEntityData<T>(url: string | undefined, keyUpdate?: any, defau
     }, [url]);
 
     useEffect(() => {
-        if (defaultData) {
-            setData(defaultData);
-        }
         if (url) {
             fetchUser();
         } else {
@@ -61,7 +58,7 @@ export type UseEntityDataList<T> = {
 
 export function useEntityDataList<T>(url: string | undefined, page?: number, textSearch?: string): UseEntityDataList<T> {
     let [data, setData] = useState<T>();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [errorStatus, setStatus] = useState<HTTP_STATUS_CODE>('200');
 
     const fetchUser = useCallback(async () => {

@@ -7,7 +7,7 @@ from bson.objectid import ObjectId
 import pymongo
 from bs4 import BeautifulSoup
 import re
-from controller.categories import get_content_post, get_image_url
+from controller.categories import get_content_post, get_image_url, get_userid_from_token
 
 @bp.route('/search', methods=['GET'])
 @token_auth.login_required(optional=True)
@@ -27,7 +27,7 @@ def search_post_by_title():
             "title" : {
                 "$regex": str(processed_query),
                 "$options" :'i'
-            }})
+            }}).skip(int(page-1)*20).limit(20)
         if(list_post == None):
             return {"data" : []}
         else:
@@ -38,9 +38,7 @@ def search_post_by_title():
                 "current_page" : page ,
                 "total_page" : max_post
             }
-            for index_page in range((page-1)*20, page*20):
-                if(index_page >= len(list_post)):
-                    break
+            for index_page in range(0, len(list_post)):
                 is_voted = 0
                 if user_id != None:
                     if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
@@ -56,7 +54,8 @@ def search_post_by_title():
                     "vote" : list_post[index_page]["vote"],
                     "views" : list_post[index_page]["views"],
                     "comments" : len(list_post[index_page]["list_comment"]),
-                    "url_image" : get_image_url(str(list_post[index_page]["content"]))
+                    "url_image" : get_image_url(str(list_post[index_page]["content"])),
+                    "is_voted" : is_voted
                 })
             return res
     except Exception as exc:

@@ -103,6 +103,7 @@ export const Header = () => {
 
 function HeaderSideBar({ user }: { user: any }) {
     const [showSideBar, setShowSideBar] = useState(false);
+    const userContext = useContext(UserContext);
     return (
         <div className='header-side-bar'>
             <BaseButton type='primary' onClick={(e) => {
@@ -113,10 +114,10 @@ function HeaderSideBar({ user }: { user: any }) {
                 defaultSelectedKeys={['home']}
                 mode="inline"
                 theme="light"
-                inlineCollapsed={showSideBar}
+                inlineCollapsed={!showSideBar}
             >
                 <Menu.Item key="home" icon={<HomeOutlined />}>
-                    <Link to='/hot'>Trang chủ</Link>
+                    <Link to='/'>Trang chủ</Link>
                 </Menu.Item>
                 <SubMenu key="catigories" icon={<ShopOutlined />} title="Tất cả chủ đề">
                     {Categories.map(item =>
@@ -129,7 +130,7 @@ function HeaderSideBar({ user }: { user: any }) {
                     <Menu.Item key="profile" icon={<UserOutlined />}>
                         <Link to={`/profile/${user._id}`}>Trang cá nhân</Link>
                     </Menu.Item>
-                    <Menu.Item key="log-out" icon={<LogoutOutlined />}>
+                    <Menu.Item key="log-out" icon={<LogoutOutlined />} onClick={userContext.logout}>
                         Đăng xuất
                 </Menu.Item>
                 </> :

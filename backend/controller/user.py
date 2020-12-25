@@ -16,8 +16,17 @@ def get_user(id):
                 for id_post in user["list_post"]:
                     post = Post(db.post.find_one({"_id": id_post}))
                     list_post.append(post.get_mini_post(get_username=False))
+                for i in range(len(list_post)-1):
+                    haveSwap = False
+                    for j in range(len(list_post)-i-1):
+                        if list_post[j]["created_date"] < list_post[j+1]["created_date"]:
+                            temp=list_post[j]
+                            list_post[j]=list_post[j+1]
+                            list_post[j+1]=temp
+                            haveSwap = True
+                    if not haveSwap:
+                        break
             followings = len(list(db.user.find({"list_follow": user["_id"]})))
-
             rs={
                         "_id" : str(user["_id"]),
                         "username": user["username"],
@@ -40,7 +49,8 @@ def get_user(id):
                     rs["followed"] = 0
 
             return rs
-    except:
+    except Exception as exc:
+        print(f"Error : {exc}")
         abort(403)
 
 
@@ -140,6 +150,61 @@ def unban(id):
     if e.matched_count > 0:
         return "ok"
     else:
+        abort(403)
+
+@bp.route('/user/<id>/follower', methods=['GET'])
+@token_auth.login_required(optional=True)
+def get_follower(id):
+    user = db.user.find_one({"_id": ObjectId(id)},
+                            {"_id": 0, "list_follow": 1})
+    rs=[]
+    for follower_id in user["list_follow"]:
+        follower=db.user.find_one({"_id": ObjectId(follower_id)}, {"_id": 1, "display_name": 1, "avatar": 1, "list_follow": 1})
+        follow_dict={"_id": str(follower["_id"]), "display_name": follower["display_name"], "avatar": follower["avatar"], "num_follow": len(follower["list_follow"])}
+        if g.current_token is not None:
+            token = g.current_token.get_token()
+            follow_dict["followed"]=0
+            if str(token.id_user) in follower["list_follow"]:
+                follow_dict["followed"]=1
+        rs.append(follow_dict)
+    return {"follower": rs}
+
+@bp.route('/user/<id>/following', methods=['GET'])
+@token_auth.login_required(optional=True)
+def get_following(id):
+    list_follow = list(db.user.find({"list_follow": id},
+                            {"_id": 1, "display_name": 1, "avatar": 1, "list_follow": 1}))
+    rs=[]
+    for follower in list_follow:
+        follow_dict={"_id": str(follower["_id"]), "display_name": follower["display_name"], "avatar": follower["avatar"], "num_follow": len(follower["list_follow"])}
+        if g.current_token is not None:
+            token = g.current_token.get_token()
+            follow_dict["followed"]=0
+            if str(token.id_user) in follower["list_follow"]:
+                follow_dict["followed"]=1
+        rs.append(follow_dict)
+    return {"following": rs}
+
+@bp.route('/listuser/<page>')
+@token_auth.login_required(role="admin")
+def get_list_user(page):
+    if page!=None and page.isnumeric():
+        page=int(page)
+    else:
+        abort(403)
+    if page<=0:
+        abort(403)
+    try:
+        if int(page)==0:
+            list_user=list(db.user.find({}, {"_id": 1, "display_name": 1, "username": 1, "avatar": 1, "ban" : 1}).limit(20))
+        else:
+            list_user = list(db.user.find({}, {"_id": 1, "display_name": 1, "username": 1, "avatar": 1, "ban" : 1}).skip(
+                (int(page) - 1) * 20).limit(20))
+        for user in list_user:
+            user["_id"]=str(user["_id"])
+            user["ban"]=int(user["ban"])
+        return {"list_user": list_user}
+    except:
         abort(403)
 
 if __name__ == "__main__":

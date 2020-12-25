@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { CaretUpOutlined, CaretDownOutlined, EyeOutlined, CommentOutlined } from '@ant-design/icons';
 import { DataAccess, useEntityData } from '../../../../access';
 import { PostDetailType } from '../../../../model';
@@ -11,9 +11,15 @@ export function ListTool() {
     const userContext = useContext(UserContext);
     const history = useHistory();
     const {loading, data} = useEntityData<PostDetailType>(`post/${postId}`);
-    const [voteStatus, setStatus] = useState(data?.is_voted ?? 0);
-    const [voteNumber, setVoteNumber] = useState(data?.vote ?? 0);
-
+    const [voteStatus, setStatus] = useState(0);
+    const [voteNumber, setVoteNumber] = useState(0);
+    useEffect(() => {
+        if (data) {
+            setStatus(data.is_voted);
+            setVoteNumber(data.vote);
+        }
+    },[data])
+    
     const voteHandler = (action: 'up' | 'down') => {
         if (!userContext._id) {
             history.push('/login');

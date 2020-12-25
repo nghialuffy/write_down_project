@@ -69,7 +69,7 @@ def get_post(id):
 
 @bp.route('/post/<id>/comment', methods=['GET'])
 @token_auth.login_required(optional=True)
-def get_comment(id):
+def get_cmt(id):
     data = db.post.find_one({"_id": ObjectId(id)}, {"_id": 0, "list_comment": 1})
     post= {"list_comment": []}
     for data_cmt in data["list_comment"]:
@@ -178,6 +178,7 @@ def delete_post(id):
         for id_draft in post.edit_history:
             db.draft.delete_one({"_id": id_draft})
 
+        db.user.update_one({"_id": post.created_by}, {"$pull": {"list_post": ObjectId(id)}})
         db.post.delete_one({"_id": ObjectId(id)})
         return "ok"
     except:
@@ -307,7 +308,8 @@ def delete_comment(id):
                 db.post.find_one({"_id": ObjectId(id)},
                                  {"_id": 0, "list_comment": {"$elemMatch": {"_id": ObjectId(rq['id'])}}})[
                     "list_comment"][0]
-            if token.id_user != pre_cmt["created_by"]:
+            if token.id_user != pre_cmt["created_by"] and db.user.find_one({"_id": token.id_user}, {"_id": 0, "role": 1})[
+            "role"] != "admin":
                 abort(405)
             e = db.post.update_one({"_id": ObjectId(id)},
                                    {'$pull': {"list_comment": {"_id": ObjectId(rq["id"])}}})
@@ -322,7 +324,8 @@ def delete_comment(id):
                                               {"$match": {"list_comment.list_comment._id": ObjectId(rq["id"])}},
                                               {"$project": {"_id": 0, "list_comment.list_comment": 1}}]))[0][
                 "list_comment"]["list_comment"]
-            if token.id_user != pre_cmt["created_by"]:
+            if token.id_user != pre_cmt["created_by"] and db.user.find_one({"_id": token.id_user}, {"_id": 0, "role": 1})[
+            "role"] != "admin":
                 abort(405)
             e = db.post.update_one({"_id": ObjectId(id), "list_comment._id": ObjectId(rq["parent"])},
                                    {'$pull': {"list_comment.$.list_comment": {"_id": ObjectId(rq["id"])}}})
@@ -408,3 +411,4 @@ def vote_cmt(id):
 if __name__ == "__main__":
     post = Post(db.post.find_one({"_id": ObjectId("5fe243e2bc62d295137ead37")}))
     print(post.created_date)
+    

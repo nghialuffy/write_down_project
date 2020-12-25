@@ -142,16 +142,18 @@
                     margin-top: 0;
                     justify-content: flex-start;
                     flex-wrap: wrap;
-                    
+                    .header-content-top-right {
+                        .user-info {
+                            display: none;
+                        }
+                    }
                     .link-new-post {
                         display: none;
                     }
                     .anticon.anticon-bell {
                         font-size: 25px;
                     }
-                    .user-info {
-                        display: none;
-                    }
+
                     .ant-input-wrapper {
                         .ant-input-affix-wrapper {
                             height: 30px;

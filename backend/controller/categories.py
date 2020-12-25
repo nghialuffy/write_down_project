@@ -123,18 +123,16 @@ def get_hot_post_unverified():
         }
         if(max_page < page):
             return res
-        
+    
         query = db["post"].find({
         }).sort([
             ("views", -1)
-        ]).limit(page*20)
+        ]).skip(int((page - 1)*20)).limit(20)
 
         list_post = []
         if(query!=None):
             list_post = list(query)
-            for index_page in range((page-1)*20, page*20):
-                if(index_page >= len(list_post)):
-                    break
+            for index_page in range(0, len(list_post)):
                 is_voted = 0
                 if user_id != None:
                     if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
@@ -183,14 +181,12 @@ def get_new_post_unverified():
         query = db["post"].find({
         }).sort(
             "created_date", -1
-        ).limit(page*20)
+        ).skip(int((page - 1)*20)).limit(20)
 
         list_post = []
         if(query!=None):
             list_post = list(query)
-            for index_page in range((page-1)*20, page*20):
-                if(index_page >= len(list_post)):
-                    break
+            for index_page in range(0, len(list_post)):
                 is_voted = 0
                 if user_id != None:
                     if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
@@ -255,7 +251,9 @@ def get_controversial_post_unverified():
                     "comment" : -1
                 }
             },{
-                "$limit" : page*20
+                "$skip" : int((page - 1)*20)
+            },{
+                "$limit" : 20
             },{
                 "$project" :{
                     "created_by" : 1,
@@ -275,9 +273,7 @@ def get_controversial_post_unverified():
         list_post = []
         if(query!=None):
             list_post = list(query)
-            for index_page in range((page-1)*20, page*20):
-                if(index_page >= len(list_post)):
-                    break
+            for index_page in range(0, len(list_post)):
                 is_voted = 0
                 if user_id != None:
                     if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
@@ -326,14 +322,12 @@ def get_top_post_unverified():
         query = db["post"].find({
         }).sort([(
             "vote", -1
-        )]).limit(page*20)
+        )]).skip(int((page - 1)*20)).limit(20)
 
         list_post = []
         if(query!=None):
             list_post = list(query)
-            for index_page in range((page-1)*20, page*20):
-                if(index_page >= len(list_post)):
-                    break
+            for index_page in range(0, len(list_post)):
                 is_voted = 0
                 if user_id != None:
                     if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
@@ -392,12 +386,12 @@ def get_category_hot(category_name):
             "category" : category_id["_id"]
         }).sort([
             ("views", -1)
-        ]).limit(page*20)
+        ]).skip(int((page - 1)*20)).limit(20)
 
         list_post = []
         if(query!=None):
             list_post = list(query)
-            for index_page in range((page-1)*20, page*20):
+            for index_page in range(0, len(list_post)):
                 if(index_page >= len(list_post)):
                     break
                 is_voted = 0
@@ -457,14 +451,12 @@ def get_category_new(category_name):
             "category" : category_id["_id"]
         }).sort(
             "created_date", -1
-        ).limit(page*20)
+        ).skip(int((page - 1)*20)).limit(page*20)
 
         list_post = []
         if(query!=None):
             list_post = list(query)
-            for index_page in range((page-1)*20, page*20):
-                if(index_page >= len(list_post)):
-                    break
+            for index_page in range(0, len(list_post)):
                 is_voted = 0
                 if user_id != None:
                     if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
@@ -543,6 +535,8 @@ def get_category_controversial(category_name):
                     "comment" : -1
                 }
             },{
+                "$skip" : int((page - 1)*20)
+            },{
                 "$limit" : page*20
             },{
                 "$project" :{
@@ -563,9 +557,7 @@ def get_category_controversial(category_name):
         list_post = []
         if(query!=None):
             list_post = list(query)
-            for index_page in range((page-1)*20, page*20):
-                if(index_page >= len(list_post)):
-                    break
+            for index_page in range(0, len(list_post)):
                 is_voted = 0
                 if user_id != None:
                     if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:
@@ -622,14 +614,12 @@ def get_category_top(category_name):
             "category" : category_id["_id"]
         }).sort([(
             "vote", -1
-        )]).limit(page*20)
+        )]).skip(int((page - 1)*20)).limit(page*20)
 
         list_post = []
         if(query!=None):
             list_post = list(query)
-            for index_page in range((page-1)*20, page*20):
-                if(index_page >= len(list_post)):
-                    break
+            for index_page in range(0, len(list_post)):
                 is_voted = 0
                 if user_id != None:
                     if user_id in list_post[index_page]["voted_user"] and list_post[index_page]["voted_user"][user_id] != None:

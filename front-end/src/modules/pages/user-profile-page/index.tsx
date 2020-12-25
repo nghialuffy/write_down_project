@@ -30,10 +30,10 @@ export function UserProfilePage() {
                                 {user.display_name && `${user.display_name} - `} <span className='username'>@{user.username}</span>
                             </div>
                             <div className='slot-content-middle'>{user.bio}</div>
-                            <div className='slot-content-bottom'>
+                            {/* <div className='slot-content-bottom'>
                                 <span>{user.followers} Follower</span>
                                 <span>{user.followings} Following</span>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className='user-profile-router'>
